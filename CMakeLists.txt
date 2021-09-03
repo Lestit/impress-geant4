@@ -21,9 +21,9 @@ target_link_libraries(impress ${Geant4_LIBRARIES})
 file(GLOB macros "${PROJECT_SOURCE_DIR}/macros/*.mac")
 
 foreach (macro ${macros})
-    get_filename_component(barename ${macro} NAME)
+    get_filename_component(rawname ${macro} NAME)
     configure_file(
         ${macro}
-        ${CMAKE_CURRENT_BINARY_DIR}/macros/${barename}
+        ${CMAKE_CURRENT_BINARY_DIR}/macros/${rawname}
         COPYONLY)
 endforeach()

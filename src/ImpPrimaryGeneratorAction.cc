@@ -3,7 +3,7 @@
 ImpPrimaryGeneratorAction::ImpPrimaryGeneratorAction()
 {
     // one particle at a time
-    gun = std::make_shared<G4ParticleGun>(2);
+    gun = std::make_shared<G4ParticleGun>(1);
     auto* table = G4ParticleTable::GetParticleTable();
     gun->SetParticleDefinition(
         table->FindParticle("gamma"));

@@ -2,16 +2,10 @@
 
 int main(int argc, char* argv[])
 {
-    G4UIExecutive* uiExec = nullptr;
-    bool interactive = (argc == 1);
-    if (interactive) {
-        uiExec = new G4UIExecutive(argc, argv);
-    }
-
     // random engine
     // no customization for now?
 
-    auto* runMan = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MTOnly);
+    auto runMan = std::make_shared<G4MTRunManager>();
     // assumes hyperthreading (2 threads/core)
     runMan->SetNumberOfThreads(2 * G4Threading::G4GetNumberOfCores());
 
@@ -20,14 +14,15 @@ int main(int argc, char* argv[])
     runMan->SetUserInitialization(detCon);
     runMan->SetUserInitialization(new ImpActionInitialization(detCon));
 
-    G4VisManager* visMan = new G4VisExecutive;
+    auto visMan = std::make_shared<G4VisExecutive>();
     visMan->Initialize();
     auto* uiMan = G4UImanager::GetUIpointer();
 
+    bool interactive = (argc == 1);
     if (interactive) {
+        auto uiExec = std::make_shared<G4UIExecutive>(argc, argv);
         uiMan->ApplyCommand("/control/execute macros/vis.mac");
         uiExec->SessionStart();
-        delete uiExec;
     }
     else {
         std::stringstream ss;
@@ -35,7 +30,5 @@ int main(int argc, char* argv[])
         uiMan->ApplyCommand(ss.str());
     }
 
-    delete visMan;
-    delete runMan;
     return 0;
 }
