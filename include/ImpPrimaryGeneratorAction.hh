@@ -7,6 +7,8 @@
 #include "G4ParticleTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "ImpDetectorConstruction.hh"
+
 class G4GeneralParticleSource;
 class G4Event;
 

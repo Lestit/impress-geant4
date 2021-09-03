@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def discern_infinity(val):
     if val == float('inf'):
-        return 'std::numeric_limits<double>::infinity()'
+        return '1.00000e+20'
     return f'{val:.5e}'
 
 def c_ary_print(data):
@@ -66,10 +66,10 @@ def absorption_length():
     energy = np.append([0], energy)
     inv_abs_1e5_cm = np.append([0], inv_abs_1e5_cm)
 
-    abs_len = np.ones_like(inv_abs_1e5_cm)#(1 / (1e5 * inv_abs_1e5_cm)) * 1/100
+    abs_len = (1 / (inv_abs_1e5_cm / 1e5))
     to_print = {
         'CEBR3_ABS_LEN_ENERGIES': {'data': energy, 'units': 'eV'},
-        'CEBR3_ABS_LEN': {'data': abs_len, 'units': 'm'}
+        'CEBR3_ABS_LEN': {'data': abs_len, 'units': 'cm'}
     }
     c_ary_print(to_print)
 
@@ -77,5 +77,5 @@ if __name__ == '__main__':
     with open('clean_data.txt', 'w') as f:
         # sys.stdout = f
         optical_emission_spectrum()
-        refractive_index()
+        # refractive_index()
         absorption_length()

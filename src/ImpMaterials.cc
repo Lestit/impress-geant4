@@ -1,9 +1,52 @@
 #include "ImpMaterials.hh"
 
+// forward declare here; don't put in header
+namespace ImpMaterials {
+    void configureTeflon();
+    void makeCeBr3();
+    void configureCeBr3Scintillation();
+    void makeVacuum();
+}
+
 namespace ImpMaterials
 {
-    // make functions static so other files can't see them
-    static void makeCeBr3()
+    void makeMaterials()
+    {
+        if (!G4Material::GetMaterial(kVACUUM)) {
+            makeVacuum();
+        }
+
+        if (!G4Material::GetMaterial(kCEBR3)) {
+            makeCeBr3();
+            configureCeBr3Scintillation();
+        }
+
+        configureTeflon();
+    }
+
+    void configureTeflon()
+    {
+        auto* nistMan = G4NistManager::Instance();
+        auto* teflon = nistMan->FindOrBuildMaterial(kNIST_TEFLON);
+        auto* tefPt = new G4MaterialPropertiesTable;
+
+        tefPt->AddProperty(kREFR_IDX, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFR_IDXS)->SetSpline(false);
+
+        teflon->SetMaterialPropertiesTable(tefPt);
+        if (teflon) {
+            G4cout << "====================================================================================================" << G4endl;
+            G4cout << *teflon << G4endl;
+            teflon->GetMaterialPropertiesTable()->DumpTable();
+            G4cout << "====================================================================================================" << G4endl;
+            G4cout.flush();
+        }
+        else {
+            throw std::runtime_error("didnt load teflon");
+        }
+    }
+
+
+    void makeCeBr3()
     {
         auto* nMan = G4NistManager::Instance();
         G4Element* ce = nMan->FindOrBuildElement("Ce");
@@ -18,8 +61,7 @@ namespace ImpMaterials
         cebr3->AddElement(ce, CE_MASS_FRAC);
     }
 
-    // make functions static so other files can't see them
-    static void configureCeBr3Scintillation() 
+    void configureCeBr3Scintillation() 
     {
         // to change optical parameters
         // see https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/TrackingAndPhysics/physicsProcess.html#id1
@@ -91,18 +133,5 @@ namespace ImpMaterials
         vacPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, indices)->SetSpline(false);
 
         vacMat->SetMaterialPropertiesTable(vacPt);
-    }
-
-    void makeMaterials()
-    {
-        if (!G4Material::GetMaterial(kVACUUM)) {
-            makeVacuum();
-        }
-
-        if (!G4Material::GetMaterial(kCEBR3)) {
-            makeCeBr3();
-            configureCeBr3Scintillation();
-        }
-
     }
 }

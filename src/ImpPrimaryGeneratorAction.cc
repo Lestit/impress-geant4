@@ -9,7 +9,7 @@ ImpPrimaryGeneratorAction::ImpPrimaryGeneratorAction()
         table->FindParticle("gamma"));
 
     gun->SetParticleEnergy(10 * keV);
-    gun->SetParticlePosition(G4ThreeVector(0, 0, 10 * cm));
+    gun->SetParticlePosition(G4ThreeVector(5, 5, 20));//ImpDetectorConstruction::maxYCoordCm()));
     gun->SetParticleMomentumDirection(G4ThreeVector(0, 0, -1));
 }
 

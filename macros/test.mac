@@ -1,0 +1,3 @@
+/gun/position 3 2 22 cm
+/gun/energy 2 keV
+/run/beamOn 1

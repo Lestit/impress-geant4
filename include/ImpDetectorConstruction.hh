@@ -13,7 +13,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VisAttributes.hh"
 
-#include "ImpHafxChannel.hh"
+#include "ImpDetectorPayload.hh"
 #include "ImpMaterials.hh"
 
 
@@ -26,6 +26,9 @@ class ImpDetectorConstruction : public G4VUserDetectorConstruction
         G4VPhysicalVolume* Construct() override;
         void ConstructSDandField() override;
 
+        static G4double maxYCoordCm()
+        { return (IMPRESS_UNITS_LONG * CUBESAT_SIDE)/2 + EXTRA_SPACE; }
+
     private:
         void constructEnclosing();
         void constructPlaceDetectors();
@@ -34,14 +37,16 @@ class ImpDetectorConstruction : public G4VUserDetectorConstruction
         G4LogicalVolume* boundingBoxLogVol;
         G4VPhysicalVolume* boundingBoxPhysVol;
 
-        std::array<ImpHafxChannel*, 4> crystalChannels;
-        std::shared_ptr<G4RotationMatrix> crystalRotMat;
+        static const size_t NUM_CRYSTALS = 4;
+        std::array<ImpHafxChannel*, NUM_CRYSTALS> crystalChannels;
 
-        const G4String kBOUNDING_BOX = "imp_enclosing_box";
-        const G4String kBOUNDING_LOG_VOL = "imp_enclosing_log_vol";
-        const G4String kBOUNDING_PHY_VOL = "imp_enclosing_phy_vol";
+        const G4String kBOUNDING_BOX = "imp_bounding_box";
+        const G4String kBOUNDING_LOG_VOL = "imp_bounding_log_vol";
+        const G4String kBOUNDING_PHY_VOL = "imp_bounding_phy_vol";
         static constexpr G4double CUBESAT_SIDE = 10 * cm;
-        static constexpr G4double EXTRA_SPACE = 1 * cm;
-        static constexpr G4int IMPRESS_Z_MUL = 3;
-        static constexpr G4int IMPRESS_XY_MUL = 1;
+        static constexpr G4double EXTRA_SPACE = 2 * cm;
+
+        // IMPRESS is a 3U cubesat
+        static constexpr G4int IMPRESS_UNITS_LONG = 3;
+        static constexpr G4int IMPRESS_UNITS_WIDE = 1;
 };

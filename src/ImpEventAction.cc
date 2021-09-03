@@ -21,9 +21,11 @@ void ImpEventAction::EndOfEventAction(const G4Event* evt)
 
 void ImpEventAction::forceDrawOptical(G4TrajectoryContainer* trjCon)
 {
+    G4int i = 0, rest = 1000;
     for (G4VTrajectory* trj : *trjCon->GetVector()) {
         if (trj->GetParticleName() == "opticalphoton") {
-            trj->DrawTrajectory();
+            if (i == 0) trj->DrawTrajectory();
+            i = (i + 1) % rest;
         }
     }
 }
