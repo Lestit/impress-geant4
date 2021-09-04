@@ -6,6 +6,7 @@
 
 #include "ImpEventAction.hh"
 #include "ImpScintCrystalHit.hh"
+#include "ImpTrajectory.hh"
 
 ImpEventAction::ImpEventAction() :
     G4UserEventAction()
@@ -27,10 +28,11 @@ void ImpEventAction::EndOfEventAction(const G4Event* evt)
 
 void ImpEventAction::sampleDrawOptical(G4TrajectoryContainer* trjCon)
 {
-    G4int i = 0, rest = 1000;
+    G4int i = 0, rest = 10;
     for (G4VTrajectory* trj : *trjCon->GetVector()) {
-        if (trj->GetParticleName() == "opticalphoton") {
-            if (i == 0) trj->DrawTrajectory();
+        auto* impTrj = static_cast<ImpTrajectory*>(trj);
+        if (impTrj->GetParticleName() == "opticalphoton") {
+            if (i != 0) impTrj->doDraw(false);
             i = (i + 1) % rest;
         }
     }

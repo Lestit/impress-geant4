@@ -1,8 +1,13 @@
 #include "ImpActionInitialization.hh"
 
-ImpActionInitialization::ImpActionInitialization(const ImpDetectorConstruction* con) :
-    G4VUserActionInitialization(),
-    detCon(con)
+#include "ImpEventAction.hh"
+#include "ImpDetectorConstruction.hh"
+#include "ImpPrimaryGeneratorAction.hh"
+#include "ImpRunAction.hh"
+#include "ImpTrackingAction.hh"
+
+ImpActionInitialization::ImpActionInitialization() :
+    G4VUserActionInitialization()
 { }
 
 
@@ -20,4 +25,5 @@ void ImpActionInitialization::Build() const
     SetUserAction(new ImpEventAction);
     SetUserAction(new ImpPrimaryGeneratorAction);
     SetUserAction(new ImpRunAction);
+    SetUserAction(new ImpTrackingAction);
 }

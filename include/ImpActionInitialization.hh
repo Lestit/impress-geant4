@@ -2,11 +2,6 @@
 
 #include "G4VUserActionInitialization.hh"
 
-#include "ImpEventAction.hh"
-#include "ImpDetectorConstruction.hh"
-#include "ImpPrimaryGeneratorAction.hh"
-#include "ImpRunAction.hh"
-
 /*
  * eventually want:
  *     event action
@@ -20,12 +15,9 @@
 class ImpActionInitialization : public G4VUserActionInitialization
 {
     public:
-        ImpActionInitialization(const ImpDetectorConstruction*);
+        ImpActionInitialization();
         ~ImpActionInitialization();
 
         void BuildForMaster() const override;
         void Build() const override;
-
-    private:
-        const ImpDetectorConstruction* detCon;
 };

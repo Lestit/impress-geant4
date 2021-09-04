@@ -9,10 +9,11 @@ int main(int argc, char* argv[])
     // assumes hyperthreading (2 threads/core)
     runMan->SetNumberOfThreads(2 * G4Threading::G4GetNumberOfCores());
 
-    runMan->SetUserInitialization(new ImpPhysicsList);
-    auto* detCon = new ImpDetectorConstruction;
-    runMan->SetUserInitialization(detCon);
-    runMan->SetUserInitialization(new ImpActionInitialization(detCon));
+    auto* physList = new ImpPhysicsList;
+    physList->SetVerboseLevel(0);
+    runMan->SetUserInitialization(physList);
+    runMan->SetUserInitialization(new ImpDetectorConstruction);
+    runMan->SetUserInitialization(new ImpActionInitialization);
 
     auto* visMan = new G4VisExecutive;
     visMan->Initialize();

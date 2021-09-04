@@ -1,7 +1,10 @@
+#include "G4AutoLock.hh"
 #include "G4Box.hh"
 #include "G4Color.hh"
+#include "G4LogicalSkinSurface.hh"
 #include "G4LogicalVolume.hh"
 #include "G4NistManager.hh"
+#include "G4OpticalSurface.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SDmanager.hh"
 #include "G4Tubs.hh"
@@ -14,6 +17,9 @@
 #include "ImpScintCrystalSensitiveDetector.hh"
 
 namespace {
+    G4Mutex mux = G4MUTEX_INITIALIZER;
+    G4OpticalSurface* tefSurf_ = nullptr;
+
     static const G4String CHANNEL_PFX = "hafx_channel";
 
     static const G4String CHANNEL_LOG_PFX = "hafx_logical";
@@ -29,22 +35,19 @@ namespace {
     static const G4String TEFLON_SHAPE_PFX = "hafx_teflon_union";
     static const G4String TEFLON_LOG_PFX = "hafx_teflon_log";
     static const G4String TEFLON_PHY_PFX = "hafx_teflon_phy";
-    /* static const G4String TEFLON_RING_LOG_PFX = "hafx_teflon_ring_log"; */
-    /* static const G4String TEFLON_CAP_LOG_PFX = "hafx_teflon_cap_log"; */
-    /* static const G4String TEFLON_RING_PHY_PFX = "hafx_teflon_ring_phy"; */
-    /* static const G4String TEFLON_CAP_PHY_PFX = "hafx_teflon_cap_phy"; */
+    static const G4String TEFLON_SURF_PFX = "hafx_teflon_surf";
+    static const G4String TEFLON_SKIN_LOG_PFX = "hafx_teflon_skin_log";
 
     static const G4String SENSITIVE_DET_PFX = "hafx_crystal_sd";
 }
 
 
+// i sure love constructors
 ImpHafxChannel::ImpHafxChannel(
     G4RotationMatrix* rotMat, const G4ThreeVector& translate,
     G4LogicalVolume* motherLogVol, const G4String& channelId)
-    : G4PVPlacement(
-        rotMat, translate,
-        tempLogVol(),
-        CHANNEL_PFX + channelId, motherLogVol, false, 0),
+    : G4PVPlacement(rotMat, translate,
+        tempLogVol(), CHANNEL_PFX + channelId, motherLogVol, false, 0),
     adjustPlacements(0, 0, (CEBR3_THICKNESS - thicknessInMm())/2),
     channelId(channelId)
 {
@@ -113,6 +116,8 @@ void ImpHafxChannel::buildTeflonReflector()
     tefPlacement = new G4PVPlacement(
         nullptr, adjustPlacements, tefLogVol, TEFLON_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
+
+    attachTeflonOpticalSurface();
 }
 
 void ImpHafxChannel::attachCrystalDetector()
@@ -125,4 +130,25 @@ void ImpHafxChannel::attachCrystalDetector()
 
     G4SDManager::GetSDMpointer()->AddNewDetector(csd);
     crystalLogVol->SetSensitiveDetector(csd);
+}
+
+G4OpticalSurface* ImpHafxChannel::tefSurf()
+{
+    //G4AutoLock l(&mux);
+    if (tefSurf_) return tefSurf_;
+    tefSurf_ = new G4OpticalSurface(TEFLON_SURF_PFX);
+    tefSurf_->SetType(dielectric_LUTDAVIS);
+    tefSurf_->SetModel(DAVIS);
+    tefSurf_->SetFinish(RoughTeflon_LUT);
+    return tefSurf_;
+}
+
+void ImpHafxChannel::attachTeflonOpticalSurface()
+{
+    G4AutoLock l(&mux);
+    auto* surf = tefSurf();
+    // tefSurf = new G4OpticalSurface(TEFLON_SURF_PFX + channelId);
+    // conveniently able to specify teflon as a surface :)
+    tefSkin = new G4LogicalSkinSurface(
+        TEFLON_SURF_PFX + channelId, tefLogVol, surf);
 }

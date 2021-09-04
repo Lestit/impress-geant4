@@ -41,9 +41,9 @@ def optical_emission_spectrum():
 
     # print('Intensity sums to', np.sum(rel_intens))
     # print('length', rel_intens.size)
-    print(energy_ev)
-    print(rel_intens)
-    input()
+    # print(energy_ev)
+    # print(rel_intens)
+    # input()
 
     to_print = {
         'CEBR3_SCINT_OPTICAL_ENERGIES': {'data': energy_ev, 'units': 'eV'},
@@ -67,6 +67,8 @@ def absorption_length():
     inv_abs_1e5_cm = np.append([0], inv_abs_1e5_cm)
 
     abs_len = (1 / (inv_abs_1e5_cm / 1e5))
+    print(energy, abs_len)
+    input()
     to_print = {
         'CEBR3_ABS_LEN_ENERGIES': {'data': energy, 'units': 'eV'},
         'CEBR3_ABS_LEN': {'data': abs_len, 'units': 'cm'}

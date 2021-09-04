@@ -8,7 +8,9 @@
 #include "G4String.hh"
 #include "G4SystemOfUnits.hh"
 
+class G4LogicalSkinSurface;
 class G4LogicalVolume;
+class G4OpticalSurface;
 class G4Tubs;
 class G4UnionSolid;
 
@@ -31,8 +33,11 @@ class ImpHafxChannel : public G4PVPlacement
         void attachCrystalDetector();
 
     private:
+        static G4OpticalSurface* tefSurf();
+
         void buildCrystal();
         void buildTeflonReflector();
+        void attachTeflonOpticalSurface();
 
         G4ThreeVector adjustPlacements;
 
@@ -47,6 +52,7 @@ class ImpHafxChannel : public G4PVPlacement
         G4UnionSolid* tefSolid;
         G4LogicalVolume* tefLogVol;
         G4PVPlacement* tefPlacement;
+        G4LogicalSkinSurface* tefSkin;
 
         G4String channelId;
 
