@@ -1,10 +1,9 @@
 #pragma once
 
-#include "G4Event.hh"
-#include "G4ThreeVector.hh"
 #include "G4UserEventAction.hh"
-#include "G4VVismanager.hh"
-#include "G4VTrajectory.hh"
+
+class G4Event;
+class G4TrajectoryContainer;
 
 class ImpEventAction : public G4UserEventAction
 {
@@ -15,5 +14,6 @@ class ImpEventAction : public G4UserEventAction
         void BeginOfEventAction(const G4Event* evt) override;
         void EndOfEventAction(const G4Event* evt) override;
     private:
-        void forceDrawOptical(G4TrajectoryContainer* trjCon);
+        void sampleDrawOptical(G4TrajectoryContainer* trjCon);
+        void printHits(const G4Event* evt);
 };

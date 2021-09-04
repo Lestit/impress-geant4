@@ -18,9 +18,7 @@ G4VPhysicalVolume* ImpDetectorConstruction::Construct()
     constructEnclosing();
 
     static const G4ThreeVector payloadPosition(0, 0, 1 * CUBESAT_SIDE);
-    G4cout << "making payload\n";
-    G4cout.flush();
-    new ImpDetectorPayload(nullptr, payloadPosition, boundingBoxLogVol);
+    payload = new ImpDetectorPayload(nullptr, payloadPosition, boundingBoxLogVol);
 
     return boundingBoxPhysVol;
 }
@@ -49,4 +47,6 @@ void ImpDetectorConstruction::constructEnclosing()
 
 void ImpDetectorConstruction::ConstructSDandField()
 // deal with this later
-{ return; }
+{
+    payload->constructSensitiveDetectors();
+}

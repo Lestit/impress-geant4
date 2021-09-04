@@ -1,0 +1,9 @@
+/gun/position 3 2 22 cm
+/gun/energy 30 keV
+
+# turn off scintillation for this test (we only want to see energy deposited in the crystals)
+# /process/optical/processActiation Scintillation false
+
+# should register a few events unless the materials in front
+# of the crystals block all the photons lol
+/run/beamOn 10

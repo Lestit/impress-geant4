@@ -18,14 +18,18 @@ int main(int argc, char* argv[])
     visMan->Initialize();
     auto* uiMan = G4UImanager::GetUIpointer();
 
+    // G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", false);
+
+    uiMan->ApplyCommand("/control/macroPath macros");
     bool interactive = (argc == 1);
     if (interactive) {
         auto* uiExec = new G4UIExecutive(argc, argv);
-        uiMan->ApplyCommand("/control/execute macros/vis.mac");
+        uiMan->ApplyCommand("/control/execute macros/init_gui.mac");
         uiExec->SessionStart();
         delete uiExec;
     }
     else {
+        uiMan->ApplyCommand("/run/initialize");
         std::stringstream ss;
         ss << "/control/execute " << argv[1];
         uiMan->ApplyCommand(ss.str());

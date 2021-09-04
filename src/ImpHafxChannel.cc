@@ -1,4 +1,17 @@
+#include "G4Box.hh"
+#include "G4Color.hh"
+#include "G4LogicalVolume.hh"
+#include "G4NistManager.hh"
+#include "G4RotationMatrix.hh"
+#include "G4SDmanager.hh"
+#include "G4Tubs.hh"
+#include "G4UnionSolid.hh"
+#include "G4VisAttributes.hh"
+
 #include "ImpHafxChannel.hh"
+#include "ImpMaterials.hh"
+#include "ImpTempLogVol.hh"
+#include "ImpScintCrystalSensitiveDetector.hh"
 
 namespace {
     static const G4String CHANNEL_PFX = "hafx_channel";
@@ -13,21 +26,27 @@ namespace {
 
     static const G4String TEFLON_RING = "hafx_teflon_ring";
     static const G4String TEFLON_CAP = "hafx_teflon_cap";
-    static const G4String TEFLON_SHAPE = "hafx_teflon_union";
-    static const G4String TEFLON_RING_LOG_PFX = "hafx_teflon_ring_log";
-    static const G4String TEFLON_CAP_LOG_PFX = "hafx_teflon_cap_log";
-    static const G4String TEFLON_RING_PHY_PFX = "hafx_teflon_ring_phy";
-    static const G4String TEFLON_CAP_PHY_PFX = "hafx_teflon_cap_phy";
+    static const G4String TEFLON_SHAPE_PFX = "hafx_teflon_union";
+    static const G4String TEFLON_LOG_PFX = "hafx_teflon_log";
+    static const G4String TEFLON_PHY_PFX = "hafx_teflon_phy";
+    /* static const G4String TEFLON_RING_LOG_PFX = "hafx_teflon_ring_log"; */
+    /* static const G4String TEFLON_CAP_LOG_PFX = "hafx_teflon_cap_log"; */
+    /* static const G4String TEFLON_RING_PHY_PFX = "hafx_teflon_ring_phy"; */
+    /* static const G4String TEFLON_CAP_PHY_PFX = "hafx_teflon_cap_phy"; */
+
+    static const G4String SENSITIVE_DET_PFX = "hafx_crystal_sd";
 }
 
 
-ImpHafxChannel::ImpHafxChannel(G4RotationMatrix* rotMat, const G4ThreeVector& translate, G4LogicalVolume* motherLogVol, const G4String& channelId) : //(
-        G4PVPlacement(
-                rotMat, translate,
-                tempLogVol(),
-                CHANNEL_PFX + channelId, motherLogVol, false, 0),
-        adjustPlacements(0, 0, (CEBR3_THICKNESS - thicknessInMm())/2),
-        channelId(channelId)
+ImpHafxChannel::ImpHafxChannel(
+    G4RotationMatrix* rotMat, const G4ThreeVector& translate,
+    G4LogicalVolume* motherLogVol, const G4String& channelId)
+    : G4PVPlacement(
+        rotMat, translate,
+        tempLogVol(),
+        CHANNEL_PFX + channelId, motherLogVol, false, 0),
+    adjustPlacements(0, 0, (CEBR3_THICKNESS - thicknessInMm())/2),
+    channelId(channelId)
 {
     boundingCylinder = new G4Tubs(CHANNEL_CYL_PFX + channelId, 0, radiusInMm(), thicknessInMm()/2, 0 * deg, 360 * deg);
     auto* vac = G4Material::GetMaterial(ImpMaterials::kVACUUM);
@@ -73,30 +92,37 @@ void ImpHafxChannel::buildTeflonReflector()
     static const G4double crystRad = CEBR3_DIAMETER / 2;
     static const G4double tefRad = crystRad + TEFLON_THICKNESS;
 
-    tefRing = new G4Tubs(
+    auto* tefRing = new G4Tubs(
         TEFLON_RING + channelId, crystRad, tefRad, CEBR3_THICKNESS/2, 0, 2*pi);
-    tefCap = new G4Tubs(
+    auto* tefCap = new G4Tubs(
         TEFLON_CAP + channelId, 0, tefRad, TEFLON_THICKNESS/2, 0, 2*pi);
 
+    G4ThreeVector displace(0, 0, (CEBR3_THICKNESS + TEFLON_THICKNESS) / 2);
+    tefSolid = new G4UnionSolid(
+        TEFLON_SHAPE_PFX + channelId, tefRing, tefCap, nullptr, displace);
+
     auto* ptfe = G4NistManager::Instance()->FindOrBuildMaterial(ImpMaterials::kNIST_TEFLON);
-    tefRingLogVol = new G4LogicalVolume(
-        tefRing, ptfe, TEFLON_RING_LOG_PFX + channelId);
-    tefCapLogVol = new G4LogicalVolume(
-        tefCap, ptfe, TEFLON_CAP_LOG_PFX + channelId);
+    tefLogVol = new G4LogicalVolume(
+        tefSolid, ptfe, TEFLON_LOG_PFX + channelId);
     
     G4VisAttributes teflonAttrs;
     teflonAttrs.SetColor(1, 1, 1, 0.5);
     teflonAttrs.SetVisibility(true);
-    tefCapLogVol->SetVisAttributes(teflonAttrs);
-    tefRingLogVol->SetVisAttributes(teflonAttrs);
+    tefLogVol->SetVisAttributes(teflonAttrs);
 
-    tefRingPlacement = new G4PVPlacement(
-        nullptr, adjustPlacements, tefRingLogVol, TEFLON_RING_PHY_PFX + channelId,
+    tefPlacement = new G4PVPlacement(
+        nullptr, adjustPlacements, tefLogVol, TEFLON_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
+}
 
-    G4ThreeVector displace(0, 0, (CEBR3_THICKNESS + TEFLON_THICKNESS) / 2);
-    displace += adjustPlacements;
-    tefCapPlacement = new G4PVPlacement(
-        nullptr, displace, tefCapLogVol, TEFLON_CAP_PHY_PFX + channelId,
-        GetLogicalVolume(), false, 0);
+void ImpHafxChannel::attachCrystalDetector()
+{
+    ImpScintCrystalSensitiveDetector* csd = crystalSensDet.Get();
+    if (csd) { return; }
+
+    csd = new ImpScintCrystalSensitiveDetector(SENSITIVE_DET_PFX + channelId, channelId);
+    crystalSensDet.Put(csd);
+
+    G4SDManager::GetSDMpointer()->AddNewDetector(csd);
+    crystalLogVol->SetSensitiveDetector(csd);
 }

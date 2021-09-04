@@ -1,4 +1,12 @@
+#include "G4Box.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
+#include "G4String.hh"
+#include "G4VisAttributes.hh"
+
 #include "ImpDetectorPayload.hh"
+#include "ImpMaterials.hh"
+#include "ImpTempLogVol.hh"
 
 namespace {
     const G4String kPAYLOAD_ID = "imp_detector_payload";
@@ -11,9 +19,6 @@ ImpDetectorPayload::ImpDetectorPayload(
     G4RotationMatrix* rotMat, const G4ThreeVector& translate, G4LogicalVolume* motherLogVol) :
     G4PVPlacement(rotMat, translate, tempLogVol(), kPAYLOAD_ID, motherLogVol, false, 0)
 {
-    G4cout << "inside payload\n";
-    G4cout.flush();
-
     const G4double half_sz = SIDE_LENGTH / 2;
     boundingBox = new G4Box(
         kBOUNDING_BOX, half_sz, half_sz, half_sz);
@@ -37,7 +42,6 @@ void ImpDetectorPayload::buildPlaceChannels()
 {
     static const G4double xy_offst = ImpHafxChannel::radiusInMm() + CRYSTAL_SEPARATION;
 
-    G4cout << "building channels\n";G4cout.flush();
     for (size_t offset_idx = 0; offset_idx < NUM_CRYSTALS; ++offset_idx) {
         G4int offy = offset_idx / (NUM_CRYSTALS / 2);
         G4int offx = offset_idx % (NUM_CRYSTALS / 2);
@@ -49,5 +53,11 @@ void ImpDetectorPayload::buildPlaceChannels()
         crystalChannels[offset_idx] = new ImpHafxChannel(
             nullptr, pos, GetLogicalVolume(), std::to_string(offset_idx));
     }
-    G4cout << "done with channels\n";G4cout.flush();
+}
+
+void ImpDetectorPayload::constructSensitiveDetectors()
+{
+    for (auto* channel : crystalChannels) {
+        channel->attachCrystalDetector();
+    }
 }

@@ -2,24 +2,17 @@
 
 #include <string>
 
-#include "G4AutoLock.hh"
-#include "G4Box.hh"
-#include "G4Color.hh"
-#include "G4LogicalVolume.hh"
-#include "G4NistManager.hh"
+#include "G4Cache.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4GenericPolyCone.hh"
 #include "G4PVPlacement.hh"
-#include "G4RotationMatrix.hh"
 #include "G4String.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Threading.hh"
-#include "G4Tubs.hh"
-#include "G4UnionSolid.hh"
-#include "G4VisAttributes.hh"
 
-#include "ImpMaterials.hh"
-#include "ImpTempLogVol.hh"
+class G4LogicalVolume;
+class G4Tubs;
+class G4UnionSolid;
+
+class ImpScintCrystalSensitiveDetector;
 
 class ImpHafxChannel : public G4PVPlacement
 {
@@ -35,6 +28,8 @@ class ImpHafxChannel : public G4PVPlacement
         static G4double radiusInMm()
         { return diameterInMm() / 2; }
 
+        void attachCrystalDetector();
+
     private:
         void buildCrystal();
         void buildTeflonReflector();
@@ -46,13 +41,12 @@ class ImpHafxChannel : public G4PVPlacement
         G4Tubs* crystalCylinder;
         G4LogicalVolume* crystalLogVol;
         G4PVPlacement* crystalPlacement;
+        // G4Cache ensures thread safety
+        G4Cache<ImpScintCrystalSensitiveDetector*> crystalSensDet;
 
-        G4Tubs* tefRing;
-        G4Tubs* tefCap;
-        G4LogicalVolume* tefRingLogVol;
-        G4LogicalVolume* tefCapLogVol;
-        G4PVPlacement* tefRingPlacement;
-        G4PVPlacement* tefCapPlacement;
+        G4UnionSolid* tefSolid;
+        G4LogicalVolume* tefLogVol;
+        G4PVPlacement* tefPlacement;
 
         G4String channelId;
 

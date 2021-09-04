@@ -3,16 +3,13 @@
 #include <array>
 #include <string>
 
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Material.hh"
 #include "G4PVPlacement.hh"
-#include "G4String.hh"
 #include "G4ThreeVector.hh"
 
 #include "ImpHafxChannel.hh"
-#include "ImpMaterials.hh"
-#include "ImpTempLogVol.hh"
+
+class G4Box;
+class G4LogicalVolume;
 
 class ImpDetectorPayload : public G4PVPlacement
 {
@@ -22,6 +19,8 @@ class ImpDetectorPayload : public G4PVPlacement
 
         static G4double sideLengthCm()
         { return SIDE_LENGTH; }
+
+        void constructSensitiveDetectors();
 
     private:
         static const size_t NUM_CRYSTALS = 4;

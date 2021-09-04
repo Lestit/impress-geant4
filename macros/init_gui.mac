@@ -26,3 +26,5 @@
 # re-enable auto refresh stuff
 /vis/viewer/set/autoRefresh true
 /vis/verbose 1
+
+/control/macroPath macros

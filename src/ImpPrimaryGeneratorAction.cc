@@ -8,8 +8,8 @@ ImpPrimaryGeneratorAction::ImpPrimaryGeneratorAction()
     gun->SetParticleDefinition(
         table->FindParticle("gamma"));
 
-    gun->SetParticleEnergy(10 * keV);
-    gun->SetParticlePosition(G4ThreeVector(5, 5, 20));//ImpDetectorConstruction::maxYCoordCm()));
+    gun->SetParticleEnergy(30 * keV);
+    gun->SetParticlePosition(G4ThreeVector(3, 3, 22));//ImpDetectorConstruction::maxYCoordCm()));
     gun->SetParticleMomentumDirection(G4ThreeVector(0, 0, -1));
 }
 
@@ -18,4 +18,6 @@ ImpPrimaryGeneratorAction::~ImpPrimaryGeneratorAction()
 { }
 
 void ImpPrimaryGeneratorAction::GeneratePrimaries(G4Event* evt)
-{ gun->GeneratePrimaryVertex(evt); }
+{
+    gun->GeneratePrimaryVertex(evt);
+}

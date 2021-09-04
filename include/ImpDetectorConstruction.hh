@@ -37,8 +37,8 @@ class ImpDetectorConstruction : public G4VUserDetectorConstruction
         G4LogicalVolume* boundingBoxLogVol;
         G4VPhysicalVolume* boundingBoxPhysVol;
 
-        static const size_t NUM_CRYSTALS = 4;
-        std::array<ImpHafxChannel*, NUM_CRYSTALS> crystalChannels;
+        ImpDetectorPayload* payload;
+
 
         const G4String kBOUNDING_BOX = "imp_bounding_box";
         const G4String kBOUNDING_LOG_VOL = "imp_bounding_log_vol";
