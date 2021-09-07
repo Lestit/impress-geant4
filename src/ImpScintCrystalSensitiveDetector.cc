@@ -28,7 +28,8 @@ ImpScintCrystalSensitiveDetector::
 void ImpScintCrystalSensitiveDetector::
 Initialize(G4HCofThisEvent* hcote)
 {
-    hitsCollection = new G4THitsCollection<ImpScintCrystalHit>(
+    // polymorphism in the hitscollection
+    hitsCollection = new G4THitsCollection<ImpVHit>(
         SensitiveDetectorName, thisCollectionName);
     hitsCollectionId = G4SDManager::GetSDMpointer()->GetCollectionID(thisCollectionName);
 

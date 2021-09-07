@@ -11,9 +11,13 @@ class ImpEventAction : public G4UserEventAction
         ImpEventAction();
         ~ImpEventAction();
 
+        void doKeepAllEvents(bool yesno)
+        { keepAllEvents = yesno; }
+
         void BeginOfEventAction(const G4Event* evt) override;
         void EndOfEventAction(const G4Event* evt) override;
     private:
+        bool keepAllEvents;
         void sampleDrawOptical(G4TrajectoryContainer* trjCon);
         void printHits(const G4Event* evt);
 };

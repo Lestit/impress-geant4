@@ -4,7 +4,9 @@
 #include "G4String.hh"
 #include "G4ThreeVector.hh"
 
-class ImpScintCrystalHit : public G4VHit
+#include "ImpVHit.hh"
+
+class ImpScintCrystalHit : public ImpVHit
 {
     public:
         ImpScintCrystalHit(G4double depositedEnergy, const G4String& channelId, const G4ThreeVector& position);
@@ -16,12 +18,14 @@ class ImpScintCrystalHit : public G4VHit
         void operator delete(void* toDelete);
 
         void Print() override;
+        HitType hitType() const override
+        { return HitType::ScintCryst; }
 
-        const G4double& peekDepositedEnergy() const
+        G4double peekDepositedEnergy() const override
         { return depositedEnergy; }
-        const G4ThreeVector& peekPosition() const
+        const G4ThreeVector& peekPosition() const override
         { return position; }
-        const G4String& peekAssociatedChannelId() const
+        const G4String& peekAssociatedChannelId() const override
         { return assocChannelId; }
 
     private:

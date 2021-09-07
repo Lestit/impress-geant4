@@ -4,6 +4,7 @@
 #include "G4VSensitiveDetector.hh"
 
 #include "ImpScintCrystalHit.hh"
+#include "ImpVHit.hh"
 
 class G4HCofThisEvent;
 class G4Step;
@@ -22,6 +23,6 @@ class ImpScintCrystalSensitiveDetector : public G4VSensitiveDetector
     private:
         G4String channelId;
         G4String thisCollectionName; 
-        G4THitsCollection<ImpScintCrystalHit>* hitsCollection;
+        G4THitsCollection<ImpVHit>* hitsCollection;
         G4int hitsCollectionId;
 };

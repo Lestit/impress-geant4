@@ -3,6 +3,7 @@
 #include <memory>
 #include <sstream>
 
+#include "ImpAnalysis.hh"
 #include "ImpActionInitialization.hh"
 #include "ImpDetectorConstruction.hh"
 #include "ImpPhysicsList.hh"

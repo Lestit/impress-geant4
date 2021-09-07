@@ -15,19 +15,19 @@ int main(int argc, char* argv[])
     runMan->SetUserInitialization(new ImpDetectorConstruction);
     runMan->SetUserInitialization(new ImpActionInitialization);
 
-    auto* visMan = new G4VisExecutive;
-    visMan->Initialize();
     auto* uiMan = G4UImanager::GetUIpointer();
 
-    // G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", false);
+    G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", false);
 
-    uiMan->ApplyCommand("/control/macroPath macros");
     bool interactive = (argc == 1);
     if (interactive) {
+        auto* visMan = new G4VisExecutive;
+        visMan->Initialize();
         auto* uiExec = new G4UIExecutive(argc, argv);
         uiMan->ApplyCommand("/control/execute macros/init_gui.mac");
         uiExec->SessionStart();
         delete uiExec;
+        delete visMan;
     }
     else {
         uiMan->ApplyCommand("/run/initialize");
@@ -36,7 +36,8 @@ int main(int argc, char* argv[])
         uiMan->ApplyCommand(ss.str());
     }
 
+    /* if (ImpAnalysis::instance()) */
+    /*     ImpAnalysis::instance->quit(); */
     delete runMan;
-    delete visMan;
     return 0;
 }

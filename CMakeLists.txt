@@ -27,3 +27,5 @@ foreach (macro ${macros})
         ${CMAKE_CURRENT_BINARY_DIR}/macros/${rawname}
         COPYONLY)
 endforeach()
+
+add_compile_options(-Wall -Wextra -pedantic -Werror)
