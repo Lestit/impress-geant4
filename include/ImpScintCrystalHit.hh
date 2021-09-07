@@ -21,7 +21,7 @@ class ImpScintCrystalHit : public ImpVHit
         HitType hitType() const override
         { return HitType::ScintCryst; }
 
-        G4double peekDepositedEnergy() const override
+        G4double peekDepositedEnergy() const
         { return depositedEnergy; }
         const G4ThreeVector& peekPosition() const override
         { return position; }

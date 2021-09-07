@@ -1,0 +1,19 @@
+# configure the G4GeneralParticleSource to match flare spectra.
+
+# /control/verbose 0
+# /tracking/verbose 0
+# /event/verbose 0
+/gps/verbose 0
+
+/gps/particle gamma
+/gps/pos/type Plane
+/gps/pos/shape Square
+
+# set in program
+# /gps/pos/centre ? ? ? cm
+# /gps/pos/halfx ? cm
+# /gps/pos/halfy ? cm
+# /gps/ang/type planar
+/gps/direction 0 0 -1
+/gps/ene/type Mono
+/gps/ene/mono 70 keV

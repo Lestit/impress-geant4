@@ -8,6 +8,7 @@
 #include "ImpDetectorConstruction.hh"
 #include "ImpPhysicsList.hh"
 
+#include "G4Box.hh"
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIManager.hh"

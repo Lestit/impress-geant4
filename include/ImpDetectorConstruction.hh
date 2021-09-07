@@ -26,8 +26,8 @@ class ImpDetectorConstruction : public G4VUserDetectorConstruction
         G4VPhysicalVolume* Construct() override;
         void ConstructSDandField() override;
 
-        static G4double maxYCoordCm()
-        { return (IMPRESS_UNITS_LONG * CUBESAT_SIDE)/2 + EXTRA_SPACE; }
+        const G4Box* peekBoundingBox()
+        { return boundingBox; }
 
     private:
         void constructEnclosing();

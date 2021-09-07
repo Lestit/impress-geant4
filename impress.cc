@@ -1,5 +1,25 @@
 #include "impress.hh"
 
+void configureGps(G4UImanager* uiMan, ImpDetectorConstruction* idc)
+{
+    // what a weird way to go about things
+    uiMan->ApplyCommand("/control/execute macros/configure_gps.mac");
+    const G4Box* b = idc->peekBoundingBox();
+
+    std::stringstream ss;
+    ss << "/gps/pos/centre " << "0 0" //b->GetXHalfLength()/cm << " " << b->GetYHalfLength()/cm
+       << " " <<  b->GetZHalfLength()/cm << " cm";
+    uiMan->ApplyCommand(ss.str());
+    ss.str("");
+
+    ss << "/gps/pos/halfx " << b->GetXHalfLength()/cm << " cm";
+    uiMan->ApplyCommand(ss.str());
+    ss.str("");
+
+    ss << "/gps/pos/halfy " << b->GetYHalfLength()/cm << " cm";
+    uiMan->ApplyCommand(ss.str());
+}
+
 int main(int argc, char* argv[])
 {
     // random engine
@@ -12,12 +32,15 @@ int main(int argc, char* argv[])
     auto* physList = new ImpPhysicsList;
     physList->SetVerboseLevel(0);
     runMan->SetUserInitialization(physList);
-    runMan->SetUserInitialization(new ImpDetectorConstruction);
+    auto* idc = new ImpDetectorConstruction;
+    runMan->SetUserInitialization(idc);
     runMan->SetUserInitialization(new ImpActionInitialization);
 
     auto* uiMan = G4UImanager::GetUIpointer();
 
-    G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", false);
+    /* G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", false); */
+    uiMan->ApplyCommand("/run/initialize");
+    configureGps(uiMan, idc);
 
     bool interactive = (argc == 1);
     if (interactive) {
@@ -30,14 +53,11 @@ int main(int argc, char* argv[])
         delete visMan;
     }
     else {
-        uiMan->ApplyCommand("/run/initialize");
         std::stringstream ss;
         ss << "/control/execute " << argv[1];
         uiMan->ApplyCommand(ss.str());
     }
 
-    /* if (ImpAnalysis::instance()) */
-    /*     ImpAnalysis::instance->quit(); */
     delete runMan;
     return 0;
 }

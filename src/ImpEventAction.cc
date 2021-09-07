@@ -26,17 +26,23 @@ void ImpEventAction::BeginOfEventAction(const G4Event*)
 void ImpEventAction::EndOfEventAction(const G4Event* evt)
 {
     auto* hcote = evt->GetHCofThisEvent();
-    size_t nHitColls;
-    if (hcote) nHitColls = hcote->GetNumberOfCollections();
-    bool keepIt = keepAllEvents || (hcote && nHitColls > 0);
-    auto* dangerousEvt = fpEventManager->GetNonconstCurrentEvent();
-    dangerousEvt->KeepTheEvent(keepIt);
-    if (!keepIt) return;
+    size_t nHitColls = 0;
+    if (hcote) {
+        for (auto i = 0; i < hcote->GetNumberOfCollections(); ++i) {
+            nHitColls += hcote->GetHC(i)->GetSize();
+        }
+    }
 
-    ImpAnalysis::instance()->saveEvent(evt);
+    bool keepIt = keepAllEvents || (hcote && nHitColls > 0);
+    if (keepIt) ImpAnalysis::instance()->saveEvent(evt);
 
     if (G4VVisManager::GetConcreteInstance()) {
-        sampleDrawOptical(evt->GetTrajectoryContainer());
+        auto* trjCon = evt->GetTrajectoryContainer();
+        for (G4VTrajectory* trj : *(trjCon->GetVector())) {
+            static_cast<ImpTrajectory*>(trj)->doDraw(keepIt);
+        }
+
+        sampleDrawOptical(trjCon);
     }
 }
 
@@ -61,6 +67,5 @@ void ImpEventAction::printHits(const G4Event* evt)
     for (G4int i = 0; i < hcote->GetNumberOfCollections(); ++i) {
         auto* hc = hcote->GetHC(i);
         if (hc) hc->PrintAllHits();
-        else G4cout << "No hits collection here" << G4endl;
     }
 }

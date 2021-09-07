@@ -24,7 +24,7 @@ namespace {
     G4Mutex instMux = G4MUTEX_INITIALIZER;
     G4Mutex dataMux = G4MUTEX_INITIALIZER;
 
-    static const G4String MANAGER_TYPE = "root";
+    static const G4String MANAGER_TYPE = "csv";
     static const G4String HISTO_DIRECTORY = "impress-histo";
     static const G4String TUPLE_DIRECTORY = "impress-tuple";
     static const G4String FILE_PFX = "imp-";
@@ -33,16 +33,16 @@ namespace {
 }
 
 ImpAnalysis::ImpAnalysis() :
-    man(G4Analysis::ManagerInstance(MANAGER_TYPE)),
+    /* man(G4Analysis::ManagerInstance(MANAGER_TYPE)), */
     totalHits(0),
     energyColId(-1),
     channelColId(-1),
     collectionNumber(0)
 {
-    man->SetNtupleDirectoryName(TUPLE_DIRECTORY);
-    man->SetHistoDirectoryName(HISTO_DIRECTORY);
-    outFn = buildFilename(FILE_PFX);
-    man->OpenFile(outFn);
+    /* man->SetNtupleDirectoryName(TUPLE_DIRECTORY); */
+    /* man->SetHistoDirectoryName(HISTO_DIRECTORY); */
+    /* outFn = buildFilename(FILE_PFX); */
+    /* man->OpenFile(outFn); */
     
     G4AccumulableManager::Instance()->RegisterAccumulable(totalHits);
 }
@@ -56,17 +56,16 @@ G4String ImpAnalysis::buildFilename(const char* pfx)
     time_t timeNow = clk::to_time_t(clk::now());
     std::tm* nowTm = std::localtime(&timeNow);
     std::stringstream ss;
-    ss << pfx << std::put_time(nowTm, TIME_FORMAT);
+    ss << pfx << std::put_time(nowTm, TIME_FORMAT) << ".csv";
     return ss.str();
 }
 
 ImpAnalysis::~ImpAnalysis()
 {
-    if (man) delete man;
-    man = nullptr;
+    /* if (man) delete man; */
+    /* man = nullptr; */
     if (anInst) delete anInst;
     anInst = nullptr;
-    G4cout << "********************************88DESTRUCTOR" << G4endl;
 }
 
 ImpAnalysis* ImpAnalysis::instance()
@@ -92,10 +91,11 @@ void ImpAnalysis::bookTuplesHistograms(G4bool isMaster)
 
     G4AccumulableManager::Instance()->Reset();
 
-    man->CreateNtuple(ENERGY_NTUPLE_NAME, "Energy deposited and channel ID");
-    energyColId = man->CreateNtupleDColumn("Edep");
-    channelColId = man->CreateNtupleDColumn("ChannelId");
-    man->FinishNtuple();
+    if (outf.is_open()) outf.close();
+    outf.open(buildFilename(FILE_PFX));
+    /* man->CreateNtuple(ENERGY_NTUPLE_NAME, "Energy deposited and channel ID"); */
+    /* energyColId = man->CreateNtupleDColumn("Edep"); */ /* channelColId = man->CreateNtupleDColumn("ChannelId"); */
+    /* man->FinishNtuple(); */
 }
 
 void ImpAnalysis::saveFile(G4bool isMaster)
@@ -105,8 +105,10 @@ void ImpAnalysis::saveFile(G4bool isMaster)
 
     G4AccumulableManager::Instance()->Merge();
     G4cout << "Total hits " << totalHits.GetValue() << G4endl;
-    man->Write();
-    man->CloseFile();
+    outf.flush();
+    outf.close();
+    /* man->Write(); */
+    /* man->CloseFile(); */
 }
 
 void ImpAnalysis::saveEvent(const G4Event* evt)
@@ -142,14 +144,16 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
 void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
 {
     G4double totalEnergy = 0;
+    G4String chId = (*vec)[0]->peekAssociatedChannelId();
     for (const auto h : *vec) {
         auto* niceHit = static_cast<ImpScintCrystalHit*>(h);
         totalEnergy += niceHit->peekDepositedEnergy();
     }
 
+    outf << (totalEnergy / keV) << '\t' << chId << std::endl;
     /* if (totalEnergy > 0) { */
-    man->FillNtupleDColumn(energyColId, totalEnergy / keV);
-    man->FillNtupleDColumn(channelColId, -1);
-    man->AddNtupleRow();
+    /* man->FillNtupleDColumn(energyColId, totalEnergy / keV); */
+    /* man->FillNtupleDColumn(channelColId, -1); */
+    /* man->AddNtupleRow(); */
     /* } */
 }

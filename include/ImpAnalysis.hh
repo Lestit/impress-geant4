@@ -1,5 +1,7 @@
 #pragma once
 
+#include <fstream>
+
 #include "G4Accumulable.hh"
 #include "G4String.hh"
 #include "G4VAnalysisManager.hh"
@@ -34,7 +36,6 @@ class ImpAnalysis
         void processHitCollection(const G4VHitsCollection* hc);
         void saveCrystalHits(const std::vector<ImpVHit*>* vec);
 
-        G4VAnalysisManager* man;
         G4Accumulable<size_t> totalHits;
 
         G4int energyColId;
@@ -42,4 +43,6 @@ class ImpAnalysis
 
         G4String outFn;
         G4int collectionNumber;
+
+        std::ofstream outf;
 };
