@@ -24,9 +24,9 @@ class ImpHafxChannel : public G4PVPlacement
 
         // as crystal becomes more fleshed out, update these
         static G4double thicknessInMm()
-        { return CEBR3_THICKNESS + TEFLON_THICKNESS; }
+        { return AL_HOUSING_DEPTH; }
         static G4double diameterInMm()
-        { return CEBR3_DIAMETER + 2*TEFLON_THICKNESS; }
+        { return CEBR3_DIAMETER + 2*TEFLON_THICKNESS + 2*AL_HOUSING_THICKNESS; }
         static G4double radiusInMm()
         { return diameterInMm() / 2; }
 
@@ -36,10 +36,17 @@ class ImpHafxChannel : public G4PVPlacement
         static G4OpticalSurface* tefSurf();
 
         void buildCrystal();
+
         void buildTeflonReflector();
         void attachTeflonOpticalSurface();
 
-        G4ThreeVector adjustPlacements;
+        void buildAlHousing();
+        void attachAlOpticalSurface();
+
+        void buildQuartz();
+
+        G4ThreeVector cebr3AnchorCenter;
+        G4ThreeVector quartzAnchorCenter;
 
         G4Tubs* boundingCylinder;
 
@@ -54,10 +61,29 @@ class ImpHafxChannel : public G4PVPlacement
         G4PVPlacement* tefPlacement;
         G4LogicalSkinSurface* tefSkin;
 
+        G4Tubs* alCylinder;
+        G4LogicalVolume* alLogVol;
+        G4PVPlacement* alPlacement;
+        G4LogicalSkinSurface* alSkin;
+
+        G4Tubs* qzCylinder;
+        G4LogicalVolume* qzLogVol;
+        G4PVPlacement* qzPlacement;
+        // optical grease between quartz and crystal?
+
         G4String channelId;
+
+        static constexpr G4double BE_THICKNESS = 0.7 * mm;
 
         static constexpr G4double CEBR3_THICKNESS = 5 * mm;
         static constexpr G4double CEBR3_DIAMETER = 37 * mm;
 
         static constexpr G4double TEFLON_THICKNESS = 1.75 * mm;
+
+        static constexpr G4double AL_HOUSING_THICKNESS = 1.25 * mm;
+        static constexpr G4double AL_HOUSING_DEPTH = 11.3 * mm;
+
+        // ???
+        static constexpr G4double QUARTZ_THICKNESS = 3 * mm;
+        static constexpr G4double QUARTZ_DIAMETER = 40.5 * mm;
 };

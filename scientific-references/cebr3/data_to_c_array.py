@@ -3,27 +3,9 @@ import os
 import sys
 import scipy.constants as cst
 import matplotlib.pyplot as plt
+sys.path.append('..')
+from d2c import discern_infinity, c_ary_print
 
-def discern_infinity(val):
-    if val == float('inf'):
-        return '1.00000e+20'
-    return f'{val:.5e}'
-
-def c_ary_print(data):
-    STEP_SZ = 8
-    for k, v in data.items():
-        unit_str = ('*' + v['units']) if v['units'] else ''
-        dat = v['data']
-
-        print(f"const std::vector<G4double> {k} =", "{")
-
-        for i in range(0, dat.size, STEP_SZ):
-            row = ', '.join(f'{discern_infinity(val)}{unit_str}' for val in dat[i:i+STEP_SZ])
-            print(4*' ' + row, end='')
-            if i + STEP_SZ <= dat.size:
-                print(',')
-
-        print(os.linesep + '};', end=2*os.linesep)
 
 def optical_emission_spectrum():
     wavelength, rel_intens = np.loadtxt('cebr3-optical-burst.raw.tab', unpack=True)
@@ -34,16 +16,6 @@ def optical_emission_spectrum():
 
     rel_intens = np.flip(rel_intens)
     energy_ev = np.flip(energy_ev)
-    # print(rel_intens)
-    # print(energy_ev)
-    # print(energy_ev.size)
-    # print(rel_intens.size)
-
-    # print('Intensity sums to', np.sum(rel_intens))
-    # print('length', rel_intens.size)
-    # print(energy_ev)
-    # print(rel_intens)
-    # input()
 
     to_print = {
         'CEBR3_SCINT_OPTICAL_ENERGIES': {'data': energy_ev, 'units': 'eV'},

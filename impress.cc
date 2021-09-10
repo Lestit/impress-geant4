@@ -7,7 +7,7 @@ void configureGps(G4UImanager* uiMan, ImpDetectorConstruction* idc)
     const G4Box* b = idc->peekBoundingBox();
 
     std::stringstream ss;
-    ss << "/gps/pos/centre " << "0 0" //b->GetXHalfLength()/cm << " " << b->GetYHalfLength()/cm
+    ss << "/gps/pos/centre " << "0 0"
        << " " <<  b->GetZHalfLength()/cm << " cm";
     uiMan->ApplyCommand(ss.str());
     ss.str("");
@@ -24,6 +24,13 @@ int main(int argc, char* argv[])
 {
     // random engine
     // no customization for now?
+    char c = 0;
+    while (c != 'y' && c != 'n') {
+        std::cout << "Scintillation on? (y/n) ";
+        std::cin >> c;
+    }
+    bool doScintillate = (c == 'y');
+
 
     auto* runMan = new G4MTRunManager;
     // assumes hyperthreading (2 threads/core)
@@ -38,7 +45,7 @@ int main(int argc, char* argv[])
 
     auto* uiMan = G4UImanager::GetUIpointer();
 
-    /* G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", false); */
+    G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", doScintillate);
     uiMan->ApplyCommand("/run/initialize");
     configureGps(uiMan, idc);
 

@@ -16,4 +16,4 @@
 # /gps/ang/type planar
 /gps/direction 0 0 -1
 /gps/ene/type Mono
-/gps/ene/mono 70 keV
+/gps/ene/mono 667 keV

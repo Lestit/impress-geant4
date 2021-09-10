@@ -6,6 +6,18 @@ namespace ImpMaterials {
     static constexpr G4double BR_MASS_FRAC = 0.631108;
     static constexpr G4double CE_MASS_FRAC = 1 - BR_MASS_FRAC;
 
+    // scintillation
+    static const G4String kSCINT_YIELD = "SCINTILLATIONYIELD";
+    static const G4String kOPTICAL_FAST_COMP = "FASTCOMPONENT";
+    static const G4String kFAST_TIME_CONSTANT = "FASTTIMECONSTANT";
+    static const G4String kRESOLUTION_SCALE = "RESOLUTIONSCALE";
+
+    // optical photon stuff
+    static const G4String kREFR_IDX = "RINDEX";
+    static const G4String kREFR_IDX_REAL = "REALRINDEX";
+    static const G4String kREFR_IDX_IMAG = "IMAGINARYRINDEX";
+    static const G4String kABSORPTION_LEN = "ABSLENGTH";
+
     // from John Sample
     // see https://opengate.readthedocs.io/en/latest/generating_and_tracking_optical_photons.html#id9
     static const G4double CEBR3_SCINT_RESLN_SCALE = 5.9;
@@ -13,6 +25,7 @@ namespace ImpMaterials {
     static const G4double CEBR3_SCINT_YIELD = 60000 / MeV;
     static const G4double CEBR3_DECAY_TIME_CONSTANT = 20 * ns;
 
+    // Quarati et al, 2.5mm thickness
     const std::vector<G4double> CEBR3_SCINT_OPTICAL_ENERGIES = {
         2.58558e+00*eV, 2.60375e+00*eV, 2.62735e+00*eV, 2.65348e+00*eV, 2.68122e+00*eV, 2.71175e+00*eV, 2.74185e+00*eV, 2.77033e+00*eV,
         2.79940e+00*eV, 2.83029e+00*eV, 2.86188e+00*eV, 2.88540e+00*eV, 2.90805e+00*eV, 2.93235e+00*eV, 2.94140e+00*eV, 2.95443e+00*eV,

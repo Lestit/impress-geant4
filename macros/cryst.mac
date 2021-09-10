@@ -3,4 +3,4 @@
 
 # should register a few events unless the materials in front
 # of the crystals block all the photons lol
-/run/beamOn 10000
+/run/beamOn 100000

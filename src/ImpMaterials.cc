@@ -6,6 +6,8 @@ namespace ImpMaterials {
     void makeCeBr3();
     void configureCeBr3Scintillation();
     void makeVacuum();
+    void makeAluminum();
+    void makeQuartz();
 }
 
 namespace ImpMaterials
@@ -22,6 +24,8 @@ namespace ImpMaterials
         }
 
         configureTeflon();
+        if (!G4Material::GetMaterial(kAL)) makeAluminum();
+        if (!G4Material::GetMaterial(kNIST_SIO2)) makeQuartz();
     }
 
     void configureTeflon()
@@ -33,18 +37,7 @@ namespace ImpMaterials
         tefPt->AddProperty(kREFR_IDX, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFR_IDXS)->SetSpline(false);
 
         teflon->SetMaterialPropertiesTable(tefPt);
-        if (teflon) {
-            G4cout << "====================================================================================================" << G4endl;
-            G4cout << *teflon << G4endl;
-            teflon->GetMaterialPropertiesTable()->DumpTable();
-            G4cout << "====================================================================================================" << G4endl;
-            G4cout.flush();
-        }
-        else {
-            throw std::runtime_error("didnt load teflon");
-        }
     }
-
 
     void makeCeBr3()
     {
@@ -133,5 +126,35 @@ namespace ImpMaterials
         vacPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, indices)->SetSpline(false);
 
         vacMat->SetMaterialPropertiesTable(vacPt);
+    }
+
+    void makeAluminum()
+    {
+        auto* nistMan = G4NistManager::Instance();
+        auto* alElt = nistMan->FindOrBuildElement("Al");
+        if (alElt == nullptr) G4cerr << "Nist manager gave nullptr for aluminum" << G4endl;
+
+        auto* al = new G4Material(
+            kAL,
+            AL_DENSITY,
+            AL_NUM_COMPONENTS,
+            kStateSolid,
+            SATELLITE_TEMP);
+
+        al->AddElement(alElt, G4int(1));
+        auto* alPt = new G4MaterialPropertiesTable;
+
+        alPt->AddProperty(kREFR_IDX_REAL, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_REAL);
+        alPt->AddProperty(kREFR_IDX_REAL, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_IMAG);
+        al->SetMaterialPropertiesTable(alPt);
+    }
+
+    void makeQuartz()
+    {
+        auto* qz = G4NistManager::Instance()->FindOrBuildMaterial(kNIST_SIO2);
+        auto* qzPt = new G4MaterialPropertiesTable;
+        qzPt->AddProperty(kREFR_IDX, QZ_REFR_IDX_ENERGIES, QZ_REFR_IDXS);
+
+        qz->SetMaterialPropertiesTable(qzPt);
     }
 }

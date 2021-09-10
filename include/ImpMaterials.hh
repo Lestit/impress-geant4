@@ -14,12 +14,17 @@
 
 #include "CeBr3Properties.hh"
 #include "TeflonProperties.hh"
+#include "AluminumProperties.hh"
+#include "QuartzProperties.hh"
+
 /*
  * Empirical data sources
  * CeBr3 scintillation information
  *     Quarati et al doi:10.1016/j.nima.2013.08.005
  * CeBr3 index of refraction, absorption length info
  *     Li et al doi:10.1016/j.ssc.2007.08.040
+ * Al refractive index info
+ *     Rakic 1995 doi:10.1364/AO.34.004755
  */
 
 namespace ImpMaterials {
@@ -30,13 +35,5 @@ namespace ImpMaterials {
     static const G4double VACUUM_PRESSURE = 1.322e-11 * pascal;
 
     static const G4double SATELLITE_TEMP = 283 * kelvin;
-
-    static const G4String kSCINT_YIELD = "SCINTILLATIONYIELD";
-    static const G4String kREFR_IDX = "RINDEX";
-    static const G4String kOPTICAL_FAST_COMP = "FASTCOMPONENT";
-    static const G4String kFAST_TIME_CONSTANT = "FASTTIMECONSTANT";
-    static const G4String kRESOLUTION_SCALE = "RESOLUTIONSCALE";
-    static const G4String kABSORPTION_LEN = "ABSLENGTH";
-    // Quarati et al, 2.5mm thickness
     void makeMaterials();
 }
