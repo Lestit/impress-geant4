@@ -23,15 +23,16 @@ class ImpDetectorPayload : public G4PVPlacement
         void constructSensitiveDetectors();
 
     private:
-        static const size_t NUM_CRYSTALS = 4;
-        static constexpr G4double CRYSTAL_SEPARATION = 0.25 * cm;
+        static constexpr G4double CRYSTAL_SEPARATION = 6 * mm;
         // cubesat standard
         static constexpr G4double SIDE_LENGTH = 10 * cm;
         static constexpr G4double DETECTOR_OFFSET = 7.5 * mm;
 
         void buildPlaceChannels();
+        void buildPlaceTopPanel();
 
-        G4Box* boundingBox;
+        //G4Box* boundingBox;
 
+        static const size_t NUM_CRYSTALS = 4;
         std::array<ImpHafxChannel*, NUM_CRYSTALS> crystalChannels;
 };

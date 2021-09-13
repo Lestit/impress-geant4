@@ -16,6 +16,8 @@
 #include "TeflonProperties.hh"
 #include "AluminumProperties.hh"
 #include "QuartzProperties.hh"
+#include "BerylliumProperties.hh"
+#include "HousingAlloyProperties.hh"
 
 /*
  * Empirical data sources
@@ -27,6 +29,7 @@
  *     Rakic 1995 doi:10.1364/AO.34.004755
  */
 
+// TODO: revisit the surrounding atmosphere of the satellite
 namespace ImpMaterials {
     static const G4String kVACUUM = "vacuum";
     static const G4double VACUUM_MOLAR_DENSITY = 1.01 * g / mole;

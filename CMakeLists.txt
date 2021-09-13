@@ -18,7 +18,11 @@ add_executable(impress impress.cc ${sources} ${headers})
 target_link_libraries(impress ${Geant4_LIBRARIES})
 
 # copy over macros
-file(GLOB macros "${PROJECT_SOURCE_DIR}/macros/*.mac")
+file(GLOB macros "${PROJECT_SOURCE_DIR}/macros/*")
+
+# configure data in/out
+file(COPY "flare-data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/data-out")
 
 foreach (macro ${macros})
     get_filename_component(rawname ${macro} NAME)

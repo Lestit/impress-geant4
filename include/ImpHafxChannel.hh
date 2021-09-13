@@ -19,16 +19,21 @@ class ImpScintCrystalSensitiveDetector;
 class ImpHafxChannel : public G4PVPlacement
 {
     public:
-        ImpHafxChannel(G4RotationMatrix* rotMat, const G4ThreeVector& translate, G4LogicalVolume* motherLogVol, const G4String& channelId);
+        ImpHafxChannel(
+            G4RotationMatrix* rotMat, const G4ThreeVector& translate,
+            G4LogicalVolume* motherLogVol, const G4String& channelId,
+            const G4double attenuatorWindowThickness = 1 * mm);
         ~ImpHafxChannel();
 
         // as crystal becomes more fleshed out, update these
-        static G4double thicknessInMm()
-        { return AL_HOUSING_DEPTH; }
-        static G4double diameterInMm()
+        G4double thickness()
+        { return AL_HOUSING_DEPTH + attenuatorWindowThickness; }
+        static G4double thicknessNoAttenuator()
+        { return AL_HOUSING_THICKNESS; }
+        static G4double diameter()
         { return CEBR3_DIAMETER + 2*TEFLON_THICKNESS + 2*AL_HOUSING_THICKNESS; }
-        static G4double radiusInMm()
-        { return diameterInMm() / 2; }
+        static G4double radius()
+        { return diameter() / 2; }
 
         void attachCrystalDetector();
 
@@ -41,9 +46,13 @@ class ImpHafxChannel : public G4PVPlacement
         void attachTeflonOpticalSurface();
 
         void buildAlHousing();
-        void attachAlOpticalSurface();
+        void buildAlAttenuator();
+        void attachAlOpticalSurface(G4LogicalVolume* curAlLogVol);
 
         void buildQuartz();
+
+        void buildBeryllium();
+        void attachBeOpticalSurface();
 
         G4ThreeVector cebr3AnchorCenter;
         G4ThreeVector quartzAnchorCenter;
@@ -66,12 +75,23 @@ class ImpHafxChannel : public G4PVPlacement
         G4PVPlacement* alPlacement;
         G4LogicalSkinSurface* alSkin;
 
+        G4Tubs* attCylinder;
+        G4LogicalVolume* attLogVol;
+        G4PVPlacement* attPlacement;
+        G4LogicalSkinSurface* attSkin;
+
         G4Tubs* qzCylinder;
         G4LogicalVolume* qzLogVol;
         G4PVPlacement* qzPlacement;
         // optical grease between quartz and crystal?
+        
+        G4Tubs* beCylinder;
+        G4LogicalVolume* beLogVol;
+        G4PVPlacement* bePlacement;
+        G4LogicalSkinSurface* beSkin;
 
         G4String channelId;
+        G4double attenuatorWindowThickness;
 
         static constexpr G4double BE_THICKNESS = 0.7 * mm;
 

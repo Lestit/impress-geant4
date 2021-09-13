@@ -1,6 +1,9 @@
 #pragma once
 
+#include "G4Types.hh"
+#include "G4String.hh"
 #include "G4VUserActionInitialization.hh"
+class ImpVDetectorConstruction;
 
 /*
  * eventually want:
@@ -20,4 +23,7 @@ class ImpActionInitialization : public G4VUserActionInitialization
 
         void BuildForMaster() const override;
         void Build() const override;
+
+    private:
+        /* void setupPrimaryGenerator() const; */
 };

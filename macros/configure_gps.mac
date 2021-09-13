@@ -6,14 +6,15 @@
 /gps/verbose 0
 
 /gps/particle gamma
-/gps/pos/type Plane
-/gps/pos/shape Square
+/gps/direction 0 0 -1
+
 
 # set in program
+# /gps/pos/type ?
+# /gps/pos/shape ?
 # /gps/pos/centre ? ? ? cm
 # /gps/pos/halfx ? cm
 # /gps/pos/halfy ? cm
-# /gps/ang/type planar
-/gps/direction 0 0 -1
-/gps/ene/type Mono
-/gps/ene/mono 667 keV
+# /gps/ang/type ?
+# /gps/ene/type ?
+

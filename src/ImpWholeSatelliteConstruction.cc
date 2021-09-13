@@ -1,19 +1,14 @@
-#include "ImpDetectorConstruction.hh"
+#include "ImpWholeSatelliteConstruction.hh"
 
-ImpDetectorConstruction::ImpDetectorConstruction() :
-    G4VUserDetectorConstruction()
-{
-    /* crystalRotMat->rotateX(45 * deg); */
-    /* crystalRotMat->rotateY(45 * deg); */
-    // offload material construction to a separate free function
-    ImpMaterials::makeMaterials();
-}
+ImpWholeSatelliteConstruction::ImpWholeSatelliteConstruction() :
+    ImpVDetectorConstruction()
+{ }
 
-ImpDetectorConstruction::~ImpDetectorConstruction()
+ImpWholeSatelliteConstruction::~ImpWholeSatelliteConstruction()
 { /* all geometry objects are deleted by a VolumeStore object */ }
 
 
-G4VPhysicalVolume* ImpDetectorConstruction::Construct()
+G4VPhysicalVolume* ImpWholeSatelliteConstruction::Construct()
 {
     constructEnclosing();
 
@@ -23,7 +18,7 @@ G4VPhysicalVolume* ImpDetectorConstruction::Construct()
     return boundingBoxPhysVol;
 }
 
-void ImpDetectorConstruction::constructEnclosing()
+void ImpWholeSatelliteConstruction::constructEnclosing()
 {
     const auto xy_half_sz = (IMPRESS_UNITS_WIDE * CUBESAT_SIDE + EXTRA_SPACE) / 2;
     const auto z_half_sz = (IMPRESS_UNITS_LONG * CUBESAT_SIDE + EXTRA_SPACE) / 2;
@@ -45,7 +40,7 @@ void ImpDetectorConstruction::constructEnclosing()
         nullptr, 0, 0, false);
 }
 
-void ImpDetectorConstruction::ConstructSDandField()
+void ImpWholeSatelliteConstruction::ConstructSDandField()
 // deal with this later
 {
     payload->constructSensitiveDetectors();

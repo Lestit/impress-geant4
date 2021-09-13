@@ -1,0 +1,3 @@
+format of files is this:
+first line: min and max energies
+next 1024 lines: energies and relative intensities of them

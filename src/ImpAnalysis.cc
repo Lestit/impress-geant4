@@ -49,14 +49,18 @@ ImpAnalysis::ImpAnalysis() :
 
 G4String ImpAnalysis::buildFilename(const char* pfx)
 {
-    static const char* TIME_FORMAT = "%F_%H:%M:%S";
     // year-month-day-hour:min:sec
+    /* static const char* TIME_FORMAT = "%F_%H:%M:%S.%f"; */
+    static const char* OUT_DIR = "data-out";
     using clk = std::chrono::system_clock;
 
-    time_t timeNow = clk::to_time_t(clk::now());
-    std::tm* nowTm = std::localtime(&timeNow);
+    /* time_t timeNow = clk::to_time_t(clk::now()); */
+    /* std::tm* nowTm = std::localtime(&timeNow); */
+
     std::stringstream ss;
-    ss << pfx << std::put_time(nowTm, TIME_FORMAT) << ".csv";
+    auto nowOut = std::chrono::duration_cast<std::chrono::milliseconds>(clk::now().time_since_epoch());
+    ss << OUT_DIR << "/" << pfx
+       << nowOut.count() /* std::put_time(nowTm, TIME_FORMAT) */ << ".csv";
     return ss.str();
 }
 

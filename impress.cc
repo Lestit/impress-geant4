@@ -1,36 +1,29 @@
 #include "impress.hh"
 
-void configureGps(G4UImanager* uiMan, ImpDetectorConstruction* idc)
-{
-    // what a weird way to go about things
-    uiMan->ApplyCommand("/control/execute macros/configure_gps.mac");
-    const G4Box* b = idc->peekBoundingBox();
-
-    std::stringstream ss;
-    ss << "/gps/pos/centre " << "0 0"
-       << " " <<  b->GetZHalfLength()/cm << " cm";
-    uiMan->ApplyCommand(ss.str());
-    ss.str("");
-
-    ss << "/gps/pos/halfx " << b->GetXHalfLength()/cm << " cm";
-    uiMan->ApplyCommand(ss.str());
-    ss.str("");
-
-    ss << "/gps/pos/halfy " << b->GetYHalfLength()/cm << " cm";
-    uiMan->ApplyCommand(ss.str());
-}
-
 int main(int argc, char* argv[])
 {
     // random engine
     // no customization for now?
     char c = 0;
-    while (c != 'y' && c != 'n') {
+    do {
         std::cout << "Scintillation on? (y/n) ";
         std::cin >> c;
-    }
+    } while (c != 'y' && c != 'n');
     bool doScintillate = (c == 'y');
 
+    c = 0;
+    do {
+        std::cout << "Whole (s)atellite or just a single (d)etector? (s/d) ";
+        std::cin >> c;
+    } while (c != 's' && c != 'd');
+    bool wholeSatellite = (c == 's');
+
+    G4String flareSize;
+    static const std::array<G4String, 4> fs = {"c1", "m1", "m5", "x1"};
+    do {
+        std::cout << "Flare size to simulate (c1, m1, m5, x1) ";
+        std::cin >> flareSize;
+    } while (std::find(fs.begin(), fs.end(), flareSize) == fs.end());
 
     auto* runMan = new G4MTRunManager;
     // assumes hyperthreading (2 threads/core)
@@ -39,15 +32,20 @@ int main(int argc, char* argv[])
     auto* physList = new ImpPhysicsList;
     physList->SetVerboseLevel(0);
     runMan->SetUserInitialization(physList);
-    auto* idc = new ImpDetectorConstruction;
-    runMan->SetUserInitialization(idc);
+
+    ImpVDetectorConstruction* detCon;
+    if (wholeSatellite) detCon = new ImpWholeSatelliteConstruction;
+    else detCon = new ImpOnlyDetectorConstruction(flareSize);
+
+    runMan->SetUserInitialization(detCon);
     runMan->SetUserInitialization(new ImpActionInitialization);
 
     auto* uiMan = G4UImanager::GetUIpointer();
 
     G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", doScintillate);
+
     uiMan->ApplyCommand("/run/initialize");
-    configureGps(uiMan, idc);
+    ImpGpsConfig::configureGps(detCon, flareSize);
 
     bool interactive = (argc == 1);
     if (interactive) {

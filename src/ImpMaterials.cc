@@ -7,7 +7,13 @@ namespace ImpMaterials {
     void configureCeBr3Scintillation();
     void makeVacuum();
     void makeAluminum();
-    void makeQuartz();
+    void configureQuartz();
+    void makeBeryllium();
+    void makeHousingAluminumAlloy();
+}
+
+namespace {
+    static const G4bool useSpline = false;
 }
 
 namespace ImpMaterials
@@ -23,9 +29,13 @@ namespace ImpMaterials
             configureCeBr3Scintillation();
         }
 
-        configureTeflon();
+        auto* nMan = G4NistManager::Instance();
+        if (!nMan->FindOrBuildMaterial(kNIST_SIO2)->GetMaterialPropertiesTable()) configureQuartz();
+        if (!nMan->FindOrBuildMaterial(kNIST_TEFLON)->GetMaterialPropertiesTable()) configureTeflon();
+
         if (!G4Material::GetMaterial(kAL)) makeAluminum();
-        if (!G4Material::GetMaterial(kNIST_SIO2)) makeQuartz();
+        if (!G4Material::GetMaterial(kBE)) makeBeryllium();
+        if (!G4Material::GetMaterial(kHOUSING_ALLOY)) makeHousingAluminumAlloy();
     }
 
     void configureTeflon()
@@ -34,7 +44,7 @@ namespace ImpMaterials
         auto* teflon = nistMan->FindOrBuildMaterial(kNIST_TEFLON);
         auto* tefPt = new G4MaterialPropertiesTable;
 
-        tefPt->AddProperty(kREFR_IDX, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFR_IDXS)->SetSpline(false);
+        tefPt->AddProperty(kREFR_IDX, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFR_IDXS)->SetSpline(useSpline);
 
         teflon->SetMaterialPropertiesTable(tefPt);
     }
@@ -81,7 +91,6 @@ namespace ImpMaterials
 
         auto* scintPt = new G4MaterialPropertiesTable;
 
-        G4bool useSpline = false;
         scintPt->AddConstProperty(kSCINT_YIELD, CEBR3_SCINT_YIELD);
         // refractive index depends on energy
         // only keep real part
@@ -149,12 +158,69 @@ namespace ImpMaterials
         al->SetMaterialPropertiesTable(alPt);
     }
 
-    void makeQuartz()
+    void configureQuartz()
     {
         auto* qz = G4NistManager::Instance()->FindOrBuildMaterial(kNIST_SIO2);
         auto* qzPt = new G4MaterialPropertiesTable;
         qzPt->AddProperty(kREFR_IDX, QZ_REFR_IDX_ENERGIES, QZ_REFR_IDXS);
 
         qz->SetMaterialPropertiesTable(qzPt);
+    }
+
+    void makeBeryllium()
+    {
+        auto* beElt = G4NistManager::Instance()->FindOrBuildElement("Be");
+        
+        auto* be = new G4Material(
+            kBE,
+            BE_DENSITY,
+            BE_NUM_COMPONENTS,
+            kStateSolid,
+            SATELLITE_TEMP);
+        be->AddElement(beElt, G4int(1));
+
+        auto* bePt = new G4MaterialPropertiesTable;
+        bePt->AddProperty(kREFR_IDX_REAL, BE_REFR_IDX_ENERGIES, BE_REFR_IDX_REAL);
+        bePt->AddProperty(kREFR_IDX_IMAG, BE_REFR_IDX_ENERGIES, BE_REFR_IDX_IMAG);
+        be->SetMaterialPropertiesTable(bePt);
+    }
+
+    void makeHousingAluminumAlloy()
+    {
+        // from ASTM international doi:10.1520/B0209M-14
+        // average values for spec
+        static const std::map<G4String, G4double> eltMap = {
+            {"Al", 0.9748},
+            {"Mg", 0.01},
+            {"Si", 0.006},
+            {"Fe", 0.0035},
+            {"Cr", 0.00195},
+            {"Zn", 0.00125},
+            {"Tl", 0.00125},
+            {"Mn", 0.00125}
+        };
+
+        // the alloy density is the same to 3 significant figures
+        static const G4double alloyDensity = AL_DENSITY;
+        const auto alloyNumComp = eltMap.size();
+
+        auto* housingAlloy = new G4Material(
+            kHOUSING_ALLOY, 
+            alloyDensity,
+            G4int(alloyNumComp),
+            kStateSolid,
+            SATELLITE_TEMP,
+            VACUUM_PRESSURE);
+
+        auto* nistMan = G4NistManager::Instance();
+        for (const auto& eltPair : eltMap) {
+            auto* e = nistMan->FindOrBuildElement(eltPair.first);
+            housingAlloy->AddElement(e, eltPair.second);
+        }
+
+        // optically, the alloy is very nearly aluminum.
+        housingAlloy->SetMaterialPropertiesTable(
+            G4Material::GetMaterial(kAL)->
+            GetMaterialPropertiesTable());
     }
 }

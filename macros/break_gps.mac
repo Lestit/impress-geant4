@@ -1,0 +1,7 @@
+/gps/ene/type Lin
+/gps/ene/gradient 0
+/gps/ene/intercept 1
+/gps/ene/min 0 keV
+/gps/ene/max 100 keV
+# /gps/ene/mono 80 keV
+/run/beamOn 300000

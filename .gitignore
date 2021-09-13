@@ -4,3 +4,5 @@ build
 Debug
 Release
 scientific-references/__pycache__
+comparison-with-analytical
+*.pdf

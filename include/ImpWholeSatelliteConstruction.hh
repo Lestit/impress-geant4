@@ -3,30 +3,33 @@
 #include <array>
 #include <memory>
 
-#include "G4VUserDetectorConstruction.hh"
-#include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Material.hh"
-#include "G4PVPlacement.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4Rotationmatrix.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4VisAttributes.hh"
+#include <G4Box.hh>
+#include <G4LogicalVolume.hh>
+#include <G4Material.hh>
+#include <G4PVPlacement.hh>
+#include <G4VPhysicalVolume.hh>
+#include <G4Rotationmatrix.hh>
+#include <G4SystemOfUnits.hh>
+#include <G4VisAttributes.hh>
 
-#include "ImpDetectorPayload.hh"
-#include "ImpMaterials.hh"
+#include <ImpVDetectorConstruction.hh>
+#include <ImpDetectorPayload.hh>
+#include <ImpMaterials.hh>
 
 
-class ImpDetectorConstruction : public G4VUserDetectorConstruction
+class ImpWholeSatelliteConstruction : public ImpVDetectorConstruction
 {
     public:
-        ImpDetectorConstruction();
-        ~ImpDetectorConstruction();
+        ImpWholeSatelliteConstruction();
+        ~ImpWholeSatelliteConstruction();
 
         G4VPhysicalVolume* Construct() override;
         void ConstructSDandField() override;
 
-        const G4Box* peekBoundingBox()
+        ConstructionType detectorConstructionType() const override
+        { return ConstructionType::wholeSatellite; }
+
+        const G4Box* peekBoundingBox() const
         { return boundingBox; }
 
     private:
