@@ -40,7 +40,7 @@ void ImpOnlyDetectorConstruction::ConstructSDandField()
 
 void ImpOnlyDetectorConstruction::constructEnclosing()
 {
-    static const G4double extraRoom = 1 * mm;
+    static const G4double extraRoom = 0 * mm;
     static const G4double thickness = WORLD_DEPTH;
     const G4double boundingRad = ImpHafxChannel::radius() + extraRoom;
 

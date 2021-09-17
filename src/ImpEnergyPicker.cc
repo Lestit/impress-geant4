@@ -6,6 +6,38 @@
 
 #include <ImpEnergyPicker.hh>
 
+namespace {
+    struct FileData {
+        std::vector<long double> eng;
+        std::vector<long double> cdf;
+    };
+    FileData loadFlareData(const std::string& flareSize)
+    {
+        G4String cpy = flareSize;
+        cpy.toLower();
+        std::string fn = "cdf_" + cpy + ".txt";
+        std::filesystem::path fszPath(fn);
+        auto p = FLARE_CDFS_DIR / fszPath;
+        std::ifstream ifs(p);
+
+        if (!ifs) {
+            std::string excStr = "Cannot load flare data file " + p.string();
+            G4Exception(
+                "src/ImpEnergyPicker.cc", "", RunMustBeAborted,
+                excStr.c_str());
+        }
+
+        long double energy, cdfVal;
+        std::vector<long double> engVec, cdfVec;
+        while (ifs >> energy >> cdfVal) {
+            engVec.push_back(energy);
+            cdfVec.push_back(cdfVal);
+        }
+
+        return {engVec, cdfVec};
+    }
+}
+
 ImpEnergyPicker::ImpEnergyPicker(
     const std::vector<long double>& energies, const std::vector<long double>& energyCdf)
         : energyVec(energies),
@@ -52,26 +84,14 @@ long double ImpEnergyPicker::interpolateEnergy(std::size_t upperBound, long doub
 
 ImpEnergyPicker ImpEnergyPicker::fromFlareSize(const std::string& flareSize)
 {
-    G4String cpy = flareSize;
-    cpy.toLower();
-    std::string fn = "cdf_" + cpy + ".txt";
-    std::filesystem::path fszPath(fn);
-    auto p = FLARE_CDFS_DIR / fszPath;
-    std::ifstream ifs(p);
-
-    if (!ifs) {
-        std::string excStr = "Cannot load flare data file " + p.string();
-        G4Exception(
-            "src/ImpEnergyPicker.cc", "", RunMustBeAborted,
-            excStr.c_str());
-    }
-
-    long double energy, cdfVal;
-    std::vector<long double> engVec, cdfVec;
-    while (ifs >> energy >> cdfVal) {
-        engVec.push_back(energy);
-        cdfVec.push_back(cdfVal);
-    }
-
-    return ImpEnergyPicker(engVec, cdfVec);
+    auto dat = loadFlareData(flareSize);
+    return ImpEnergyPicker(dat.eng, dat.cdf);
 }
+
+std::unique_ptr<ImpEnergyPicker> ImpEnergyPicker::uniquePtrFromFlareSize(const std::string& flareSize)
+{
+    auto dat = loadFlareData(flareSize);
+    return std::make_unique<ImpEnergyPicker>(dat.eng, dat.cdf);
+}
+
+/* FileData loadFlareData(const std::string& flareSize) */

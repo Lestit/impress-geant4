@@ -8,7 +8,8 @@
 class G4Tubs;
 class G4Box;
 
-class ImpSurfacePointPicker {
+class ImpSurfacePointPicker
+{
     public:
         static const ssize_t NOSEED = 0xdeadbeef;
         ImpSurfacePointPicker() =delete;

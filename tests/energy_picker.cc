@@ -16,13 +16,13 @@ int main(int argc, char* argv[])
     long double eTot = 0;
     long double eMin = 0;
     long double eMax = 0;
-    auto ePicker = ImpEnergyPicker::fromFlareSize(choice);
+    auto ePicker = ImpEnergyPicker::uniquePtrFromFlareSize(choice);
 
     /* use helper-scripts/plot_recent_keep.py to plot this file for visual inspection */
     std::ofstream outf("recent_epick_test.txt");
 
     for (size_t i = 0; i < NUM_RUNS; ++i) {
-        auto e = ePicker.pickEnergy();
+        auto e = ePicker->pickEnergy();
         eTot += e;
         if (e < eMin) eMin = e;
         if (e > eMax) eMax = e;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <memory>
 #include <random>
 #include <vector>
 #include <string>
@@ -13,6 +14,7 @@ static const std::filesystem::path FLARE_CDFS_DIR = "flare-cdfs";
 class ImpEnergyPicker {
     public:
         static ImpEnergyPicker fromFlareSize(const std::string& flareSize);
+        static std::unique_ptr<ImpEnergyPicker> uniquePtrFromFlareSize(const std::string& flareSize);
         ImpEnergyPicker() =delete;
         ImpEnergyPicker(const std::vector<long double>& energies, const std::vector<long double>& energyCdf);
         ~ImpEnergyPicker();
@@ -28,5 +30,3 @@ class ImpEnergyPicker {
         std::mt19937_64 rng;
         std::uniform_real_distribution<long double> realDis;
 };
-
-ImpEnergyPicker makeEnergyPicker(const std::string& flareSize);

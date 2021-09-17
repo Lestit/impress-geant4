@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     else detCon = new ImpOnlyDetectorConstruction(flareSize);
 
     runMan->SetUserInitialization(detCon);
-    runMan->SetUserInitialization(new ImpActionInitialization);
+    runMan->SetUserInitialization(new ImpActionInitialization(detCon, flareSize));
 
     auto* uiMan = G4UImanager::GetUIpointer();
 

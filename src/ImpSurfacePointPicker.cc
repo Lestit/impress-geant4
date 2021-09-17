@@ -40,9 +40,9 @@ G4ThreeVector ImpSurfacePointPicker::pickPoint()
 G4ThreeVector ImpSurfacePointPicker::pickCylinder()
 {
     const G4double angle = 2 * pi * realDis(rng);
-    const G4double r = radius * realDis(rng);
+    // need sqrt because we go from area -> radius
+    const G4double r = radius * std::sqrt(realDis(rng));
 
-    // std::cout << r << '\t' << angle << std::endl;
     return G4ThreeVector(r * std::cos(angle), r * std::sin(angle), zOffset);
 }
 
