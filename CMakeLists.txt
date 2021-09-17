@@ -3,33 +3,39 @@ cmake_minimum_required(VERSION 3.20)
 set(CMAKE_CXX_STANDARD 20)
 project(impress)
 
+set(EXC_OUT impress)
+
 find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
+add_executable(${EXC_OUT} impress.cc)
+
+enable_testing()
+add_subdirectory(tests)
 
 include_directories(
-    ${PROJECT_SOURCE_DIR}/include
-    ${Geant4_INCLUDE_DIR})
+    ${Geant4_INCLUDE_DIR}
+    "${PROJECT_SOURCE_DIR}/include"
+)
 
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-# includes headers and "impress.hh"
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh ${PROJECT_SOURCE_DIR}/*.hh)
+add_subdirectory(src)
+add_subdirectory(include)
 
-add_executable(impress impress.cc ${sources} ${headers})
-target_link_libraries(impress ${Geant4_LIBRARIES})
+target_sources(${EXC_OUT}
+    PRIVATE
+        impress.cc
+        impress.hh
+)
 
-# copy over macros
-file(GLOB macros "${PROJECT_SOURCE_DIR}/macros/*")
+target_link_libraries(${EXC_OUT} ${Geant4_LIBRARIES})
 
 # configure data in/out
 file(COPY "flare-data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/data-out")
 
-foreach (macro ${macros})
-    get_filename_component(rawname ${macro} NAME)
-    configure_file(
-        ${macro}
-        ${CMAKE_CURRENT_BINARY_DIR}/macros/${rawname}
-        COPYONLY)
-endforeach()
+# copy flare CDF tables
+file(COPY "helper-scripts/generate-cdfs/flare-cdfs" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+
+# copy macros
+file(COPY macros DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 
 add_compile_options(-Wall -Wextra -pedantic -Werror)

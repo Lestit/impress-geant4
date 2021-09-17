@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
     G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", doScintillate);
 
     uiMan->ApplyCommand("/run/initialize");
-    ImpGpsConfig::configureGps(detCon, flareSize);
+    // ImpGpsConfig::configureGps(detCon, flareSize);
 
     bool interactive = (argc == 1);
     if (interactive) {
