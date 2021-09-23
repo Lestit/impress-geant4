@@ -24,6 +24,8 @@ class ImpDetectorPayload : public G4PVPlacement
 
     private:
         static constexpr G4double CRYSTAL_SEPARATION = 6 * mm;
+        static constexpr G4double X123_PEEP_DIAM = 14.22 * mm;
+        static constexpr G4double CRYSTAL_HOLE_DIAM = 43 * mm;
         // cubesat standard
         static constexpr G4double SIDE_LENGTH = 10 * cm;
         static constexpr G4double DETECTOR_OFFSET = 7.5 * mm;

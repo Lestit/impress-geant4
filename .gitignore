@@ -6,3 +6,4 @@ Release
 scientific-references/__pycache__
 comparison-with-analytical
 *.pdf
+helper-scripts/__pycache__

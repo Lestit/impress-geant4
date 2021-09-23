@@ -14,7 +14,7 @@
 
 ImpEventAction::ImpEventAction() :
     G4UserEventAction(),
-    keepAllEvents(true)
+    keepAllEvents(false)
 { }
 
 ImpEventAction::~ImpEventAction()
@@ -54,6 +54,7 @@ void ImpEventAction::sampleDrawOptical(G4TrajectoryContainer* trjCon)
         auto* impTrj = static_cast<ImpTrajectory*>(trj);
         if (impTrj->GetParticleName() == "opticalphoton") {
             if (i != 0) impTrj->doDraw(false);
+            else impTrj->doDraw(true);
             i = (i + 1) % rest;
         }
     }

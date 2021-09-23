@@ -5,13 +5,17 @@
 #include <G4SystemOfUnits.hh>
 
 #include <ImpEnergyPicker.hh>
+#include <ImpEnergyPickerMessenger.hh>
 
-namespace {
-    struct FileData {
+namespace
+{
+    struct FlareFileData
+    {
         std::vector<long double> eng;
         std::vector<long double> cdf;
     };
-    FileData loadFlareData(const std::string& flareSize)
+
+    FlareFileData loadFlareData(const std::string& flareSize)
     {
         G4String cpy = flareSize;
         cpy.toLower();
@@ -38,60 +42,128 @@ namespace {
     }
 }
 
-ImpEnergyPicker::ImpEnergyPicker(
-    const std::vector<long double>& energies, const std::vector<long double>& energyCdf)
-        : energyVec(energies),
-    energyCdf(energyCdf),
-    rng(std::random_device()()),
-    realDis(0, 1)
+ImpEnergyPicker::ImpEnergyPicker() : 
+    distrType(DistributionType::undefined),
+    mess(new ImpEnergyPickerMessenger(this))
 { }
+
+ImpEnergyPicker::ImpEnergyPicker(const ImpEnergyPicker& other)
+        : distrType(other.distrType),
+    monoEnergy(other.monoEnergy),
+    flatStart(other.flatStart),
+    flatEnd(other.flatEnd),
+    flareEnergyVec(other.flareEnergyVec),
+    flareEnergyCdf(other.flareEnergyCdf),
+    rng(other.rng),
+    realDis(other.realDis),
+    mess(new ImpEnergyPickerMessenger(this))
+{ }
+
+ImpEnergyPicker& ImpEnergyPicker::operator=(const ImpEnergyPicker& other)
+{
+    if (this == &other) { std::cout << "poopy\n"; return *this; }
+
+    monoEnergy = other.monoEnergy;
+    flatStart = other.flatStart;
+    flatEnd = other.flatEnd;
+    flareEnergyVec = other.flareEnergyVec;
+    flareEnergyCdf = other.flareEnergyCdf;
+    rng = other.rng;
+    realDis = other.realDis;
+    distrType = other.distrType;
+    mess = new ImpEnergyPickerMessenger(this);
+    return *this;
+}
+
+ImpEnergyPicker::ImpEnergyPicker(const std::string& flareSize)
+        : distrType(DistributionType::flare),
+    rng(std::random_device()()),
+    realDis(0, 1),
+    mess(new ImpEnergyPickerMessenger(this))
+{
+    auto dat = loadFlareData(flareSize);
+    flareEnergyVec = dat.eng;
+    flareEnergyCdf = dat.cdf;
+}
+
+ImpEnergyPicker::ImpEnergyPicker(long double mono)
+        : distrType(DistributionType::mono),
+    monoEnergy(mono),
+    rng(std::random_device()()),
+    realDis(0, 1),
+    mess(new ImpEnergyPickerMessenger(this))
+{ }
+
+ImpEnergyPicker::ImpEnergyPicker(long double flatStart, long double flatEnd)
+        : distrType(DistributionType::flat),
+    flatStart(flatStart),
+    flatEnd(flatEnd),
+    rng(std::random_device()()),
+    realDis(0, 1),
+    mess(new ImpEnergyPickerMessenger(this))
+{
+    assert(flatEnd > flatStart);
+}
 
 ImpEnergyPicker::~ImpEnergyPicker()
-{ }
+{
+    if (mess) {
+        delete mess;
+        mess = nullptr;
+    }
+}
+
+void ImpEnergyPicker::updateFlareSize(const std::string& fs)
+{
+    auto dat = loadFlareData(fs);
+    flareEnergyVec = dat.eng;
+    flareEnergyCdf = dat.cdf;
+}
 
 long double ImpEnergyPicker::pickEnergy()
+{
+    using dt = DistributionType;
+    switch (distrType) {
+        case dt::mono:  return pickMono();
+        case dt::flat:  return pickFlat();
+        case dt::flare: return pickFlare();
+        default:
+            G4Exception(
+                "ImpEnergyPicker::pickEnergy", "", RunMustBeAborted,
+                "Undefined energy distribution type");
+            return -0x1337;
+    }
+}
+
+long double ImpEnergyPicker::pickFlare()
 {
     long double goal = realDis(rng);
 
     // max valid index
-    std::size_t upperBoundIdx = energyCdf.size() - 1;
-    for (std::size_t i = 0; i < energyCdf.size(); ++i) {
-        if (energyCdf[i] >= goal) {
+    std::size_t upperBoundIdx = flareEnergyCdf.size() - 1;
+    for (std::size_t i = 0; i < flareEnergyCdf.size(); ++i) {
+        if (flareEnergyCdf[i] >= goal) {
             upperBoundIdx = i;
             break;
         }
     }
 
-    return interpolateEnergy(upperBoundIdx, goal);
+    return interpolateFlareEnergy(upperBoundIdx, goal);
 }
 
 /* linear interpolation between energy/cdf points */
-long double ImpEnergyPicker::interpolateEnergy(std::size_t upperBound, long double goal)
+long double ImpEnergyPicker::interpolateFlareEnergy(std::size_t upperBound, long double goal)
 {
-    if (upperBound == 0) return energyVec[0];
+    if (upperBound == 0) return flareEnergyVec[0];
    
     auto lowerBound = upperBound - 1;
-    auto goalOffset = goal - energyCdf[lowerBound];
-    auto deltaCdf = energyCdf[upperBound] - energyCdf[lowerBound];
+    auto goalOffset = goal - flareEnergyCdf[lowerBound];
+    auto deltaCdf = flareEnergyCdf[upperBound] - flareEnergyCdf[lowerBound];
 
     long double proportionBetween = goalOffset / deltaCdf;
 
-    auto deltaEne = energyVec[upperBound] - energyVec[lowerBound];
+    auto deltaEne = flareEnergyVec[upperBound] - flareEnergyVec[lowerBound];
 
     // put into Geant units
-    return (energyVec[lowerBound] + proportionBetween * deltaEne) * keV;
+    return (flareEnergyVec[lowerBound] + proportionBetween * deltaEne) * keV;
 }
-
-ImpEnergyPicker ImpEnergyPicker::fromFlareSize(const std::string& flareSize)
-{
-    auto dat = loadFlareData(flareSize);
-    return ImpEnergyPicker(dat.eng, dat.cdf);
-}
-
-std::unique_ptr<ImpEnergyPicker> ImpEnergyPicker::uniquePtrFromFlareSize(const std::string& flareSize)
-{
-    auto dat = loadFlareData(flareSize);
-    return std::make_unique<ImpEnergyPicker>(dat.eng, dat.cdf);
-}
-
-/* FileData loadFlareData(const std::string& flareSize) */

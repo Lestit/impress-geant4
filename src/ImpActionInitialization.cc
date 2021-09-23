@@ -10,12 +10,11 @@
 
 ImpActionInitialization::ImpActionInitialization()
         : G4VUserActionInitialization(),
-    dc(nullptr), flareSize("")
+    dc(nullptr)
 { }
 
-ImpActionInitialization::ImpActionInitialization(const ImpVDetectorConstruction* dc, const G4String& flareSize)
-        : G4VUserActionInitialization(),
-    dc(dc), flareSize(flareSize)
+ImpActionInitialization::ImpActionInitialization(const ImpVDetectorConstruction* dc) : G4VUserActionInitialization(),
+    dc(dc)
 { }
 
 ImpActionInitialization::~ImpActionInitialization()
@@ -42,13 +41,16 @@ void ImpActionInitialization::setupPrimaryGenerator() const
         return;
     }
 
+    auto* pga = new ImpPrimaryGeneratorAction;
     using ct = ImpVDetectorConstruction::ConstructionType;
     if (dc->detectorConstructionType() == ct::wholeSatellite) {
         const auto* whole = static_cast<const ImpWholeSatelliteConstruction*>(dc);
-        SetUserAction(new ImpPrimaryGeneratorAction(whole->peekBoundingBox(), flareSize));
+        pga->updateWorldVolume(whole->peekBoundingBox());
+        SetUserAction(pga);
     }
     else if (dc->detectorConstructionType() == ct::onlyDetector) {
         const auto* onlyDet = static_cast<const ImpOnlyDetectorConstruction*>(dc);
-        SetUserAction(new ImpPrimaryGeneratorAction(onlyDet->peekBoundingCyl(), flareSize));
+        pga->updateWorldVolume(onlyDet->peekBoundingCyl());
+        SetUserAction(pga);
     }
 }

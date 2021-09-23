@@ -9,6 +9,7 @@ target_sources(${EXC_OUT}
         ImpAnalysis.hh
         ImpDetectorPayload.hh
         ImpEnergyPicker.hh
+        ImpEnergyPickerMessenger.hh
         ImpEventAction.hh
         ImpGlobalConfigs.hh
         ImpGpsConfig.hh
@@ -35,5 +36,6 @@ target_sources(${EXC_OUT}
 target_sources(rand_test
     PRIVATE ImpSurfacePointPicker.hh)
 
-target_sources(energy_picker_test
-    PRIVATE ImpEnergyPicker.hh)
+target_sources(flare_picker_test PRIVATE ImpEnergyPicker.hh ImpEnergyPickerMessenger.hh)
+
+target_sources(mono_flat_energy_test PRIVATE ImpEnergyPicker.hh ImpEnergyPickerMessenger.hh)

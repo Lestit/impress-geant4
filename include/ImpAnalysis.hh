@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fstream>
+#include <unordered_map>
 
 #include "G4Accumulable.hh"
 #include "G4String.hh"
@@ -12,13 +13,11 @@ class G4VHitsCollection;
 
 class ImpScintCrystalHit;
 class ImpVHit;
-/* template<class T> std::vector<T>; */
 
 class ImpAnalysis
 {
     public:
         static ImpAnalysis* instance();
-        void quit();
 
         void bookTuplesHistograms(G4bool isMaster);
         void saveFile(G4bool isMaster);

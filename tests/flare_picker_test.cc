@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <memory>
 
 #include <ImpEnergyPicker.hh>
 #include <G4SystemOfUnits.hh>
@@ -16,7 +17,7 @@ int main(int argc, char* argv[])
     long double eTot = 0;
     long double eMin = 0;
     long double eMax = 0;
-    auto ePicker = ImpEnergyPicker::uniquePtrFromFlareSize(choice);
+    auto ePicker = std::make_unique<ImpEnergyPicker>(choice);
 
     /* use helper-scripts/plot_recent_keep.py to plot this file for visual inspection */
     std::ofstream outf("recent_epick_test.txt");

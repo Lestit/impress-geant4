@@ -18,7 +18,7 @@ class ImpVDetectorConstruction;
 class ImpActionInitialization : public G4VUserActionInitialization
 {
     public:
-        ImpActionInitialization(const ImpVDetectorConstruction* dc, const G4String& flareSize);
+        ImpActionInitialization(const ImpVDetectorConstruction* dc);
         ImpActionInitialization();
         ~ImpActionInitialization();
 
@@ -27,6 +27,5 @@ class ImpActionInitialization : public G4VUserActionInitialization
 
     private:
         const ImpVDetectorConstruction* dc;
-        G4String flareSize;
         void setupPrimaryGenerator() const;
 };

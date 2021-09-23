@@ -2,8 +2,6 @@
 
 int main(int argc, char* argv[])
 {
-    // random engine
-    // no customization for now?
     char c = 0;
     do {
         std::cout << "Scintillation on? (y/n) ";
@@ -21,13 +19,13 @@ int main(int argc, char* argv[])
     G4String flareSize;
     static const std::array<G4String, 4> fs = {"c1", "m1", "m5", "x1"};
     do {
-        std::cout << "Flare size to simulate (c1, m1, m5, x1) ";
+        std::cout << "Flare size to simulate -- also for attenuator thickness (c1, m1, m5, x1) ";
         std::cin >> flareSize;
     } while (std::find(fs.begin(), fs.end(), flareSize) == fs.end());
 
     auto* runMan = new G4MTRunManager;
-    // assumes hyperthreading (2 threads/core)
-    runMan->SetNumberOfThreads(2 * G4Threading::G4GetNumberOfCores());
+    // no hyperthreading
+    runMan->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
 
     auto* physList = new ImpPhysicsList;
     physList->SetVerboseLevel(0);
@@ -38,7 +36,7 @@ int main(int argc, char* argv[])
     else detCon = new ImpOnlyDetectorConstruction(flareSize);
 
     runMan->SetUserInitialization(detCon);
-    runMan->SetUserInitialization(new ImpActionInitialization(detCon, flareSize));
+    runMan->SetUserInitialization(new ImpActionInitialization(detCon));
 
     auto* uiMan = G4UImanager::GetUIpointer();
 

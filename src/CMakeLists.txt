@@ -4,6 +4,7 @@ target_sources(${EXC_OUT}
         ImpAnalysis.cc
         ImpDetectorPayload.cc
         ImpEnergyPicker.cc
+        ImpEnergyPickerMessenger.cc
         ImpEventAction.cc
         ImpGpsConfig.cc
         ImpHafxChannel.cc
@@ -26,4 +27,5 @@ target_sources(${EXC_OUT}
 
 target_sources(rand_test PRIVATE ImpSurfacePointPicker.cc)
 
-target_sources(energy_picker_test PRIVATE ImpEnergyPicker.cc)
+target_sources(flare_picker_test PRIVATE ImpEnergyPicker.cc ImpEnergyPickerMessenger.cc)
+target_sources(mono_flat_energy_test PRIVATE ImpEnergyPicker.cc ImpEnergyPickerMessenger.cc)

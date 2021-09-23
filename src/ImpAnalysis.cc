@@ -79,15 +79,6 @@ ImpAnalysis* ImpAnalysis::instance()
     return anInst;
 }
 
-void ImpAnalysis::quit()
-{
-    /* G4AutoLock l(&instMux); */
-    /* if (man) delete man; */
-    /* man = nullptr; */
-    /* if (anInst) delete anInst; */
-    /* anInst = nullptr; */
-}
-
 void ImpAnalysis::bookTuplesHistograms(G4bool isMaster)
 {
     G4AutoLock l(&dataMux);
@@ -97,9 +88,6 @@ void ImpAnalysis::bookTuplesHistograms(G4bool isMaster)
 
     if (outf.is_open()) outf.close();
     outf.open(buildFilename(FILE_PFX));
-    /* man->CreateNtuple(ENERGY_NTUPLE_NAME, "Energy deposited and channel ID"); */
-    /* energyColId = man->CreateNtupleDColumn("Edep"); */ /* channelColId = man->CreateNtupleDColumn("ChannelId"); */
-    /* man->FinishNtuple(); */
 }
 
 void ImpAnalysis::saveFile(G4bool isMaster)
@@ -111,8 +99,6 @@ void ImpAnalysis::saveFile(G4bool isMaster)
     G4cout << "Total hits " << totalHits.GetValue() << G4endl;
     outf.flush();
     outf.close();
-    /* man->Write(); */
-    /* man->CloseFile(); */
 }
 
 void ImpAnalysis::saveEvent(const G4Event* evt)
@@ -147,17 +133,15 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
 
 void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
 {
-    G4double totalEnergy = 0;
-    G4String chId = (*vec)[0]->peekAssociatedChannelId();
+    std::map<G4String, G4double> deposits;
     for (const auto h : *vec) {
         auto* niceHit = static_cast<ImpScintCrystalHit*>(h);
-        totalEnergy += niceHit->peekDepositedEnergy();
+        const auto& chId = niceHit->peekAssociatedChannelId();
+        if (!deposits.contains(niceHit->peekAssociatedChannelId()))
+            deposits[chId] = 0;
+        deposits[chId] += niceHit->peekDepositedEnergy();
     }
 
-    outf << (totalEnergy / keV) << '\t' << chId << std::endl;
-    /* if (totalEnergy > 0) { */
-    /* man->FillNtupleDColumn(energyColId, totalEnergy / keV); */
-    /* man->FillNtupleDColumn(channelColId, -1); */
-    /* man->AddNtupleRow(); */
-    /* } */
+    for (const auto& p : deposits)
+        outf << (p.second / keV) << '\t' << p.first << std::endl;
 }

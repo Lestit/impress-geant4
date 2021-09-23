@@ -18,15 +18,19 @@ class G4Event;
 class ImpPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
     public:
+        using DistributionType = ImpEnergyPicker::DistributionType;
         ImpPrimaryGeneratorAction();
-        ImpPrimaryGeneratorAction(const G4Box* b, const G4String& flareSize);
-        ImpPrimaryGeneratorAction(const G4Tubs* c, const G4String& flareSize);
+        /* ImpPrimaryGeneratorAction(const G4Box* b, const G4String& flareSize); */
+        /* ImpPrimaryGeneratorAction(const G4Tubs* c, const G4String& flareSize); */
         ~ImpPrimaryGeneratorAction();
+        
+        void updateWorldVolume(const G4Box* b);
+        void updateWorldVolume(const G4Tubs* c);
 
         void GeneratePrimaries(G4Event* anEvent) override;
     private:
         std::unique_ptr<G4ParticleGun> gun;
-        std::unique_ptr<ImpEnergyPicker> energyPicker;
+        // sorry boss
+        ImpEnergyPicker* energyPicker;
         std::unique_ptr<ImpSurfacePointPicker> pointPicker;
-        /* std::unique_ptr<G4GeneralParticleSource> gps; */
 };

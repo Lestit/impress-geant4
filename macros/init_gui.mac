@@ -14,6 +14,7 @@
 # draw trajectories & hits
 /vis/scene/add/trajectories smooth
 
+# color particles
 /vis/modeling/trajectories/create/drawByParticleID
 /vis/modeling/trajectories/drawByParticleID-0/set gamma green
 /vis/modeling/trajectories/drawByParticleID-0/setRGBA opticalphoton 0.878 0.627 1 0.1
