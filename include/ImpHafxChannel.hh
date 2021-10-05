@@ -31,7 +31,7 @@ class ImpHafxChannel : public G4PVPlacement
         static G4double thicknessNoAttenuator()
         { return AL_HOUSING_THICKNESS; }
         static G4double diameter()
-        { return CEBR3_DIAMETER + 2*TEFLON_THICKNESS + 2*AL_HOUSING_THICKNESS; }
+        { return WHOLE_DIAMETER; }
         static G4double radius()
         { return diameter() / 2; }
 
@@ -98,7 +98,7 @@ class ImpHafxChannel : public G4PVPlacement
         static constexpr G4double CEBR3_THICKNESS = 5 * mm;
         static constexpr G4double CEBR3_DIAMETER = 37 * mm;
 
-        static constexpr G4double TEFLON_THICKNESS = 1.75 * mm;
+        static constexpr G4double TEFLON_THICKNESS = 0.127 * mm;
 
         static constexpr G4double AL_HOUSING_THICKNESS = 1.25 * mm;
         static constexpr G4double AL_HOUSING_DEPTH = 11.3 * mm;
@@ -106,4 +106,6 @@ class ImpHafxChannel : public G4PVPlacement
         // ???
         static constexpr G4double QUARTZ_THICKNESS = 3 * mm;
         static constexpr G4double QUARTZ_DIAMETER = 40.5 * mm;
+
+        static constexpr G4double WHOLE_DIAMETER = 43 * mm;
 };

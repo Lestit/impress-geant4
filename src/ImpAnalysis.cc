@@ -2,6 +2,7 @@
 #include <chrono>
 #include <iomanip>
 #include <memory>
+#include <map>
 #include <numeric>
 #include <sstream>
 #include <string>
@@ -33,41 +34,28 @@ namespace {
 }
 
 ImpAnalysis::ImpAnalysis() :
-    /* man(G4Analysis::ManagerInstance(MANAGER_TYPE)), */
-    totalHits(0),
+    totalEvents(0),
     energyColId(-1),
     channelColId(-1),
     collectionNumber(0)
 {
-    /* man->SetNtupleDirectoryName(TUPLE_DIRECTORY); */
-    /* man->SetHistoDirectoryName(HISTO_DIRECTORY); */
-    /* outFn = buildFilename(FILE_PFX); */
-    /* man->OpenFile(outFn); */
-    
-    G4AccumulableManager::Instance()->RegisterAccumulable(totalHits);
+    G4AccumulableManager::Instance()->RegisterAccumulable(totalEvents);
 }
 
 G4String ImpAnalysis::buildFilename(const char* pfx)
 {
-    // year-month-day-hour:min:sec
-    /* static const char* TIME_FORMAT = "%F_%H:%M:%S.%f"; */
     static const char* OUT_DIR = "data-out";
     using clk = std::chrono::system_clock;
-
-    /* time_t timeNow = clk::to_time_t(clk::now()); */
-    /* std::tm* nowTm = std::localtime(&timeNow); */
 
     std::stringstream ss;
     auto nowOut = std::chrono::duration_cast<std::chrono::milliseconds>(clk::now().time_since_epoch());
     ss << OUT_DIR << "/" << pfx
-       << nowOut.count() /* std::put_time(nowTm, TIME_FORMAT) */ << ".csv";
+       << nowOut.count() << ".csv";
     return ss.str();
 }
 
 ImpAnalysis::~ImpAnalysis()
 {
-    /* if (man) delete man; */
-    /* man = nullptr; */
     if (anInst) delete anInst;
     anInst = nullptr;
 }
@@ -96,7 +84,7 @@ void ImpAnalysis::saveFile(G4bool isMaster)
     if (!isMaster) return;
 
     G4AccumulableManager::Instance()->Merge();
-    G4cout << "Total hits " << totalHits.GetValue() << G4endl;
+    G4cout << "Total events " << totalEvents.GetValue() << G4endl;
     outf.flush();
     outf.close();
 }
@@ -109,10 +97,9 @@ void ImpAnalysis::saveEvent(const G4Event* evt)
     
     G4int numHitColl = hcote->GetNumberOfCollections();
     for (G4int i = 0; i < numHitColl; ++i) {
-        auto* hc = hcote->GetHC(i);
+        const auto* hc = hcote->GetHC(i);
         if (hc == nullptr) continue;
         processHitCollection(hc);
-        addHits(hc->GetSize());
     }
 }
 
@@ -139,8 +126,14 @@ void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
         const auto& chId = niceHit->peekAssociatedChannelId();
         if (!deposits.contains(niceHit->peekAssociatedChannelId()))
             deposits[chId] = 0;
-        deposits[chId] += niceHit->peekDepositedEnergy();
+        auto curEng = niceHit->peekDepositedEnergy();
+        G4cout << "current energy is " << curEng/keV << " keV" << G4endl;
+        deposits[chId] += curEng;
     }
+
+    // from scattering out of one into another, etc.
+    std::size_t crystalsTouched = deposits.size();
+    addEvents(crystalsTouched);
 
     for (const auto& p : deposits)
         outf << (p.second / keV) << '\t' << p.first << std::endl;

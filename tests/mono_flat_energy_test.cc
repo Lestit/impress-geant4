@@ -90,8 +90,11 @@ void testMono(ImpEnergyPicker& p, long double monoEng)
 
 void testFlat(ImpEnergyPicker& p, long double start, long double end)
 {
-    for (std::uint32_t i = 0; i < 1000000; ++i) {
+    std::size_t nruns = 1000000;
+    std::ofstream ofs("flat-test-out.csv");
+    for (std::size_t i = 0; i < nruns; ++i) {
         auto e = p.pickEnergy();
+        ofs << e/keV << std::endl;
         if (start > e || end < e) {
             std::ostringstream ss;
             ss << "flat error. got " << e / keV << "keV, which is out of bounds (index " << i << ")";
@@ -105,12 +108,14 @@ int main()
     long double monoEng = 50 * keV;
     auto ep = ImpEnergyPicker(monoEng);
     testMono(ep, monoEng);
-    long double start = 1 * keV, end = 300 * keV;
+    long double start = 1. * keV, end = 300. * keV;
 
-    ep = ImpEnergyPicker(start, end);
+    /* ep = ImpEnergyPicker(start, end); */
+    ep.updateDistributionType(ImpEnergyPicker::DistributionType::flat);
+    ep.updateFlatEnergyBounds(start, end);
     testFlat(ep, start, end);
 
-    testUpdates();
-    testAssignCopy();
+    /* testUpdates(); */
+    /* testAssignCopy(); */
     return 0;
 }

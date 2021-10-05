@@ -22,8 +22,8 @@ class ImpAnalysis
         void bookTuplesHistograms(G4bool isMaster);
         void saveFile(G4bool isMaster);
         void saveEvent(const G4Event* evt);
-        void addHits(size_t nHits)
-        { totalHits += nHits; };
+        void addEvents(std::size_t nEvts)
+        { totalEvents += nEvts; };
 
         ImpAnalysis(const ImpAnalysis&) =delete;
         void operator=(const ImpAnalysis&) =delete;
@@ -35,7 +35,7 @@ class ImpAnalysis
         void processHitCollection(const G4VHitsCollection* hc);
         void saveCrystalHits(const std::vector<ImpVHit*>* vec);
 
-        G4Accumulable<size_t> totalHits;
+        G4Accumulable<std::size_t> totalEvents;
 
         G4int energyColId;
         G4int channelColId;

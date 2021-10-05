@@ -11,4 +11,6 @@ class ImpVHit : public G4VHit
         virtual HitType hitType() const =0;
         virtual const G4ThreeVector& peekPosition() const =0;
         virtual const G4String& peekAssociatedChannelId() const =0;
+
+        virtual void Draw() override;
 };

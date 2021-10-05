@@ -2,6 +2,10 @@
 
 #include "ImpTrajectory.hh"
 
+/* static_assert( */
+/*     sizeof(ImpTrajectory) == sizeof(G4Trajectory), */
+/*     "Trajectory size mismatch"); */
+
 namespace {
     G4ThreadLocal G4Allocator<ImpTrajectory>* trjAlloc = nullptr;
 }
@@ -19,7 +23,8 @@ void ImpTrajectory::DrawTrajectory() const
 
 void* ImpTrajectory::operator new(size_t)
 {
-    if (trjAlloc == nullptr) trjAlloc = new G4Allocator<ImpTrajectory>;
+    if (trjAlloc == nullptr)
+        trjAlloc = new G4Allocator<ImpTrajectory>;
     return static_cast<void*>(trjAlloc->MallocSingle());
 }
 

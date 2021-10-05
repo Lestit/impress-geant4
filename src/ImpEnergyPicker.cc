@@ -44,6 +44,8 @@ namespace
 
 ImpEnergyPicker::ImpEnergyPicker() : 
     distrType(DistributionType::undefined),
+    rng(std::random_device()()),
+    realDis(0, 1),
     mess(new ImpEnergyPickerMessenger(this))
 { }
 
@@ -61,7 +63,7 @@ ImpEnergyPicker::ImpEnergyPicker(const ImpEnergyPicker& other)
 
 ImpEnergyPicker& ImpEnergyPicker::operator=(const ImpEnergyPicker& other)
 {
-    if (this == &other) { std::cout << "poopy\n"; return *this; }
+    if (this == &other) { return *this; }
 
     monoEnergy = other.monoEnergy;
     flatStart = other.flatStart;
@@ -124,9 +126,9 @@ long double ImpEnergyPicker::pickEnergy()
 {
     using dt = DistributionType;
     switch (distrType) {
-        case dt::mono:  return pickMono();
-        case dt::flat:  return pickFlat();
-        case dt::flare: return pickFlare();
+        case dt::mono:  return pickMono(); break;
+        case dt::flat:  return pickFlat(); break;
+        case dt::flare: return pickFlare(); break;
         default:
             G4Exception(
                 "ImpEnergyPicker::pickEnergy", "", RunMustBeAborted,

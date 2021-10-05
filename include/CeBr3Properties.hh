@@ -20,7 +20,8 @@ namespace ImpMaterials {
 
     // from John Sample
     // see https://opengate.readthedocs.io/en/latest/generating_and_tracking_optical_photons.html#id9
-    static const G4double CEBR3_SCINT_RESLN_SCALE = 5.9;
+    // update 23 sep 2021: set to simple fluctuation and apply energy resolution empirically afterwards
+    static const G4double CEBR3_SCINT_RESLN_SCALE = 1.0; //5.9;
     // Quarati et al (not encapsulated)
     static const G4double CEBR3_SCINT_YIELD = 60000 / MeV;
     static const G4double CEBR3_DECAY_TIME_CONSTANT = 20 * ns;

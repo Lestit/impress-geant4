@@ -7,6 +7,7 @@
 #include <string>
 
 #include <G4String.hh>
+#include <G4SystemOfUnits.hh>
 #include <G4Types.hh>
 
 class ImpEnergyPickerMessenger;
@@ -43,7 +44,19 @@ class ImpEnergyPicker
     private:
         long double pickFlare();
         long double pickFlat()
-        { return flatStart + realDis(rng) * (flatEnd - flatStart); } 
+        {
+            /* std::cout << "start is " << flatStart/keV << " keV" << std::endl */
+            /*           << "end is   " << flatEnd/keV   << " keV" << std::endl */
+            /*           << "diff is  " << diff/keV << " keV" << std::endl; */
+            /* std::cout << "random num is " << rand << std::endl */
+            /*           << "stride along diff is " << stride/keV << std::endl; */
+
+            auto diff = flatEnd - flatStart;
+            auto rand = realDis(rng);
+            auto stride = diff * rand;
+            return flatStart + stride;
+        }
+
         long double pickMono()
         { return monoEnergy; }
 

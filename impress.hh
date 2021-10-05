@@ -7,7 +7,7 @@
 #include <sstream>
 
 #include <ImpAnalysis.hh>
-#include <ImpGpsConfig.hh>
+#include <ImpGlobalConfigs.hh>
 #include <ImpActionInitialization.hh>
 #include <ImpWholeSatelliteConstruction.hh>
 #include <ImpOnlyDetectorConstruction.hh>

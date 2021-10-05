@@ -34,5 +34,5 @@ class ImpOnlyDetectorConstruction : public ImpVDetectorConstruction
         G4LogicalVolume* boundingLogVol;
         G4VPhysicalVolume* boundingPhysVol;
 
-        static constexpr G4double WORLD_DEPTH = 2 * cm;
+        static constexpr G4double WORLD_DEPTH = 10 * cm;
 };

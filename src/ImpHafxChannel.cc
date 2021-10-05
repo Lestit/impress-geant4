@@ -27,15 +27,18 @@ ImpHafxChannel::ImpHafxChannel(
     G4RotationMatrix* rotMat, const G4ThreeVector& translate,
     G4LogicalVolume* motherLogVol, const G4String& channelId, const G4double attenuatorWindowThickness)
         : G4PVPlacement(rotMat, translate, tempLogVol(), CHANNEL_PFX + channelId, motherLogVol, false, 0),
-    quartzAnchorCenter(0, 0, -(thickness() - QUARTZ_THICKNESS)/2),
     channelId(channelId),
     attenuatorWindowThickness(attenuatorWindowThickness)
 {
-    cebr3AnchorCenter = quartzAnchorCenter + G4ThreeVector(0, 0, (QUARTZ_THICKNESS + CEBR3_THICKNESS)/2);
+    quartzAnchorCenter = G4ThreeVector(0, 0, -thickness()/2 + QUARTZ_THICKNESS/2);
+    cebr3AnchorCenter = quartzAnchorCenter + G4ThreeVector(
+        0, 0, (QUARTZ_THICKNESS + CEBR3_THICKNESS)/2);
 
-    boundingCylinder = new G4Tubs(CHANNEL_CYL_PFX + channelId, 0, radius(), thickness()/2, 0 * deg, 360 * deg);
+    boundingCylinder = new G4Tubs(
+        CHANNEL_CYL_PFX + channelId, 0, radius(), thickness()/2, 0 * deg, 360 * deg);
     auto* vac = G4Material::GetMaterial(ImpMaterials::kVACUUM);
-    auto* logVol = new G4LogicalVolume(boundingCylinder, vac, WHOLE_CHANNEL_LOG_VOL_PFX + channelId);
+    auto* logVol = new G4LogicalVolume(
+        boundingCylinder, vac, WHOLE_CHANNEL_LOG_VOL_PFX + channelId);
 
     G4VisAttributes motherLogAttrs;
     motherLogAttrs.SetVisibility(true);
@@ -46,7 +49,7 @@ ImpHafxChannel::ImpHafxChannel(
     buildQuartz();
     buildCrystal();
     buildTeflonReflector();
-    buildBeryllium();
+    //buildBeryllium();
     buildAlHousing();
     if (attenuatorWindowThickness > 0) buildAlAttenuator();
 }
@@ -124,7 +127,7 @@ void ImpHafxChannel::attachTeflonOpticalSurface()
 
 void ImpHafxChannel::buildAlHousing()
 {
-    static const G4double startRad = CEBR3_DIAMETER/2 + TEFLON_THICKNESS;
+    static const G4double startRad = diameter()/2 - AL_HOUSING_THICKNESS;
     static const G4double endRad = startRad + AL_HOUSING_THICKNESS;
 
     alCylinder = new G4Tubs(
@@ -181,7 +184,7 @@ void ImpHafxChannel::buildQuartz()
 
 void ImpHafxChannel::buildBeryllium()
 {
-    static const G4double beDiam = QUARTZ_DIAMETER;
+    static const G4double beDiam = diameter() - 2 * AL_HOUSING_THICKNESS;
     beCylinder = new G4Tubs(
         BE_CYL_PFX + channelId, 0, beDiam / 2,
         BE_THICKNESS/2, 0, 2*pi);
@@ -191,12 +194,14 @@ void ImpHafxChannel::buildBeryllium()
         beCylinder, be, BE_LOG_PFX + channelId);
 
     G4VisAttributes beAttrs;
-    beAttrs.SetColor(1, 0, 1, 0.1);
+    beAttrs.SetColor(1, 0, 1, 0.2);
     beAttrs.SetVisibility(true);
     beLogVol->SetVisAttributes(beAttrs);
 
     G4ThreeVector beAnchorAdjust(
-        0, 0, CEBR3_THICKNESS/2 + TEFLON_THICKNESS + BE_THICKNESS/2);
+        0, 0,
+        CEBR3_THICKNESS/2 + TEFLON_THICKNESS +
+        BE_THICKNESS/2 - attenuatorWindowThickness);
     bePlacement = new G4PVPlacement(
         nullptr, cebr3AnchorCenter + beAnchorAdjust, beLogVol, BE_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
@@ -222,7 +227,7 @@ void ImpHafxChannel::buildAlAttenuator()
         attCylinder, al, ATT_LOG_PFX + channelId);
 
     G4VisAttributes attAttrs;
-    attAttrs.SetColor(0.3, 0.3, 0.3, 0.4);
+    attAttrs.SetColor(0.3, 0.3, 0.3, 0.7);
     attAttrs.SetVisibility(true);
     attLogVol->SetVisAttributes(attAttrs);
 

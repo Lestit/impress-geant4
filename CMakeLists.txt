@@ -29,7 +29,7 @@ target_sources(${EXC_OUT}
 target_link_libraries(${EXC_OUT} ${Geant4_LIBRARIES})
 
 # configure data in/out
-file(COPY "flare-data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+# file(COPY "flare-data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/data-out")
 
 # copy flare CDF tables

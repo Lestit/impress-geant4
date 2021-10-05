@@ -1,5 +1,25 @@
 #include "impress.hh"
 
+G4String pickFlareSize()
+{
+    std::vector<G4String> fs;
+    for (const auto& p : ImpGlobalConf::ATTENUATOR_THICKNESSES)
+        fs.push_back(p.first);
+
+    std::stringstream flaresStream;
+    for (const auto& fn : fs)
+        flaresStream << fn << ", ";
+
+    G4String flareSize;
+    do {
+        std::cout << "Flare size to simulate -- also for attenuator thickness ("
+                  << flaresStream.str() << ") ";
+        std::cin >> flareSize;
+    } while (std::find(fs.begin(), fs.end(), flareSize) == fs.end());
+
+    return flareSize;
+}
+
 int main(int argc, char* argv[])
 {
     char c = 0;
@@ -17,11 +37,9 @@ int main(int argc, char* argv[])
     bool wholeSatellite = (c == 's');
 
     G4String flareSize;
-    static const std::array<G4String, 4> fs = {"c1", "m1", "m5", "x1"};
-    do {
-        std::cout << "Flare size to simulate -- also for attenuator thickness (c1, m1, m5, x1) ";
-        std::cin >> flareSize;
-    } while (std::find(fs.begin(), fs.end(), flareSize) == fs.end());
+    if (!wholeSatellite) {
+        flareSize = pickFlareSize();
+    }
 
     auto* runMan = new G4MTRunManager;
     // no hyperthreading
@@ -41,7 +59,10 @@ int main(int argc, char* argv[])
     auto* uiMan = G4UImanager::GetUIpointer();
 
     G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", doScintillate);
+    G4OpticalParameters::Instance()->SetProcessActivation("Cerenkov", doScintillate);
 
+    // silence annoying physics lists
+    uiMan->ApplyCommand("/process/had/verbose 0");
     uiMan->ApplyCommand("/run/initialize");
     // ImpGpsConfig::configureGps(detCon, flareSize);
 
