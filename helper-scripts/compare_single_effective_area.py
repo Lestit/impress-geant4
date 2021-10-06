@@ -5,8 +5,11 @@ import sys
 
 choice = ''
 options = ('1m', '300k')
+opt_nums = [1000000, 300000]
+opt_map = {k: v for (k, v) in zip(options, opt_nums)}
 while choice not in options:
     choice = input(f"how many geant counts ({'. '.join(options)}) ").lower()
+tot_cnts = opt_map[choice]
 
 analytical_data_dir = os.path.join(os.path.dirname(__file__), f'photons-{choice}')
 analytical_files = os.listdir(analytical_data_dir)
@@ -60,29 +63,36 @@ print(f"bins start: {np.min(bins)}; bins end: {np.max(bins)}")
 for i in np.arange(bins.size - 1):
     start, end = bins[i], bins[i+1]
     condition = np.logical_and(an_es >= start, an_es < end)
-    x, y = an_es[condition], an_is[condition]
-    cur_cts = np.trapz(x=x, y=y)
+    cur_cts = np.sum(an_is[condition])
     an_cts.append(cur_cts)
 
+
 an_cts = np.asarray(an_cts)
-# an_cts = an_cts / np.sum(an_cts) * np.sum(hg)
 print(np.sum(an_cts))
 print("analytical counts^")
-# an_cts = geant_counts * an_cts / np.sum(an_cts)
 
 fig, ax = plt.subplots()
 
 ax.bar(
     centers, an_cts, width=np.diff(bins), align='center',
-    label='analytical', linewidth=1, color='steelblue',
-    alpha=1, zorder=0)
-ax.hist(
-    channels[chosen_idx], bins=bins, label='geant',
-    histtype='step', color='black', alpha=1, zorder=1, linewidth=1.5,
-    align='right')
-ax.legend()
+    label=f'{np.sum(an_cts):.0f} counts analytical', linewidth=1, color='red',
+    alpha=0.6, zorder=1)
 
-ax.set_title(f'Compare G4 to {choice}-optimized flat response : {geant_counts} events')
+# scale because the Geant model has some extra crystal space
+full_diam = 43 # mm
+cryst_diam = 37 # mm
+g4cts = np.array(channels[chosen_idx])
+g4bins, _ = np.histogram(g4cts, bins=bins)
+g4bins = np.array(g4bins, dtype=np.float64)
+g4bins *= (43 / 37)**2
+g4lab = f'{np.sum(g4bins):.0f} counts geant'
+ax.bar(
+    centers, g4bins, width=np.diff(bins), label=g4lab,
+    color='black', alpha=1, zorder=0,
+    align='center')
+
+leg = ax.legend()
+ax.set_title(f'Compare G4 to {choice}-optimized flat response : {tot_cnts} photons incident')
 ax.set_xscale('linear')
 ax.set_yscale('linear')
 ax.set_xlabel('Energy (keV)')
@@ -90,4 +100,5 @@ ax.set_ylabel('Counts')
 
 fig.set_size_inches(8, 6)
 fig.tight_layout()
+
 plt.show()

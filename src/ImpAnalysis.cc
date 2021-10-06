@@ -28,16 +28,14 @@ namespace {
     static const G4String MANAGER_TYPE = "csv";
     static const G4String HISTO_DIRECTORY = "impress-histo";
     static const G4String TUPLE_DIRECTORY = "impress-tuple";
-    static const G4String FILE_PFX = "imp-";
+    static const G4String OUT_SPEC_FN_PFX = "spec-out-";
+    static const G4String IN_SPEC_FN_PFX  = "spec-in-";
 
     static const G4String ENERGY_NTUPLE_NAME = "depetup";
 }
 
 ImpAnalysis::ImpAnalysis() :
-    totalEvents(0),
-    energyColId(-1),
-    channelColId(-1),
-    collectionNumber(0)
+    totalEvents(0)
 {
     G4AccumulableManager::Instance()->RegisterAccumulable(totalEvents);
 }
@@ -56,8 +54,7 @@ G4String ImpAnalysis::buildFilename(const char* pfx)
 
 ImpAnalysis::~ImpAnalysis()
 {
-    if (anInst) delete anInst;
-    anInst = nullptr;
+    if (anInst) { delete anInst; anInst = nullptr; }
 }
 
 ImpAnalysis* ImpAnalysis::instance()
@@ -74,8 +71,11 @@ void ImpAnalysis::bookTuplesHistograms(G4bool isMaster)
 
     G4AccumulableManager::Instance()->Reset();
 
-    if (outf.is_open()) outf.close();
-    outf.open(buildFilename(FILE_PFX));
+    if (specOutFile.is_open()) specOutFile.close();
+    specOutFile.open(buildFilename(OUT_SPEC_FN_PFX));
+
+    if (specInFile.is_open()) specInFile.close();
+    specInFile.open(buildFilename(IN_SPEC_FN_PFX));
 }
 
 void ImpAnalysis::saveFile(G4bool isMaster)
@@ -85,8 +85,11 @@ void ImpAnalysis::saveFile(G4bool isMaster)
 
     G4AccumulableManager::Instance()->Merge();
     G4cout << "Total events " << totalEvents.GetValue() << G4endl;
-    outf.flush();
-    outf.close();
+
+    specOutFile.flush();
+    specInFile.flush();
+    specOutFile.close();
+    specInFile.close();
 }
 
 void ImpAnalysis::saveEvent(const G4Event* evt)
@@ -116,6 +119,8 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
         saveCrystalHits(vec);
     else
         G4Exception("src/ImpAnalysis.cc processHitCollection", "", FatalException, "unrecognized hit. what?");
+
+    saveIncidentSpectrumChunk();
 }
 
 void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
@@ -127,7 +132,7 @@ void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
         if (!deposits.contains(niceHit->peekAssociatedChannelId()))
             deposits[chId] = 0;
         auto curEng = niceHit->peekDepositedEnergy();
-        G4cout << "current energy is " << curEng/keV << " keV" << G4endl;
+        /* G4cout << "current energy is " << curEng/keV << " keV" << G4endl; */
         deposits[chId] += curEng;
     }
 
@@ -136,5 +141,19 @@ void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
     addEvents(crystalsTouched);
 
     for (const auto& p : deposits)
-        outf << (p.second / keV) << '\t' << p.first << std::endl;
+        specOutFile << (p.second / keV) << '\t' << p.first << std::endl;
+}
+
+void ImpAnalysis::addIncidentEnergy(long double e)
+{
+    G4AutoLock l(&dataMux);
+    incidentEnergiesChunk.push_back(e);
+}
+
+void ImpAnalysis::saveIncidentSpectrumChunk()
+{
+    for (const auto& e : incidentEnergiesChunk)
+        specInFile << e / keV << std::endl;
+
+    incidentEnergiesChunk.clear();
 }

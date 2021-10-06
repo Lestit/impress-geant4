@@ -6,7 +6,7 @@ namespace ImpMaterials {
     static const G4String kAL = "aluminum";
     static const G4int AL_NUM_COMPONENTS = 1;
     // https://www.engineeringtoolbox.com/metal-alloys-densities-d_50.html
-    static const G4double AL_DENSITY = 2.7 * g / cm3;
+    static const G4double AL_DENSITY = 2.712 * g / cm3;
     
     const std::vector<G4double> AL_REFR_IDX_ENERGIES = {
         6.19921e-03*eV, 7.00001e-03*eV, 8.05877e-03*eV, 9.00001e-03*eV, 9.91873e-03*eV, 1.23989e-02*eV, 1.54978e-02*eV, 1.85978e-02*eV,

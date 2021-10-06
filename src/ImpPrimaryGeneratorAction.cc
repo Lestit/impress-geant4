@@ -2,7 +2,9 @@
 #include <G4ParticleTable.hh>
 #include <G4SystemOfUnits.hh>
 
+#include <ImpAnalysis.hh>
 #include <ImpPrimaryGeneratorAction.hh>
+
 ImpPrimaryGeneratorAction::ImpPrimaryGeneratorAction()
         : G4VUserPrimaryGeneratorAction(),
     gun(std::make_unique<G4ParticleGun>()),
@@ -36,7 +38,10 @@ void ImpPrimaryGeneratorAction::GeneratePrimaries(G4Event* evt)
 {
     if (energyPicker && pointPicker) {
         gun->SetParticlePosition(pointPicker->pickPoint());
-        gun->SetParticleEnergy(energyPicker->pickEnergy());
+
+        auto e = energyPicker->pickEnergy();
+        gun->SetParticleEnergy(e);
+        ImpAnalysis::instance()->addIncidentEnergy(e);
     }
 
     gun->GeneratePrimaryVertex(evt);

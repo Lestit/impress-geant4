@@ -49,7 +49,7 @@ ImpHafxChannel::ImpHafxChannel(
     buildQuartz();
     buildCrystal();
     buildTeflonReflector();
-    //buildBeryllium();
+    buildBeryllium();
     buildAlHousing();
     if (attenuatorWindowThickness > 0) buildAlAttenuator();
 }
@@ -187,7 +187,7 @@ void ImpHafxChannel::buildBeryllium()
     static const G4double beDiam = diameter() - 2 * AL_HOUSING_THICKNESS;
     beCylinder = new G4Tubs(
         BE_CYL_PFX + channelId, 0, beDiam / 2,
-        BE_THICKNESS/2, 0, 2*pi);
+        BE_THICKNESS / 2, 0, 2*pi);
 
     auto* be = G4Material::GetMaterial(ImpMaterials::kBE);
     beLogVol = new G4LogicalVolume(
@@ -198,12 +198,10 @@ void ImpHafxChannel::buildBeryllium()
     beAttrs.SetVisibility(true);
     beLogVol->SetVisAttributes(beAttrs);
 
-    G4ThreeVector beAnchorAdjust(
-        0, 0,
-        CEBR3_THICKNESS/2 + TEFLON_THICKNESS +
-        BE_THICKNESS/2 - attenuatorWindowThickness);
+    G4ThreeVector beAnchorAdjust = cebr3AnchorCenter + G4ThreeVector(
+        0, 0, CEBR3_THICKNESS/2 + TEFLON_THICKNESS + BE_THICKNESS/2);
     bePlacement = new G4PVPlacement(
-        nullptr, cebr3AnchorCenter + beAnchorAdjust, beLogVol, BE_PHY_PFX + channelId,
+        nullptr, beAnchorAdjust, beLogVol, BE_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
 
     attachBeOpticalSurface();

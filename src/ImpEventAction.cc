@@ -14,7 +14,7 @@
 
 ImpEventAction::ImpEventAction() :
     G4UserEventAction(),
-    keepAllEvents(false)
+    keepAllEvents(true)
 { }
 
 ImpEventAction::~ImpEventAction()

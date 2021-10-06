@@ -22,8 +22,11 @@ class ImpAnalysis
         void bookTuplesHistograms(G4bool isMaster);
         void saveFile(G4bool isMaster);
         void saveEvent(const G4Event* evt);
+
         void addEvents(std::size_t nEvts)
         { totalEvents += nEvts; };
+
+        void addIncidentEnergy(long double e);
 
         ImpAnalysis(const ImpAnalysis&) =delete;
         void operator=(const ImpAnalysis&) =delete;
@@ -34,14 +37,12 @@ class ImpAnalysis
         void processEvent(const G4Event* evt);
         void processHitCollection(const G4VHitsCollection* hc);
         void saveCrystalHits(const std::vector<ImpVHit*>* vec);
+        void saveIncidentSpectrumChunk();
 
         G4Accumulable<std::size_t> totalEvents;
 
-        G4int energyColId;
-        G4int channelColId;
+        std::vector<long double> incidentEnergiesChunk;
 
-        G4String outFn;
-        G4int collectionNumber;
-
-        std::ofstream outf;
+        std::ofstream specOutFile;
+        std::ofstream specInFile;
 };

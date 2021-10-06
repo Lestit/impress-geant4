@@ -150,7 +150,7 @@ namespace ImpMaterials
             kStateSolid,
             SATELLITE_TEMP);
 
-        al->AddElement(alElt, G4int(1));
+        al->AddElement(alElt, G4double(1.0));
         auto* alPt = new G4MaterialPropertiesTable;
 
         alPt->AddProperty(kREFR_IDX_REAL, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_REAL);
