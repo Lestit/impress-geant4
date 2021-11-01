@@ -10,6 +10,7 @@ namespace ImpMaterials {
     void configureQuartz();
     void makeBeryllium();
     void makeHousingAluminumAlloy();
+    void makeSilicon();
 }
 
 namespace {
@@ -20,9 +21,8 @@ namespace ImpMaterials
 {
     void makeMaterials()
     {
-        if (!G4Material::GetMaterial(kVACUUM)) {
+        if (!G4Material::GetMaterial(kVACUUM))
             makeVacuum();
-        }
 
         if (!G4Material::GetMaterial(kCEBR3)) {
             makeCeBr3();
@@ -30,12 +30,19 @@ namespace ImpMaterials
         }
 
         auto* nMan = G4NistManager::Instance();
-        if (!nMan->FindOrBuildMaterial(kNIST_SIO2)->GetMaterialPropertiesTable()) configureQuartz();
-        if (!nMan->FindOrBuildMaterial(kNIST_TEFLON)->GetMaterialPropertiesTable()) configureTeflon();
+        if (!nMan->FindOrBuildMaterial(kNIST_SIO2)->GetMaterialPropertiesTable())
+            configureQuartz();
+        if (!nMan->FindOrBuildMaterial(kNIST_TEFLON)->GetMaterialPropertiesTable())
+            configureTeflon();
+        if (!nMan->FindOrBuildMaterial(kNIST_TEFLON)->GetMaterialPropertiesTable())
+            makeSilicon();
 
-        if (!G4Material::GetMaterial(kAL)) makeAluminum();
-        if (!G4Material::GetMaterial(kBE)) makeBeryllium();
-        if (!G4Material::GetMaterial(kHOUSING_ALLOY)) makeHousingAluminumAlloy();
+        if (!G4Material::GetMaterial(kAL))
+            makeAluminum();
+        if (!G4Material::GetMaterial(kBE))
+            makeBeryllium();
+        if (!G4Material::GetMaterial(kHOUSING_ALLOY))
+            makeHousingAluminumAlloy();
     }
 
     void configureTeflon()
@@ -222,5 +229,26 @@ namespace ImpMaterials
         housingAlloy->SetMaterialPropertiesTable(
             G4Material::GetMaterial(kAL)->
             GetMaterialPropertiesTable());
+    }
+
+    void makeSilicon()
+    {
+        auto* si = G4NistManager::Instance()->FindOrBuildMaterial(kNIST_SI);
+        if (!si) {
+            G4Exception(
+                "src/ImpMaterials.cc makeSilicon()",
+                "[no error code]",
+                RunMustBeAborted,
+                "Silicon can't be loaded from NIST manager");
+        }
+
+        auto* simpt = new G4MaterialPropertiesTable;
+        simpt->AddProperty(kOP_DET_EFF, SI_DET_EFF_ENERGIES, SI_DET_EFF)
+             ->SetSpline(useSpline);
+        simpt->AddProperty(kREFR_IDX_REAL, SI_REFR_IDX_ENERGY, SI_REFR_IDX_REAL)
+             ->SetSpline(useSpline);
+        simpt->AddProperty(kREFR_IDX_IMAG, SI_REFR_IDX_ENERGY, SI_REFR_IDX_IMAG)
+             ->SetSpline(useSpline);
+        si->SetMaterialPropertiesTable(simpt);
     }
 }

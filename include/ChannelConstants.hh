@@ -44,4 +44,9 @@ namespace {
     static const G4String BE_SUR_PFX = "hafx_be_sur";
 
     static const G4String SENSITIVE_DET_PFX = "hafx_crystal_sd";
+
+    static const G4String SI_CYL_PFX = "hafx_si_cyl";
+    static const G4String SI_LOG_PFX = "hafx_si_log";
+    static const G4String SI_PHY_PFX = "hafx_si_phy";
+    static const G4String SI_SUR_PFX = "hafx_si_sur";
 }

@@ -20,6 +20,7 @@
 static G4OpticalSurface* teflonOpticalSurface();
 static G4OpticalSurface* alOpticalSurface();
 static G4OpticalSurface* beOpticalSurface();
+static G4OpticalSurface* siOpticalSurface();
 
 
 // i sure love constructors
@@ -30,9 +31,10 @@ ImpHafxChannel::ImpHafxChannel(
     channelId(channelId),
     attenuatorWindowThickness(attenuatorWindowThickness)
 {
-    quartzAnchorCenter = G4ThreeVector(0, 0, -thickness()/2 + QUARTZ_THICKNESS/2);
+    quartzAnchorCenter = G4ThreeVector(
+        0, 0, -thickness()/2 + QUARTZ_THICKNESS/2 + DUMB_SI_THICKNESS);
     cebr3AnchorCenter = quartzAnchorCenter + G4ThreeVector(
-        0, 0, (QUARTZ_THICKNESS + CEBR3_THICKNESS)/2);
+        0, 0, QUARTZ_THICKNESS + DUMB_SI_THICKNESS + CEBR3_THICKNESS/2);
 
     boundingCylinder = new G4Tubs(
         CHANNEL_CYL_PFX + channelId, 0, radius(), thickness()/2, 0 * deg, 360 * deg);
@@ -52,6 +54,7 @@ ImpHafxChannel::ImpHafxChannel(
     buildBeryllium();
     buildAlHousing();
     if (attenuatorWindowThickness > 0) buildAlAttenuator();
+    buildDumbSi();
 }
 
 ImpHafxChannel::~ImpHafxChannel()
@@ -60,7 +63,8 @@ ImpHafxChannel::~ImpHafxChannel()
 void ImpHafxChannel::buildCrystal()
 {
     crystalCylinder = new G4Tubs(
-        CRYSTAL_CYL_PFX + channelId, 0, CEBR3_DIAMETER / 2, CEBR3_THICKNESS/2, 0 * deg, 360 * deg);
+        CRYSTAL_CYL_PFX + channelId, 0,
+        CEBR3_DIAMETER / 2, CEBR3_THICKNESS/2, 0 * deg, 360 * deg);
 
     auto* cebr3 = G4Material::GetMaterial(ImpMaterials::kCEBR3);
     crystalLogVol = new G4LogicalVolume(
@@ -79,7 +83,8 @@ void ImpHafxChannel::buildCrystal()
 void ImpHafxChannel::buildTeflonReflector()
 {
     static const G4double crystRad = CEBR3_DIAMETER / 2;
-    static const G4double tefRad = crystRad + TEFLON_THICKNESS;
+    static const G4double tefRad =
+        (WHOLE_DIAMETER - 2*AL_HOUSING_THICKNESS) / 2;
 
     auto* tefRing = new G4Tubs(
         TEFLON_RING + channelId, crystRad, tefRad, CEBR3_THICKNESS/2, 0, 2*pi);
@@ -144,8 +149,9 @@ void ImpHafxChannel::buildAlHousing()
     alLogVol->SetVisAttributes(alAttrs);
 
 
-    // account for attenuator window
-    G4ThreeVector alAnchorCenter(0, 0, -attenuatorWindowThickness/2);
+    // account for attenuator window (and silicon at the back)
+    G4ThreeVector alAnchorCenter(
+        0, 0, -attenuatorWindowThickness/2 + DUMB_SI_THICKNESS/2);
     alPlacement = new G4PVPlacement(
         nullptr, alAnchorCenter, alLogVol, AL_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
@@ -225,7 +231,7 @@ void ImpHafxChannel::buildAlAttenuator()
         attCylinder, al, ATT_LOG_PFX + channelId);
 
     G4VisAttributes attAttrs;
-    attAttrs.SetColor(0.3, 0.3, 0.3, 0.7);
+    attAttrs.SetColor(0.3, 0.3, 0.3, 0.1);
     attAttrs.SetVisibility(true);
     attLogVol->SetVisAttributes(attAttrs);
 
@@ -236,6 +242,53 @@ void ImpHafxChannel::buildAlAttenuator()
         GetLogicalVolume(), false, 0);
 
     attachAlOpticalSurface(attLogVol);
+}
+
+void ImpHafxChannel::buildDumbSi()
+{
+    dumbSiCylinder = new G4Tubs(
+        SI_CYL_PFX + channelId, 0, radius(),
+        DUMB_SI_THICKNESS / 2, 0, 2*pi);
+
+    auto* si = G4NistManager::Instance()
+        ->FindOrBuildMaterial(ImpMaterials::kNIST_SI);
+
+    G4VisAttributes siAttrs;
+    siAttrs.SetColor(0, 0, 1, 0.3);
+    siAttrs.SetVisibility(true);
+    dumbSiLogVol = new G4LogicalVolume(
+        dumbSiCylinder, si, SI_LOG_PFX + channelId);
+    dumbSiLogVol->SetVisAttributes(siAttrs);
+
+    auto siTranslate = quartzAnchorCenter + G4ThreeVector(
+        0, 0, -QUARTZ_THICKNESS/2 - DUMB_SI_THICKNESS/2);
+    dumbSiPlacement = new G4PVPlacement(
+        nullptr, siTranslate, dumbSiLogVol, SI_PHY_PFX + channelId,
+        GetLogicalVolume(), false, 0);
+
+    attachDumbSiOpticalSurface();
+}
+
+void ImpHafxChannel::attachDumbSiOpticalSurface()
+{
+    auto* siSurf = siOpticalSurface();
+    dumbSiSkin = new G4LogicalSkinSurface(
+        SI_SUR_PFX + channelId, dumbSiLogVol, siSurf);
+}
+
+static G4OpticalSurface* siOpticalSurface()
+{
+    static G4OpticalSurface* ss = nullptr;
+    if (ss) return ss;
+    ss = new G4OpticalSurface(SI_SUR_PFX);
+    ss->SetMaterialPropertiesTable(
+        G4NistManager::Instance()
+        ->FindOrBuildMaterial(ImpMaterials::kNIST_SI)
+        ->GetMaterialPropertiesTable());
+    ss->SetModel(unified);
+    ss->SetFinish(polished);
+    ss->SetType(dielectric_dielectric);
+    return ss;
 }
 
 static G4OpticalSurface* teflonOpticalSurface()

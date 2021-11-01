@@ -6,7 +6,7 @@
 
 namespace ImpMaterials
 {
-    static const G4String kSI = "silicon";
+    static const G4String kNIST_SI = "G4_Si";
     static const G4double SI_DENSITY = 2.33 * g / cm3;
     static const G4String kOP_DET_EFF = "EFFICIENCY";
 

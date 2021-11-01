@@ -27,9 +27,9 @@ class ImpHafxChannel : public G4PVPlacement
 
         // as crystal becomes more fleshed out, update these
         G4double thickness()
-        { return AL_HOUSING_DEPTH + attenuatorWindowThickness; }
+        { return thicknessNoAttenuator() + attenuatorWindowThickness; }
         static G4double thicknessNoAttenuator()
-        { return AL_HOUSING_THICKNESS; }
+        { return AL_HOUSING_DEPTH + DUMB_SI_THICKNESS; }
         static G4double diameter()
         { return WHOLE_DIAMETER; }
         static G4double radius()
@@ -53,6 +53,9 @@ class ImpHafxChannel : public G4PVPlacement
 
         void buildBeryllium();
         void attachBeOpticalSurface();
+
+        void buildDumbSi();
+        void attachDumbSiOpticalSurface();
 
         G4ThreeVector cebr3AnchorCenter;
         G4ThreeVector quartzAnchorCenter;
@@ -90,6 +93,11 @@ class ImpHafxChannel : public G4PVPlacement
         G4PVPlacement* bePlacement;
         G4LogicalSkinSurface* beSkin;
 
+        G4Tubs* dumbSiCylinder;
+        G4LogicalVolume* dumbSiLogVol;
+        G4PVPlacement* dumbSiPlacement;
+        G4LogicalSkinSurface* dumbSiSkin;
+
         G4String channelId;
         G4double attenuatorWindowThickness;
 
@@ -108,4 +116,6 @@ class ImpHafxChannel : public G4PVPlacement
         static constexpr G4double QUARTZ_DIAMETER = 40.5 * mm;
 
         static constexpr G4double WHOLE_DIAMETER = 43 * mm;
+
+        static constexpr G4double DUMB_SI_THICKNESS = 0.3 * mm;
 };

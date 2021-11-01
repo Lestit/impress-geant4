@@ -12,12 +12,13 @@
 #include "G4Scintillation.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "CeBr3Properties.hh"
-#include "TeflonProperties.hh"
 #include "AluminumProperties.hh"
-#include "QuartzProperties.hh"
 #include "BerylliumProperties.hh"
+#include "CeBr3Properties.hh"
 #include "HousingAlloyProperties.hh"
+#include "QuartzProperties.hh"
+#include "SiProperties.hh"
+#include "TeflonProperties.hh"
 
 /*
  * Empirical data sources

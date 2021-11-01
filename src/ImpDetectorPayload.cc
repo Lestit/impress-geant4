@@ -63,7 +63,7 @@ void ImpDetectorPayload::buildPlaceChannels()
         auto thick = attenuatorThicknesses[offsetIdx];
         G4double detectorOffset =
             ImpHafxChannel::thicknessNoAttenuator() / 2 +
-            TOP_PANEL_THICK * 1.5;
+            TOP_PANEL_THICK;
 
         G4ThreeVector pos(
             -xyOffset + 2*offx*xyOffset,
