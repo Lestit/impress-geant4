@@ -10,6 +10,7 @@
 
 class G4Box;
 class G4LogicalVolume;
+class G4SubtractionSolid;
 
 class ImpDetectorPayload : public G4PVPlacement
 {
@@ -28,12 +29,18 @@ class ImpDetectorPayload : public G4PVPlacement
         static constexpr G4double CRYSTAL_HOLE_DIAM = 43 * mm;
         // cubesat standard
         static constexpr G4double SIDE_LENGTH = 10 * cm;
-        static constexpr G4double DETECTOR_OFFSET = 7.5 * mm;
+
+        // top panel
+        static constexpr G4double TOP_PANEL_SIDE = 98 * mm;
+        static constexpr G4double TOP_PANEL_THICK = 4.5 * mm;
+        static constexpr G4double CRYSTAL_HOLE_SPACING = TOP_PANEL_SIDE / 4;
+        // 1mm < crystal diameter
+        static constexpr G4double CRYSTAL_ENTRANCE_DIAM = 43 * mm;//42 * mm;
+        G4SubtractionSolid* topPanelSubSol;
+        G4PVPlacement* topPanelPlacement;
 
         void buildPlaceChannels();
         void buildPlaceTopPanel();
-
-        //G4Box* boundingBox;
 
         static const size_t NUM_CRYSTALS = 4;
         std::array<ImpHafxChannel*, NUM_CRYSTALS> crystalChannels;

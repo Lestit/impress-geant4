@@ -30,6 +30,7 @@ target_sources(${EXC_OUT}
         ImpVHit.hh
         ImpWholeSatelliteConstruction.hh
         QuartzProperties.hh
+        SiProperties.hh
         TeflonProperties.hh
 )
 

@@ -1,0 +1,12 @@
+attachOpticalDetector
+how to detect optical photon hit? idkkkkkkkk
+
+idea: if optical photon hits boundary,
+    absorb with some efficiency?
+    "optical boundary process" . . .
+
+
+https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/TrackingAndPhysics/physicsProcess.html#optical-photon-processes
+If a photon is absorbed at the boundary, it may by detected–that is, its status set to “Detect” and its energy deposited locally. The material property EFFICIENCY is used to specify the fraction of photons detected.
+
+sigma_alpha: surface roughness.

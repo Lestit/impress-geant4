@@ -91,12 +91,16 @@ ax.bar(
     color='black', alpha=1, zorder=0,
     align='center')
 
-leg = ax.legend()
 ax.set_title(f'Compare G4 to {choice}-optimized flat response : {tot_cnts} photons incident')
 ax.set_xscale('linear')
 ax.set_yscale('linear')
 ax.set_xlabel('Energy (keV)')
 ax.set_ylabel('Counts')
+
+# ax.axvline(34.7, label='secondary line Ce', color='black')
+ax.axvline(40.44, label='k edge', color='blue')
+
+leg = ax.legend()
 
 fig.set_size_inches(8, 6)
 fig.tight_layout()
