@@ -135,7 +135,10 @@ namespace ImpMaterials {
     };
 
     // absorption lengths are super long so just make them 1 meter
-    const std::vector<G4double> CEBR3_ABS_LEN(CEBR3_ABS_LEN_ENERGIES.size(), 1. * m);
+    // update 13 November 2021:
+    //  total internal reflection is a huge issue so the 1km attenuation length makes more sense (maybe?)
+    const std::vector<G4double> CEBR3_ABS_LEN(CEBR3_ABS_LEN_ENERGIES.size(), 1. * km);
+    // these are the actual calculated values but . . . they're ridiculous
         /* 1.00000e+20*cm, 1.00000e+20*cm, 1.00000e+20*cm, 1.06000e+06*cm, 2.65000e+05*cm, 1.59000e+05*cm, 1.13571e+05*cm, 1.06000e+05*cm, */
         /* 8.83333e+04*cm, 6.62500e+04*cm, 4.81818e+04*cm, 3.18000e+04*cm, 2.44615e+04*cm, 2.23944e+04*cm, 2.02548e+04*cm, 1.80682e+04*cm, */
         /* 1.57426e+04*cm, 1.40088e+04*cm, 1.27711e+04*cm, 1.16484e+04*cm, 1.10417e+04*cm, 1.03583e+04*cm, 1.00952e+04*cm, 9.96865e+03*cm, */

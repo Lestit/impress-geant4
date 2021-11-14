@@ -43,9 +43,6 @@ ProcessHits(G4Step* step, G4TouchableHistory* /* unused */)
     auto def = step->GetTrack()->GetParticleDefinition();
     // we don't want optical photons to count as hits
     // especially if scintillation is on
-    /* if (def == G4OpticalPhoton::Definition() || */
-    /*         def == G4Gamma::Definition()) */
-    /*     return false; */
     if (def == G4OpticalPhoton::Definition()) return false;
 
     G4double depositedEnergy = step->GetTotalEnergyDeposit();

@@ -14,7 +14,7 @@ namespace ImpMaterials {
 }
 
 namespace {
-    static const G4bool useSpline = false;
+    static const G4bool useSpline = true;
 }
 
 namespace ImpMaterials
@@ -34,7 +34,7 @@ namespace ImpMaterials
             configureQuartz();
         if (!nMan->FindOrBuildMaterial(kNIST_TEFLON)->GetMaterialPropertiesTable())
             configureTeflon();
-        if (!nMan->FindOrBuildMaterial(kNIST_TEFLON)->GetMaterialPropertiesTable())
+        if (!nMan->FindOrBuildMaterial(kNIST_SI)->GetMaterialPropertiesTable())
             makeSilicon();
 
         if (!G4Material::GetMaterial(kAL))
@@ -51,7 +51,7 @@ namespace ImpMaterials
         auto* teflon = nistMan->FindOrBuildMaterial(kNIST_TEFLON);
         auto* tefPt = new G4MaterialPropertiesTable;
 
-        tefPt->AddProperty(kREFR_IDX, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFR_IDXS)->SetSpline(useSpline);
+        /* tefPt->AddProperty(kREFR_IDX, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFR_IDXS)->SetSpline(useSpline); */
 
         teflon->SetMaterialPropertiesTable(tefPt);
     }
@@ -100,8 +100,11 @@ namespace ImpMaterials
 
         scintPt->AddConstProperty(kSCINT_YIELD, CEBR3_SCINT_YIELD);
         // refractive index depends on energy
-        // only keep real part
         scintPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, CEBR3_REFR_IDXS)->SetSpline(useSpline);
+        /* scintPt->AddProperty(kREFR_IDX_REAL, CEBR3_REFR_IDX_ENERGIES, CEBR3_REFR_IDXS)->SetSpline(useSpline); */
+        /* scintPt->AddProperty( */
+        /*     kREFR_IDX_IMAG, CEBR3_REFR_IDX_ENERGIES, */
+        /*     std::vector<G4double>(CEBR3_REFR_IDXS.size(), 0))->SetSpline(useSpline); */
 
         // we are only required to set one of either FASTCOMPONENT or SLOWCOMPONENT
         // optical photon relative intensitiesto get scintillation working.
@@ -137,9 +140,11 @@ namespace ImpMaterials
             VACUUM_PRESSURE);
 
         auto* vacPt = new G4MaterialPropertiesTable;
-        std::vector<G4double> indices = CEBR3_REFR_IDX_ENERGIES;
-        std::fill(indices.begin(), indices.end(), 1.);
-        vacPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, indices)->SetSpline(false);
+
+        std::vector<G4double> indices(CEBR3_REFR_IDX_ENERGIES.size(), 1.);
+        vacPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, indices)->SetSpline(useSpline);
+        /* vacPt->AddProperty(kREFR_IDX_REAL, CEBR3_REFR_IDX_ENERGIES, indices)->SetSpline(useSpline); */
+        /* vacPt->AddProperty(kREFR_IDX_IMAG, CEBR3_REFR_IDX_ENERGIES, std::vector<G4double>(indices.size(), 0.))->SetSpline(useSpline); */
 
         vacMat->SetMaterialPropertiesTable(vacPt);
     }
@@ -160,8 +165,9 @@ namespace ImpMaterials
         al->AddElement(alElt, G4double(1.0));
         auto* alPt = new G4MaterialPropertiesTable;
 
+        /* alPt->AddProperty(kREFR_IDX, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_REAL); */
         alPt->AddProperty(kREFR_IDX_REAL, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_REAL);
-        alPt->AddProperty(kREFR_IDX_REAL, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_IMAG);
+        alPt->AddProperty(kREFR_IDX_IMAG, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_IMAG);
         al->SetMaterialPropertiesTable(alPt);
     }
 
@@ -169,7 +175,9 @@ namespace ImpMaterials
     {
         auto* qz = G4NistManager::Instance()->FindOrBuildMaterial(kNIST_SIO2);
         auto* qzPt = new G4MaterialPropertiesTable;
-        qzPt->AddProperty(kREFR_IDX, QZ_REFR_IDX_ENERGIES, QZ_REFR_IDXS);
+        qzPt->AddProperty("RINDEX", QZ_REFR_IDX_ENERGIES, QZ_REFR_IDXS);
+        /* qzPt->AddProperty(kREFR_IDX_REAL, QZ_REFR_IDX_ENERGIES, QZ_REFR_IDXS); */
+        /* qzPt->AddProperty(kREFR_IDX_IMAG, QZ_REFR_IDX_ENERGIES, std::vector<G4double>(QZ_REFR_IDXS.size(), 0.0)); */
 
         qz->SetMaterialPropertiesTable(qzPt);
     }
@@ -187,6 +195,7 @@ namespace ImpMaterials
         be->AddElement(beElt, G4int(1));
 
         auto* bePt = new G4MaterialPropertiesTable;
+        bePt->AddProperty(kREFR_IDX, BE_REFR_IDX_ENERGIES, BE_REFR_IDX_REAL);
         bePt->AddProperty(kREFR_IDX_REAL, BE_REFR_IDX_ENERGIES, BE_REFR_IDX_REAL);
         bePt->AddProperty(kREFR_IDX_IMAG, BE_REFR_IDX_ENERGIES, BE_REFR_IDX_IMAG);
         be->SetMaterialPropertiesTable(bePt);
@@ -244,6 +253,8 @@ namespace ImpMaterials
 
         auto* simpt = new G4MaterialPropertiesTable;
         simpt->AddProperty(kOP_DET_EFF, SI_DET_EFF_ENERGIES, SI_DET_EFF)
+             ->SetSpline(useSpline);
+        simpt->AddProperty(kREFR_IDX, SI_REFR_IDX_ENERGY, SI_REFR_IDX_REAL)
              ->SetSpline(useSpline);
         simpt->AddProperty(kREFR_IDX_REAL, SI_REFR_IDX_ENERGY, SI_REFR_IDX_REAL)
              ->SetSpline(useSpline);

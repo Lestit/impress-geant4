@@ -15,12 +15,15 @@
 #include "ImpMaterials.hh"
 #include "ImpTempLogVol.hh"
 #include "ImpScintCrystalSensitiveDetector.hh"
+#include "ImpSiSensitiveDetector.hh"
 
 #include "ChannelConstants.hh"
 static G4OpticalSurface* teflonOpticalSurface();
 static G4OpticalSurface* alOpticalSurface();
 static G4OpticalSurface* beOpticalSurface();
 static G4OpticalSurface* siOpticalSurface();
+static G4OpticalSurface* qzOpticalSurface();
+static G4OpticalSurface* cebr3OpticalSurface();
 
 
 // i sure love constructors
@@ -34,7 +37,7 @@ ImpHafxChannel::ImpHafxChannel(
     quartzAnchorCenter = G4ThreeVector(
         0, 0, -thickness()/2 + QUARTZ_THICKNESS/2 + DUMB_SI_THICKNESS);
     cebr3AnchorCenter = quartzAnchorCenter + G4ThreeVector(
-        0, 0, QUARTZ_THICKNESS + DUMB_SI_THICKNESS + CEBR3_THICKNESS/2);
+        0, 0, QUARTZ_THICKNESS/2 + CEBR3_THICKNESS/2);
 
     boundingCylinder = new G4Tubs(
         CHANNEL_CYL_PFX + channelId, 0, radius(), thickness()/2, 0 * deg, 360 * deg);
@@ -78,6 +81,8 @@ void ImpHafxChannel::buildCrystal()
     crystalPlacement = new G4PVPlacement(
         nullptr, cebr3AnchorCenter, crystalLogVol, CRYSTAL_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
+
+    /* attachCeBr3OpticalSurface(); */
 }
 
 void ImpHafxChannel::buildTeflonReflector()
@@ -114,13 +119,25 @@ void ImpHafxChannel::buildTeflonReflector()
 void ImpHafxChannel::attachCrystalDetector()
 {
     ImpScintCrystalSensitiveDetector* csd = crystalSensDet.Get();
-    if (csd) { throw std::runtime_error("WTF (IN ATTACH CRYSTAL DETECTOR)"); return; }
+    if (csd) { throw std::runtime_error("wot (IN ATTACH CRYSTAL DETECTOR)"); return; }
 
-    csd = new ImpScintCrystalSensitiveDetector(SENSITIVE_DET_PFX + channelId, channelId);
+    csd = new ImpScintCrystalSensitiveDetector(CRYSTAL_SENS_DET_PFX + channelId, channelId);
     crystalSensDet.Put(csd);
 
     G4SDManager::GetSDMpointer()->AddNewDetector(csd);
     crystalLogVol->SetSensitiveDetector(csd);
+}
+
+void ImpHafxChannel::attachDumbSiDetector()
+{
+    auto* sisd = siSensDet.Get();
+    if (sisd) { throw std::runtime_error("wot (IN ATTACH SILICON DETECTOR)"); return; }
+
+    sisd = new ImpSiSensitiveDetector(DUMB_SI_SENS_DET_PFX + channelId, channelId);
+    siSensDet.Put(sisd);
+
+    G4SDManager::GetSDMpointer()->AddNewDetector(sisd);
+    dumbSiLogVol->SetSensitiveDetector(sisd);
 }
 
 void ImpHafxChannel::attachTeflonOpticalSurface()
@@ -186,6 +203,8 @@ void ImpHafxChannel::buildQuartz()
     qzPlacement = new G4PVPlacement(
         nullptr, quartzAnchorCenter, qzLogVol, QZ_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
+
+    /* attachQuartzOpticalSurface(); */
 }
 
 void ImpHafxChannel::buildBeryllium()
@@ -231,7 +250,7 @@ void ImpHafxChannel::buildAlAttenuator()
         attCylinder, al, ATT_LOG_PFX + channelId);
 
     G4VisAttributes attAttrs;
-    attAttrs.SetColor(0.3, 0.3, 0.3, 0.1);
+    attAttrs.SetColor(0.7, 0.7, 0.7, 0.4);
     attAttrs.SetVisibility(true);
     attLogVol->SetVisAttributes(attAttrs);
 
@@ -274,6 +293,20 @@ void ImpHafxChannel::attachDumbSiOpticalSurface()
     auto* siSurf = siOpticalSurface();
     dumbSiSkin = new G4LogicalSkinSurface(
         SI_SUR_PFX + channelId, dumbSiLogVol, siSurf);
+}
+
+void ImpHafxChannel::attachQuartzOpticalSurface()
+{
+    auto* qs = qzOpticalSurface();
+    qzSkin = new G4LogicalSkinSurface(
+        QZ_SUR_PFX + channelId, qzLogVol, qs);
+}
+
+void ImpHafxChannel::attachCeBr3OpticalSurface()
+{
+    auto* s = cebr3OpticalSurface();
+    new G4LogicalSkinSurface(
+        CRYSTAL_SUR_PFX + channelId, crystalLogVol, s);
 }
 
 static G4OpticalSurface* siOpticalSurface()
@@ -335,4 +368,33 @@ static G4OpticalSurface* beOpticalSurface()
     bs->SetModel(unified);
     bs->SetFinish(ground);  // ground == rough
     return bs;
+}
+
+static G4OpticalSurface* qzOpticalSurface()
+{
+    static G4OpticalSurface* qs = nullptr;
+    if (qs) return qs;
+    qs = new G4OpticalSurface(QZ_SUR_PFX);
+    qs->SetMaterialPropertiesTable(
+        G4NistManager::Instance()->
+        FindOrBuildMaterial(ImpMaterials::kNIST_SIO2)->
+        GetMaterialPropertiesTable());
+    qs->SetType(dielectric_dielectric);
+    qs->SetModel(unified);
+    qs->SetFinish(polished);
+    return qs;
+}
+
+static G4OpticalSurface* cebr3OpticalSurface()
+{
+    static G4OpticalSurface* s = nullptr;
+    if (s) return s;
+    s = new G4OpticalSurface(CRYSTAL_SUR_PFX);
+    s->SetMaterialPropertiesTable(
+        G4Material::GetMaterial(ImpMaterials::kCEBR3)->
+        GetMaterialPropertiesTable());
+    s->SetModel(unified);
+    s->SetType(dielectric_dielectric);
+    s->SetFinish(polished);
+    return s;
 }

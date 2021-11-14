@@ -5,6 +5,7 @@
 #include "ImpOnlyDetectorConstruction.hh"
 #include "ImpPrimaryGeneratorAction.hh"
 #include "ImpRunAction.hh"
+#include "ImpSteppingAction.hh"
 #include "ImpTrackingAction.hh"
 #include "ImpVDetectorConstruction.hh"
 
@@ -31,6 +32,7 @@ void ImpActionInitialization::Build() const
     SetUserAction(new ImpEventAction);
     SetUserAction(new ImpRunAction);
     SetUserAction(new ImpTrackingAction);
+    SetUserAction(new ImpSteppingAction);
     setupPrimaryGenerator();
 }
 

@@ -14,6 +14,7 @@ namespace {
     static const G4String CRYSTAL_CYL_PFX = "hafx_crystal_cyl";
     static const G4String CRYSTAL_LOG_PFX = "hafx_crystal_log";
     static const G4String CRYSTAL_PHY_PFX = "hafx_crystal_phy";
+    static const G4String CRYSTAL_SUR_PFX = "hafx_crystal_sur";
 
     static const G4String TEFLON_RING = "hafx_teflon_ring";
     static const G4String TEFLON_CAP = "hafx_teflon_cap";
@@ -36,6 +37,7 @@ namespace {
     static const G4String QZ_CYL_PFX = "hafx_qz_cyl";
     static const G4String QZ_LOG_PFX = "hafx_qz_log";
     static const G4String QZ_PHY_PFX = "hafx_qz_phy";
+    static const G4String QZ_SUR_PFX = "hafx_qz_sur";
     static const G4String QZ_CRYST_INTERFACE_PFX = "hafx_qz_cebr3_interface";
 
     static const G4String BE_CYL_PFX = "hafx_be_cyl";
@@ -43,7 +45,8 @@ namespace {
     static const G4String BE_PHY_PFX = "hafx_be_phy";
     static const G4String BE_SUR_PFX = "hafx_be_sur";
 
-    static const G4String SENSITIVE_DET_PFX = "hafx_crystal_sd";
+    static const G4String CRYSTAL_SENS_DET_PFX = "hafx_crystal_sd";
+    static const G4String DUMB_SI_SENS_DET_PFX = "hafx_dumb_sd";
 
     static const G4String SI_CYL_PFX = "hafx_si_cyl";
     static const G4String SI_LOG_PFX = "hafx_si_log";

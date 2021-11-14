@@ -21,6 +21,7 @@ namespace ImpMaterials
         1.40292e+00*eV, 1.38094e+00*eV
     };
 
+    /* const std::vector<G4double> SI_DET_EFF = std::vector<double>(SI_DET_EFF_ENERGIES.size(), 1);//{ */
     const std::vector<G4double> SI_DET_EFF = {
         2.62014e-01, 2.70252e-01, 2.79863e-01, 3.00458e-01, 3.23799e-01, 3.49886e-01, 3.67735e-01, 3.78719e-01,
         3.85584e-01, 3.86957e-01, 3.89703e-01, 3.93822e-01, 3.99314e-01, 4.04805e-01, 4.13043e-01, 4.24027e-01,

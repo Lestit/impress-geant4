@@ -39,7 +39,7 @@ def refr_idx():
         plt.show()
     return energy, n, k
 
-if __name__ == '__main__':
+def write_geant():
     eff_energy, eff = efficiency()
     refidx_energy, real_idx, imag_idx = refr_idx()
     data = {
@@ -54,3 +54,12 @@ if __name__ == '__main__':
         sys.stdout = f
         c_ary_print(data)
         sys.stdout = old_stdout
+
+def write_csv():
+    refidx_energy, real_idx, imag_idx = refr_idx()
+    fn = 'silicon-refr-idx-ev-n-k.tab'
+    np.savetxt(fn, np.array([refidx_energy, real_idx, imag_idx]).T)
+
+if __name__ == '__main__':
+    # write_geant()
+    write_csv()

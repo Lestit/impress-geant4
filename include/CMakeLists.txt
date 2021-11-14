@@ -22,6 +22,9 @@ target_sources(${EXC_OUT}
         ImpRunAction.hh
         ImpScintCrystalHit.hh
         ImpScintCrystalSensitiveDetector.hh
+        ImpSiHit.hh
+        ImpSiSensitiveDetector.hh
+        ImpSteppingAction.hh
         ImpSurfacePointPicker.hh
         ImpTempLogVol.hh
         ImpTrackingAction.hh

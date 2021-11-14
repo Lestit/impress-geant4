@@ -6,11 +6,19 @@
 class ImpVHit : public G4VHit
 {
     public:
-        enum class HitType { ScintCryst, Sipm };
+        ImpVHit(const G4String& channelId, const G4ThreeVector& position);
+        ~ImpVHit() =0;
+        enum class HitType { ScintCryst, Si };
 
         virtual HitType hitType() const =0;
-        virtual const G4ThreeVector& peekPosition() const =0;
-        virtual const G4String& peekAssociatedChannelId() const =0;
+        virtual const G4ThreeVector& peekPosition() const
+        { return position; }
+        virtual const G4String& peekAssociatedChannelId() const
+        { return assocChannelId; }
 
         virtual void Draw() override;
+
+    protected:
+        G4String assocChannelId;
+        G4ThreeVector position;
 };

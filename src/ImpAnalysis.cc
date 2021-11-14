@@ -117,6 +117,8 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
     const auto* testHit = (*vec)[0];
     if (testHit->hitType() == ImpVHit::HitType::ScintCryst)
         saveCrystalHits(vec);
+    else if (testHit->hitType() == ImpVHit::HitType::Si)
+        printSiHits(vec);
     else
         G4Exception("src/ImpAnalysis.cc processHitCollection", "", FatalException, "unrecognized hit. what?");
 
@@ -156,4 +158,13 @@ void ImpAnalysis::saveIncidentSpectrumChunk()
         specInFile << e / keV << std::endl;
 
     incidentEnergiesChunk.clear();
+}
+
+void ImpAnalysis::printSiHits(const std::vector<ImpVHit*>* vec)
+{
+    for (auto* h : *vec) {
+        /* h->Print(); */
+    }
+    G4cout << "there were " << vec->size() << " silicon hits" << G4endl;
+    G4cout.flush();
 }

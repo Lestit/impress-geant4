@@ -30,6 +30,4 @@ class ImpScintCrystalHit : public ImpVHit
 
     private:
         G4double depositedEnergy;
-        G4String assocChannelId;
-        G4ThreeVector position;
 };

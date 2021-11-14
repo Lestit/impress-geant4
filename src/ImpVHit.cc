@@ -6,6 +6,13 @@
 #include <G4VisAttributes.hh>
 #include <G4VVisManager.hh>
 
+ImpVHit::ImpVHit(const G4String& channelId, const G4ThreeVector& position) :
+    assocChannelId(channelId),
+    position(position)
+{ }
+
+ImpVHit::~ImpVHit() { }
+
 void ImpVHit::Draw()
 {
     auto* visMan = G4VVisManager::GetConcreteInstance();

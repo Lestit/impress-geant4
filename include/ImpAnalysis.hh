@@ -39,6 +39,8 @@ class ImpAnalysis
         void saveCrystalHits(const std::vector<ImpVHit*>* vec);
         void saveIncidentSpectrumChunk();
 
+        void printSiHits(const std::vector<ImpVHit*>* vec);
+
         G4Accumulable<std::size_t> totalEvents;
 
         std::vector<long double> incidentEnergiesChunk;

@@ -36,6 +36,7 @@ G4VPhysicalVolume* ImpOnlyDetectorConstruction::Construct()
 void ImpOnlyDetectorConstruction::ConstructSDandField()
 {
     singleDetector->attachCrystalDetector();
+    singleDetector->attachDumbSiDetector();
 }
 
 void ImpOnlyDetectorConstruction::constructEnclosing()

@@ -15,6 +15,7 @@ class G4Tubs;
 class G4UnionSolid;
 
 class ImpScintCrystalSensitiveDetector;
+class ImpSiSensitiveDetector;
 
 class ImpHafxChannel : public G4PVPlacement
 {
@@ -36,11 +37,13 @@ class ImpHafxChannel : public G4PVPlacement
         { return diameter() / 2; }
 
         void attachCrystalDetector();
+        void attachDumbSiDetector();
 
     private:
         static G4OpticalSurface* tefSurf();
 
         void buildCrystal();
+        void attachCeBr3OpticalSurface();
 
         void buildTeflonReflector();
         void attachTeflonOpticalSurface();
@@ -50,6 +53,7 @@ class ImpHafxChannel : public G4PVPlacement
         void attachAlOpticalSurface(G4LogicalVolume* curAlLogVol);
 
         void buildQuartz();
+        void attachQuartzOpticalSurface();
 
         void buildBeryllium();
         void attachBeOpticalSurface();
@@ -67,6 +71,7 @@ class ImpHafxChannel : public G4PVPlacement
         G4PVPlacement* crystalPlacement;
         // G4Cache ensures thread safety
         G4Cache<ImpScintCrystalSensitiveDetector*> crystalSensDet;
+        G4Cache<ImpSiSensitiveDetector*> siSensDet;
 
         G4UnionSolid* tefSolid;
         G4LogicalVolume* tefLogVol;
@@ -86,6 +91,7 @@ class ImpHafxChannel : public G4PVPlacement
         G4Tubs* qzCylinder;
         G4LogicalVolume* qzLogVol;
         G4PVPlacement* qzPlacement;
+        G4LogicalSkinSurface* qzSkin;
         // optical grease between quartz and crystal?
         
         G4Tubs* beCylinder;
