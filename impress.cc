@@ -17,6 +17,7 @@ G4String pickFlareSize()
         std::cin >> flareSize;
     } while (std::find(fs.begin(), fs.end(), flareSize) == fs.end());
 
+    ImpAnalysis::instance()->updateFlareIdentifier(flareSize);
     return flareSize;
 }
 

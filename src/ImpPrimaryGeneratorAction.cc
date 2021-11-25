@@ -8,6 +8,7 @@
 ImpPrimaryGeneratorAction::ImpPrimaryGeneratorAction()
         : G4VUserPrimaryGeneratorAction(),
     gun(std::make_unique<G4ParticleGun>()),
+    gps(std::make_unique<G4GeneralParticleSource>()),
     energyPicker(new ImpEnergyPicker),
     pointPicker(nullptr)
 {
@@ -36,9 +37,14 @@ ImpPrimaryGeneratorAction::~ImpPrimaryGeneratorAction()
 
 void ImpPrimaryGeneratorAction::GeneratePrimaries(G4Event* evt)
 {
+    // allow G4GeneralParticleSource to bypass the ImpEnergyPicker
+    if (energyPicker && energyPicker->peekDistributionType() == ImpEnergyPicker::DistributionType::gps) {
+        gps->GeneratePrimaryVertex(evt);
+        return;
+    }
+
     if (energyPicker && pointPicker) {
         gun->SetParticlePosition(pointPicker->pickPoint());
-
         auto e = energyPicker->pickEnergy();
         gun->SetParticleEnergy(e);
         ImpAnalysis::instance()->addIncidentEnergy(e);

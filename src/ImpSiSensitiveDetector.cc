@@ -40,8 +40,10 @@ Initialize(G4HCofThisEvent* hcote)
 G4bool ImpSiSensitiveDetector::
 ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-    if (step->GetTrack()->GetParticleDefinition() == G4OpticalPhoton::Definition())
-        processOptical(step);
+    G4cout << "*** in optical" << G4endl;
+    // with 100% efficiency hits don't really register...
+    /* if (step->GetTrack()->GetParticleDefinition() == G4OpticalPhoton::Definition()) */
+        /* processOptical(step); */
 
     return false;
 }
@@ -49,6 +51,7 @@ ProcessHits(G4Step* step, G4TouchableHistory*)
 void ImpSiSensitiveDetector::
 processOptical(const G4Step* step)
 {
+    /* G4cout << "*** in optical" << G4endl; */
     if (step->GetTotalEnergyDeposit() == 0)
         return;
 

@@ -17,7 +17,7 @@ static const std::filesystem::path FLARE_CDFS_DIR = "flare-cdfs";
 class ImpEnergyPicker
 {
     public:
-        enum class DistributionType { flare, mono, flat, undefined };
+        enum class DistributionType { flare, mono, flat, gps, undefined };
 
         ImpEnergyPicker(const ImpEnergyPicker& other);
         ImpEnergyPicker& operator=(const ImpEnergyPicker& other);
@@ -33,6 +33,8 @@ class ImpEnergyPicker
 
         void updateDistributionType(const DistributionType& dt)
         { distrType = dt; }
+        const DistributionType& peekDistributionType()
+        { return distrType; }
 
         void updateFlareSize(const std::string& fs);
         void updateMonoEnergy(long double mono)

@@ -58,7 +58,9 @@ void ImpEnergyPickerMessenger::SetNewValue(
 {
     if (cmd == distributionTypeCmd) {
         distrType = newValues == "mono" ? dtype::mono : 
-                    newValues == "flat" ? dtype::flat : dtype::flare;
+                    newValues == "flat" ? dtype::flat :
+                    newValues == "gps"  ? dtype::gps  : dtype::flare;
+        ePicker->updateDistributionType(distrType);
     }
     else if (cmd == flareEnergyCmd)
         processFlare(newValues);
@@ -90,7 +92,7 @@ void ImpEnergyPickerMessenger::processFlare(const G4String& nv)
 {
     checkType(dtype::flare, "Not using flare distribution");
     flareSize = nv;
-    ePicker->updateDistributionType(dtype::flare);
+    /* ePicker->updateDistributionType(dtype::flare); */
     ePicker->updateFlareSize(flareSize);
 }
 
@@ -98,7 +100,7 @@ void ImpEnergyPickerMessenger::processFlatLow(const G4String& nv)
 {
     checkType(dtype::flat, "Not using flat distribution");
     flatLow = flatEnergyLowCmd->GetNewDoubleValue(nv);
-    ePicker->updateDistributionType(dtype::flat);
+    /* ePicker->updateDistributionType(dtype::flat); */
     ePicker->updateFlatEnergyBounds(flatLow, flatHigh);
 }
 
@@ -106,7 +108,7 @@ void ImpEnergyPickerMessenger::processFlatHigh(const G4String& nv)
 {
     checkType(dtype::flat, "Not using flat distribution");
     flatHigh = flatEnergyHighCmd->GetNewDoubleValue(nv);
-    ePicker->updateDistributionType(dtype::flat);
+    /* ePicker->updateDistributionType(dtype::flat); */
     ePicker->updateFlatEnergyBounds(flatLow, flatHigh);
 }
 
@@ -114,7 +116,7 @@ void ImpEnergyPickerMessenger::processMono(const G4String& nv)
 {
     checkType(dtype::mono, "Not using a monoenergetic distribution");
     mono = monoEnergyCmd->GetNewDoubleValue(nv);
-    ePicker->updateDistributionType(dtype::mono);
+    /* ePicker->updateDistributionType(dtype::mono); */
     ePicker->updateMonoEnergy(mono);
 }
 

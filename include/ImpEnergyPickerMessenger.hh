@@ -40,7 +40,7 @@ class ImpEnergyPickerMessenger : public G4UImessenger
 
         const char* DISTR_TYPE_STR = "/impe/distributionType";
         const char* DISTR_TYPE_PARM = "energyDistribution";
-        const char* ALLOWED_DISTRIBUTIONS = "mono flat flare";
+        const char* ALLOWED_DISTRIBUTIONS = "mono flat flare gps";
 
         void processFlare(const G4String & nv);
         void processFlatLow(const G4String & nv);

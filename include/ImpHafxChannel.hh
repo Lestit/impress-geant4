@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include <ChannelConstants.hh>
 #include "G4Cache.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4PVPlacement.hh"
@@ -27,14 +28,17 @@ class ImpHafxChannel : public G4PVPlacement
         ~ImpHafxChannel();
 
         // as crystal becomes more fleshed out, update these
-        G4double thickness()
-        { return thicknessNoAttenuator() + attenuatorWindowThickness; }
         static G4double thicknessNoAttenuator()
         { return AL_HOUSING_DEPTH + DUMB_SI_THICKNESS; }
         static G4double diameter()
         { return WHOLE_DIAMETER; }
         static G4double radius()
         { return diameter() / 2; }
+
+        G4double thickness() const
+        { return thicknessNoAttenuator() + attenuatorWindowThickness; }
+        const std::string& peekSensitiveDetectorName() const
+        { return sensDetName; }
 
         void attachCrystalDetector();
         void attachDumbSiDetector();
@@ -105,6 +109,7 @@ class ImpHafxChannel : public G4PVPlacement
         G4LogicalSkinSurface* dumbSiSkin;
 
         G4String channelId;
+        std::string sensDetName;
         G4double attenuatorWindowThickness;
 
         static constexpr G4double BE_THICKNESS = 0.7 * mm;

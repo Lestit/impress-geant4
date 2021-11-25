@@ -20,5 +20,5 @@ void ImpRunAction::BeginOfRunAction(const G4Run*)
 
 void ImpRunAction::EndOfRunAction(const G4Run*)
 {
-    ImpAnalysis::instance()->saveFile(IsMaster());
+    ImpAnalysis::instance()->saveFiles(IsMaster());
 }

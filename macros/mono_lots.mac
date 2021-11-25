@@ -1,0 +1,4 @@
+/impe/distributionType mono
+/impe/mono 30 keV
+
+/run/beamOn 1000

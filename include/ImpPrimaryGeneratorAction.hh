@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include <G4VUserPrimaryGeneratorAction.hh>
+#include <G4GeneralParticleSource.hh>
 #include <G4ParticleGun.hh>
 
 #include <ImpEnergyPicker.hh>
@@ -30,6 +31,7 @@ class ImpPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
         void GeneratePrimaries(G4Event* anEvent) override;
     private:
         std::unique_ptr<G4ParticleGun> gun;
+        std::unique_ptr<G4GeneralParticleSource> gps;
         // sorry boss
         ImpEnergyPicker* energyPicker;
         std::unique_ptr<ImpSurfacePointPicker> pointPicker;

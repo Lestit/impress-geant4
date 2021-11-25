@@ -98,7 +98,7 @@ ax.set_xlabel('Energy (keV)')
 ax.set_ylabel('Counts')
 
 # ax.axvline(34.7, label='secondary line Ce', color='black')
-ax.axvline(40.44, label='k edge', color='blue')
+ax.axvline(40.44, label='Cerium k edge @ 40.44 keV', color='blue')
 
 leg = ax.legend()
 

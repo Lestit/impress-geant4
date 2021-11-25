@@ -132,7 +132,7 @@ long double ImpEnergyPicker::pickEnergy()
         default:
             G4Exception(
                 "ImpEnergyPicker::pickEnergy", "", RunMustBeAborted,
-                "Undefined energy distribution type");
+                "Undefined energy distribution type, or using GPS");
             return -0x1337;
     }
 }

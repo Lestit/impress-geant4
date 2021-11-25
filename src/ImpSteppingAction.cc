@@ -1,9 +1,12 @@
 #include <G4OpBoundaryProcess.hh>
 #include <G4OpticalPhoton.hh>
 #include <G4ProcessManager.hh>
+#include <G4SDManager.hh>
 #include <G4Step.hh>
 #include <G4Threading.hh>
 
+#include <ImpHafxChannel.hh>
+#include <ImpSiSensitiveDetector.hh>
 #include <ImpSteppingAction.hh>
 #include <ChannelConstants.hh>
 
@@ -72,7 +75,7 @@ void ImpSteppingAction::UserSteppingAction(const G4Step* step)
 
 void ImpSteppingAction::processOptical(const G4Step* step)
 {
-    return;
+    /* return; */
     // G4AutoLock l(&optMux);
     static G4ThreadLocal G4OpBoundaryProcess* boundary = nullptr;
     if (boundary == nullptr) {
@@ -111,8 +114,9 @@ void ImpSteppingAction::processOptical(const G4Step* step)
         // G4cout << "TRACKING OPTICAL AFTER BOUNDARY" << G4endl;
         auto s = boundary->GetStatus();
         switch (s) {
+            // detect it here bc it dies before it can actually hit the boundary
             case Detection:
-                G4cout << "optical photon DETECTED!!!!!!!!!!!!!!!!!!!!" << G4endl;
+                processDetected(preVol, postVol, step);
                 break;
             case Absorption:
             case TotalInternalReflection:
@@ -130,5 +134,18 @@ void ImpSteppingAction::processOptical(const G4Step* step)
                 }
                 break;
         }
+    }
+}
+
+void ImpSteppingAction::processDetected(
+    const G4VPhysicalVolume* preVol, const G4VPhysicalVolume* postVol, const G4Step* step)
+{
+    std::array<const G4VPhysicalVolume*, 2> volz = {preVol, postVol};
+    for (const auto* v : volz) {
+        const auto* sdLogVol = v->GetLogicalVolume();
+        if (!sdLogVol) continue;
+
+        auto* siSd = dynamic_cast<ImpSiSensitiveDetector*>(sdLogVol->GetSensitiveDetector());
+        if (siSd) siSd->processOptical(step);
     }
 }

@@ -9,6 +9,8 @@ namespace ImpMaterials
     static const G4String kNIST_SI = "G4_Si";
     static const G4double SI_DENSITY = 2.33 * g / cm3;
     static const G4String kOP_DET_EFF = "EFFICIENCY";
+    static const G4String kREFLECTIVITY = "REFLECTIVITY";
+    static const G4String kTRANSMITTANCE = "TRANSMITTANCE";
 
     const std::vector<G4double> SI_DET_EFF_ENERGIES = {
         3.98830e+00*eV, 3.90793e+00*eV, 3.86124e+00*eV, 3.78585e+00*eV, 3.71335e+00*eV, 3.64358e+00*eV, 3.57638e+00*eV, 3.51161e+00*eV,
@@ -21,8 +23,11 @@ namespace ImpMaterials
         1.40292e+00*eV, 1.38094e+00*eV
     };
 
-    /* const std::vector<G4double> SI_DET_EFF = std::vector<double>(SI_DET_EFF_ENERGIES.size(), 1);//{ */
-    const std::vector<G4double> SI_DET_EFF = {
+    // calibrated using some sample data
+    const std::vector<G4double> SI_DET_EFF = std::vector<double>(SI_DET_EFF_ENERGIES.size(), 1);//, 0.596);//{
+    // set to zero so that we either detect or reflect
+    const std::vector<G4double> SI_TRANSMITTANCE = std::vector<double>(SI_DET_EFF_ENERGIES.size(), 0);
+    const std::vector<G4double> SI_BROADCOM_NUMBERS = {
         2.62014e-01, 2.70252e-01, 2.79863e-01, 3.00458e-01, 3.23799e-01, 3.49886e-01, 3.67735e-01, 3.78719e-01,
         3.85584e-01, 3.86957e-01, 3.89703e-01, 3.93822e-01, 3.99314e-01, 4.04805e-01, 4.13043e-01, 4.24027e-01,
         4.35011e-01, 4.41876e-01, 4.48741e-01, 4.51487e-01, 4.45995e-01, 4.36384e-01, 4.24027e-01, 4.06178e-01,

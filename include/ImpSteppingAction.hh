@@ -14,4 +14,7 @@ class ImpSteppingAction : public G4UserSteppingAction
 
     private:
         void processOptical(const G4Step* step);
+        void processDetected(
+            const G4VPhysicalVolume* preVol, const G4VPhysicalVolume* postVol,
+            const G4Step* step);
 };

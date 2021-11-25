@@ -117,15 +117,11 @@ namespace ImpMaterials
         // # of photons emitted = RESOLUTION_SCALE * sqrt(mean # of photons)
         // TODO: modify source to make energy resolution energy-dependent
         scintPt->AddConstProperty(kRESOLUTION_SCALE, CEBR3_SCINT_RESLN_SCALE);
-        G4cout << "absorption length\n";
-        G4cout.flush();
         scintPt->AddProperty(kABSORPTION_LEN, CEBR3_ABS_LEN_ENERGIES, CEBR3_ABS_LEN)->SetSpline(useSpline);
         // skip optical Rayleigh scattering (not important)
         // skip Mie scattering (doesn't apply)
 
         cebr3->SetMaterialPropertiesTable(scintPt);
-        G4cout << "done\n";
-        G4cout.flush();
     }
 
     void makeVacuum()
@@ -252,7 +248,18 @@ namespace ImpMaterials
         }
 
         auto* simpt = new G4MaterialPropertiesTable;
+        std::vector<G4double> refl(SI_BROADCOM_NUMBERS.size(), 0.);
+        // FIXME: set to zero just for testing stuff
+        /* for (size_t i = 0; i < refl.size(); ++i) */
+        /*     refl[i] = 1 - SI_BROADCOM_NUMBERS[i]; */
+
+        // set efficiency to a number that calibrates the detection number
+        // to the empirical values from Broadcom
         simpt->AddProperty(kOP_DET_EFF, SI_DET_EFF_ENERGIES, SI_DET_EFF)
+             ->SetSpline(useSpline);
+        simpt->AddProperty(kREFLECTIVITY, SI_DET_EFF_ENERGIES, refl)
+             ->SetSpline(useSpline);
+        simpt->AddProperty(kTRANSMITTANCE, SI_DET_EFF_ENERGIES, SI_TRANSMITTANCE)
              ->SetSpline(useSpline);
         simpt->AddProperty(kREFR_IDX, SI_REFR_IDX_ENERGY, SI_REFR_IDX_REAL)
              ->SetSpline(useSpline);
@@ -260,6 +267,7 @@ namespace ImpMaterials
              ->SetSpline(useSpline);
         simpt->AddProperty(kREFR_IDX_IMAG, SI_REFR_IDX_ENERGY, SI_REFR_IDX_IMAG)
              ->SetSpline(useSpline);
+
         si->SetMaterialPropertiesTable(simpt);
     }
 }

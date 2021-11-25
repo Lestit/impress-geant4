@@ -17,7 +17,6 @@
 #include "ImpScintCrystalSensitiveDetector.hh"
 #include "ImpSiSensitiveDetector.hh"
 
-#include "ChannelConstants.hh"
 static G4OpticalSurface* teflonOpticalSurface();
 static G4OpticalSurface* alOpticalSurface();
 static G4OpticalSurface* beOpticalSurface();
@@ -32,6 +31,7 @@ ImpHafxChannel::ImpHafxChannel(
     G4LogicalVolume* motherLogVol, const G4String& channelId, const G4double attenuatorWindowThickness)
         : G4PVPlacement(rotMat, translate, tempLogVol(), CHANNEL_PFX + channelId, motherLogVol, false, 0),
     channelId(channelId),
+    sensDetName(DUMB_SI_SENS_DET_PFX + channelId),
     attenuatorWindowThickness(attenuatorWindowThickness)
 {
     quartzAnchorCenter = G4ThreeVector(
@@ -133,7 +133,7 @@ void ImpHafxChannel::attachDumbSiDetector()
     auto* sisd = siSensDet.Get();
     if (sisd) { throw std::runtime_error("wot (IN ATTACH SILICON DETECTOR)"); return; }
 
-    sisd = new ImpSiSensitiveDetector(DUMB_SI_SENS_DET_PFX + channelId, channelId);
+    sisd = new ImpSiSensitiveDetector(sensDetName, channelId);
     siSensDet.Put(sisd);
 
     G4SDManager::GetSDMpointer()->AddNewDetector(sisd);
