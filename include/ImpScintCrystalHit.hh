@@ -23,10 +23,6 @@ class ImpScintCrystalHit : public ImpVHit
 
         G4double peekDepositedEnergy() const
         { return depositedEnergy; }
-        const G4ThreeVector& peekPosition() const override
-        { return position; }
-        const G4String& peekAssociatedChannelId() const override
-        { return assocChannelId; }
 
     private:
         G4double depositedEnergy;

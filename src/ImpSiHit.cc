@@ -9,8 +9,9 @@ namespace
     G4ThreadLocal G4Allocator<ImpSiHit>* alloc = nullptr;
 }
 
-ImpSiHit::ImpSiHit(const G4String& channelId, const G4ThreeVector& position) :
-    ImpVHit(channelId, position)
+ImpSiHit::ImpSiHit(
+    const G4String& channelId, const G4ThreeVector& position, G4double depositedEnergy) :
+        ImpVHit(channelId, position), depositedEnergy(depositedEnergy)
 { }
 
 ImpSiHit::~ImpSiHit()
@@ -21,6 +22,7 @@ void ImpSiHit::Print()
     auto f = G4cout.flags();
     G4cout
         << "=== Begin SiCrystalHit ===" << G4endl
+        << "Energy deposited: " << std::setw(7) << G4BestUnit(depositedEnergy, "Energy") << G4endl
         << "Position:         " << std::setw(7) << G4BestUnit(position, "Length") << G4endl
         << "Channel ID:       " << std::setw(7) << assocChannelId << G4endl
         << "=== End SiCrystalHit ===" << G4endl;
@@ -32,13 +34,15 @@ bool ImpSiHit::operator==(const ImpSiHit& rhs)
 {
     return
         position == rhs.peekPosition() &&
-        assocChannelId == rhs.peekAssociatedChannelId();
+        assocChannelId == rhs.peekAssociatedChannelId() &&
+        depositedEnergy == rhs.peekDepositedEnergy();
 }
 
 const ImpSiHit& ImpSiHit::operator=(const ImpSiHit& rhs)
 {
     position = rhs.peekPosition();
     assocChannelId = rhs.peekAssociatedChannelId();
+    depositedEnergy = rhs.peekDepositedEnergy();
     return *this;
 }
 

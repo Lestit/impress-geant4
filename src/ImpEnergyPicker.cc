@@ -9,27 +9,26 @@
 
 namespace
 {
-    struct FlareFileData
+    struct EngPointsFileData
     {
         std::vector<long double> eng;
-        std::vector<long double> cdf;
+        std::vector<long double> assoc;
     };
 
-    FlareFileData loadFlareData(const std::string& flareSize)
+    void verifyIfs(const std::ifstream& ifs, const std::filesystem::path& p)
     {
-        G4String cpy = flareSize;
-        cpy.toLower();
-        std::string fn = "cdf_" + cpy + ".txt";
-        std::filesystem::path fszPath(fn);
-        auto p = FLARE_CDFS_DIR / fszPath;
-        std::ifstream ifs(p);
-
         if (!ifs) {
-            std::string excStr = "Cannot load flare data file " + p.string();
+            std::string excStr = "Cannot load element data file " + p.string();
             G4Exception(
                 "src/ImpEnergyPicker.cc", "", RunMustBeAborted,
                 excStr.c_str());
         }
+    }
+
+    EngPointsFileData loadGenericTable(std::filesystem::path p)
+    {
+        std::ifstream ifs(p);
+        verifyIfs(ifs, p);
 
         long double energy, cdfVal;
         std::vector<long double> engVec, cdfVec;
@@ -39,6 +38,33 @@ namespace
         }
 
         return {engVec, cdfVec};
+    }
+
+    EngPointsFileData loadFlareData(const std::string& flareSize)
+    {
+        G4String cpy = flareSize;
+        cpy.toLower();
+        std::string fn = "cdf_" + cpy + ".txt";
+        std::filesystem::path fszPath(fn);
+        return loadGenericTable(FLARE_CDFS_DIR / fszPath);
+    }
+
+    std::array<long double, NUM_O1_CDF>
+    loadElementData(const std::string& elementName)
+    {
+        G4String cpy = elementName;
+        cpy.toLower();
+        std::filesystem::path p(elementName + "-o1.txt");
+        std::ifstream ifs(ELT_INTENS_DIR / p);
+        verifyIfs(ifs, p);
+
+        long double e;
+        size_t i = 0;
+        std::array<long double, NUM_O1_CDF> ret;
+        while (ifs >> e) {
+            ret[i++] = e;
+        }
+        return ret;
     }
 }
 
@@ -56,6 +82,7 @@ ImpEnergyPicker::ImpEnergyPicker(const ImpEnergyPicker& other)
     flatEnd(other.flatEnd),
     flareEnergyVec(other.flareEnergyVec),
     flareEnergyCdf(other.flareEnergyCdf),
+    eltEnergyO1Cdf(other.eltEnergyO1Cdf),
     rng(other.rng),
     realDis(other.realDis),
     mess(new ImpEnergyPickerMessenger(this))
@@ -77,36 +104,6 @@ ImpEnergyPicker& ImpEnergyPicker::operator=(const ImpEnergyPicker& other)
     return *this;
 }
 
-ImpEnergyPicker::ImpEnergyPicker(const std::string& flareSize)
-        : distrType(DistributionType::flare),
-    rng(std::random_device()()),
-    realDis(0, 1),
-    mess(new ImpEnergyPickerMessenger(this))
-{
-    auto dat = loadFlareData(flareSize);
-    flareEnergyVec = dat.eng;
-    flareEnergyCdf = dat.cdf;
-}
-
-ImpEnergyPicker::ImpEnergyPicker(long double mono)
-        : distrType(DistributionType::mono),
-    monoEnergy(mono),
-    rng(std::random_device()()),
-    realDis(0, 1),
-    mess(new ImpEnergyPickerMessenger(this))
-{ }
-
-ImpEnergyPicker::ImpEnergyPicker(long double flatStart, long double flatEnd)
-        : distrType(DistributionType::flat),
-    flatStart(flatStart),
-    flatEnd(flatEnd),
-    rng(std::random_device()()),
-    realDis(0, 1),
-    mess(new ImpEnergyPickerMessenger(this))
-{
-    assert(flatEnd > flatStart);
-}
-
 ImpEnergyPicker::~ImpEnergyPicker()
 {
     if (mess) {
@@ -119,22 +116,33 @@ void ImpEnergyPicker::updateFlareSize(const std::string& fs)
 {
     auto dat = loadFlareData(fs);
     flareEnergyVec = dat.eng;
-    flareEnergyCdf = dat.cdf;
+    flareEnergyCdf = dat.assoc;
+}
+
+void ImpEnergyPicker::updateElement(const std::string& elt)
+{
+    eltEnergyO1Cdf = loadElementData(elt);
 }
 
 long double ImpEnergyPicker::pickEnergy()
 {
     using dt = DistributionType;
     switch (distrType) {
-        case dt::mono:  return pickMono(); break;
-        case dt::flat:  return pickFlat(); break;
-        case dt::flare: return pickFlare(); break;
+        case dt::mono:    return pickMono(); break;
+        case dt::flat:    return pickFlat(); break;
+        case dt::flare:   return pickFlare(); break;
+        case dt::element: return pickElement(); break;
         default:
             G4Exception(
                 "ImpEnergyPicker::pickEnergy", "", RunMustBeAborted,
                 "Undefined energy distribution type, or using GPS");
             return -0x1337;
     }
+}
+
+long double ImpEnergyPicker::pickElement()
+{
+    return eltEnergyO1Cdf[size_t(realDis(rng) * NUM_O1_CDF)] * keV;
 }
 
 long double ImpEnergyPicker::pickFlare()

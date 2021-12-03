@@ -1,5 +1,12 @@
 #include "impress.hh"
 
+void initRandom()
+{
+    auto x = std::random_device()();
+    G4cout << "random device gave " << x << G4endl;
+    G4Random::setTheSeed(x);
+}
+
 G4String pickFlareSize()
 {
     std::vector<G4String> fs;
@@ -23,6 +30,8 @@ G4String pickFlareSize()
 
 int main(int argc, char* argv[])
 {
+    initRandom();
+
     char c = 0;
     do {
         std::cout << "Scintillation on? (y/n) ";

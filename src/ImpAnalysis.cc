@@ -1,5 +1,6 @@
 #include <ctime>
 #include <chrono>
+#include <filesystem>
 #include <iomanip>
 #include <memory>
 #include <map>
@@ -18,6 +19,7 @@
 
 #include "ImpAnalysis.hh"
 #include "ImpScintCrystalHit.hh"
+#include "ImpSiHit.hh"
 #include "ImpVHit.hh"
 
 namespace {
@@ -25,36 +27,25 @@ namespace {
     G4Mutex instMux = G4MUTEX_INITIALIZER;
     G4Mutex dataMux = G4MUTEX_INITIALIZER;
 
-    static const G4String MANAGER_TYPE = "csv";
-    static const G4String HISTO_DIRECTORY = "impress-histo";
-    static const G4String TUPLE_DIRECTORY = "impress-tuple";
-    static const G4String OUT_SPEC_FN_PFX = "spec-out-";
-    static const G4String IN_SPEC_FN_PFX  = "spec-in-";
-    static const G4String SI_OUT_FN_PFX = "si-out-";
-
-    static const G4String ENERGY_NTUPLE_NAME = "depetup";
+    static const G4String kSPEC_IN = "spec-in";
+    static const G4String kCRYST_OUT = "cryst-out";
+    static const G4String kSI_OUT = "si-out";
+    static const G4String kSCINT_OUT = "scint-phots-out";
+    static const G4String kSI_ENGS_OUT = "si-energies-out";
+    static const std::string OUT_DIR = "data-out";
 }
 
 ImpAnalysis::ImpAnalysis() :
     totalEvents(0),
-    savePositions(false)
+    saveSiEnergies(false),
+    crystOut(kCRYST_OUT, false),
+    specIn(kSPEC_IN, false),
+    siOut(kSI_OUT, false),
+    siEngOut(kSI_ENGS_OUT, true),
+    scintOut(kSCINT_OUT, false)
 {
     G4AccumulableManager::Instance()->RegisterAccumulable(totalEvents);
-}
-
-G4String ImpAnalysis::buildFilename(const G4String& pfx)
-{
-    static const char* OUT_DIR = "data-out";
-    using clk = std::chrono::system_clock;
-
-    std::stringstream ss;
-    auto nowOut = std::chrono::duration_cast<std::chrono::milliseconds>(
-            clk::now().time_since_epoch());
-
-    std::string fidPfx = flareIdentifier.empty() ? "" : (flareIdentifier + "-");
-    ss << OUT_DIR << "/" << fidPfx << pfx
-       << nowOut.count() << ".csv";
-    return ss.str();
+    wrappers = {&crystOut, &specIn, &siOut, &siEngOut, &scintOut};
 }
 
 ImpAnalysis::~ImpAnalysis()
@@ -69,22 +60,29 @@ ImpAnalysis* ImpAnalysis::instance()
     return anInst;
 }
 
-void ImpAnalysis::bookTuplesHistograms(G4bool isMaster)
+void ImpAnalysis::updateFlareIdentifier(const std::string& fid)
+{
+    flareIdentifier = fid;
+    for (const auto w : wrappers)
+        w->updateFlareId(fid);
+}
+
+void ImpAnalysis::initFiles(G4bool isMaster)
 {
     G4AutoLock l(&dataMux);
     if (!isMaster) return;
 
     G4AccumulableManager::Instance()->Reset();
 
-    const size_t NFILES = 3;
-    std::array<G4String, NFILES> fileNames = {
-        IN_SPEC_FN_PFX, OUT_SPEC_FN_PFX, SI_OUT_FN_PFX};
-    std::array<std::ofstream*, NFILES> files = {
-        &specInFile, &specOutFile, &siOutFile};
+    using clk = std::chrono::system_clock;
+    auto nowOut = std::chrono::duration_cast<std::chrono::milliseconds>(
+            clk::now().time_since_epoch());
+    auto cnt = nowOut.count();
+    std::filesystem::path outPath(OUT_DIR);
+    std::filesystem::create_directory(outPath / std::to_string(cnt));
 
-    for (size_t i = 0; i < fileNames.size(); ++i) {
-        if (files[i]->is_open()) files[i]->close();
-        files[i]->open(buildFilename(fileNames[i]));
+    for (auto* w : wrappers) {
+        w->reset(cnt);
     }
 }
 
@@ -96,12 +94,10 @@ void ImpAnalysis::saveFiles(G4bool isMaster)
     G4AccumulableManager::Instance()->Merge();
     G4cout << "Total events " << totalEvents.GetValue() << G4endl;
 
-    specOutFile.flush();
-    specInFile.flush();
-    specOutFile.close();
-    specInFile.close();
-    siOutFile.flush();
-    siOutFile.close();
+    for (auto& w : wrappers) {
+        w->file().flush();
+        w->file().close();
+    }
 }
 
 void ImpAnalysis::saveEvent(const G4Event* evt)
@@ -130,10 +126,11 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
     if (testHit->hitType() == ImpVHit::HitType::ScintCryst) {
         saveCrystalHits(vec);
     } else if (testHit->hitType() == ImpVHit::HitType::Si) {
-        /* printSiHits(vec); */
         saveSiHits(vec);
     } else
-        G4Exception("src/ImpAnalysis.cc processHitCollection", "", FatalException, "unrecognized hit. what?");
+        G4Exception(
+            "src/ImpAnalysis.cc processHitCollection",
+            "", FatalException, "unrecognized hit. what?");
 
     saveIncidentSpectrumChunk();
 }
@@ -147,7 +144,6 @@ void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
         if (!deposits.contains(niceHit->peekAssociatedChannelId()))
             deposits[chId] = 0;
         auto curEng = niceHit->peekDepositedEnergy();
-        /* G4cout << "current energy is " << curEng/keV << " keV" << G4endl; */
         deposits[chId] += curEng;
     }
 
@@ -156,7 +152,7 @@ void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
     addEvents(crystalsTouched);
 
     for (const auto& p : deposits)
-        specOutFile << (p.second / keV) << '\t' << p.first << std::endl;
+        crystOut.file() << (p.second / keV) << '\t' << p.first << std::endl;
 }
 
 void ImpAnalysis::addIncidentEnergy(long double e)
@@ -168,7 +164,7 @@ void ImpAnalysis::addIncidentEnergy(long double e)
 void ImpAnalysis::saveIncidentSpectrumChunk()
 {
     for (const auto& e : incidentEnergiesChunk)
-        specInFile << e / keV << std::endl;
+        specIn.file() << e / keV << std::endl;
 
     incidentEnergiesChunk.clear();
 }
@@ -181,13 +177,63 @@ void ImpAnalysis::printSiHits(const std::vector<ImpVHit*>* vec)
 
 void ImpAnalysis::saveSiHits(const std::vector<ImpVHit*>* vec)
 {
-    siOutFile << vec->size() << std::endl;
-    if (savePositions) {
+    siOut.file() << vec->size() << std::endl;
+    if (saveSiEnergies) {
+        const size_t sz = vec->size();
+        siEngOut.file().write(
+            reinterpret_cast<const char*>(&sz),
+            sizeof(size_t));
         for (const auto* h : *vec) {
-            const auto& pos = h->peekPosition();
-            siOutFile << pos.x()/cm << ' ' << pos.y()/cm << ' '
-                      << pos.z()/cm << ' ' << h->peekAssociatedChannelId()
-                      << std::endl;
+            const auto* nice = static_cast<const ImpSiHit*>(h);
+            const double e = nice->peekDepositedEnergy() / eV;
+            siEngOut.file().write(
+                reinterpret_cast<const char*>(&e),
+                sizeof(double));
         }
     }
+}
+
+void ImpAnalysis::saveScintillated(std::size_t num)
+{
+    G4AutoLock l(&dataMux);
+    if (num == 0) return;
+    // # scintillated per event can vary
+    scintOut.file() << num << std::endl;
+}
+
+// filewrapper below
+
+ImpAnalysisFileWrapper::ImpAnalysisFileWrapper(
+        const G4String& fnPfx, bool isBinary, const G4String& flareId) :
+    isBinary(isBinary),
+    fileNamePrefix(fnPfx),
+    flareId(flareId)
+{ }
+
+ImpAnalysisFileWrapper::~ImpAnalysisFileWrapper()
+{ }
+
+void ImpAnalysisFileWrapper::updateFlareId(const G4String& fid)
+{ flareId = fid; }
+
+void ImpAnalysisFileWrapper::reset(std::uint64_t newTimePfx)
+{
+    outf.flush();
+    outf.close();
+    if (newTimePfx)
+        timePfx = newTimePfx;
+    auto fn = buildFilename();
+    auto openMode = isBinary? std::ios::out : (std::ios::out | std::ios::binary);
+    outf.open(fn, openMode);
+}
+
+G4String ImpAnalysisFileWrapper::buildFilename()
+{
+    std::stringstream ss;
+
+    std::string fidPfx = flareId.empty() ? "" : (flareId + "-");
+    ss << OUT_DIR << "/" << timePfx << "/"
+       << fidPfx << fileNamePrefix << (isBinary? ".bin" : ".tab");
+
+    return ss.str();
 }

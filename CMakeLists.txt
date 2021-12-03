@@ -33,7 +33,9 @@ target_link_libraries(${EXC_OUT} ${Geant4_LIBRARIES})
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/data-out")
 
 # copy flare CDF tables
-file(COPY "helper-scripts/generate-cdfs/flare-cdfs" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+file(COPY "data-tables/flare-cdfs" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+# copy element spectrum tables
+file(COPY "data-tables/element-intens" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 
 # copy macros
 file(COPY macros DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")

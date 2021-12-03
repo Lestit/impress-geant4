@@ -15,7 +15,7 @@ ImpRunAction::~ImpRunAction()
 
 void ImpRunAction::BeginOfRunAction(const G4Run*)
 {
-    ImpAnalysis::instance()->bookTuplesHistograms(IsMaster());
+    ImpAnalysis::instance()->initFiles(IsMaster());
 }
 
 void ImpRunAction::EndOfRunAction(const G4Run*)

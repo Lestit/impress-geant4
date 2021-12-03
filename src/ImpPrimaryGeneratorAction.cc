@@ -1,6 +1,7 @@
 #include <G4Event.hh>
 #include <G4ParticleTable.hh>
 #include <G4SystemOfUnits.hh>
+#include <G4UImanager.hh>
 
 #include <ImpAnalysis.hh>
 #include <ImpPrimaryGeneratorAction.hh>
@@ -37,18 +38,28 @@ ImpPrimaryGeneratorAction::~ImpPrimaryGeneratorAction()
 
 void ImpPrimaryGeneratorAction::GeneratePrimaries(G4Event* evt)
 {
+    using dt = ImpEnergyPicker::DistributionType;
+    long double e = 0;
+    if (energyPicker->peekDistributionType() != dt::gps)
+        e = energyPicker->pickEnergy();
+
     // allow G4GeneralParticleSource to bypass the ImpEnergyPicker
-    if (energyPicker && energyPicker->peekDistributionType() == ImpEnergyPicker::DistributionType::gps) {
+    if (energyPicker->peekDistributionType() == dt::gps) {
         gps->GeneratePrimaryVertex(evt);
-        return;
+        e = gps->GetParticleEnergy();
     }
-
-    if (energyPicker && pointPicker) {
+    else if (energyPicker->peekDistributionType() == dt::element) {
+        gps->GetCurrentSource()
+            ->GetEneDist()
+            ->SetMonoEnergy(e);
+        gps->GeneratePrimaryVertex(evt);
+    }
+    else if (pointPicker) {
         gun->SetParticlePosition(pointPicker->pickPoint());
-        auto e = energyPicker->pickEnergy();
         gun->SetParticleEnergy(e);
-        ImpAnalysis::instance()->addIncidentEnergy(e);
+        gun->GeneratePrimaryVertex(evt);
     }
+    else { gun->GeneratePrimaryVertex(evt); }
 
-    gun->GeneratePrimaryVertex(evt);
+    ImpAnalysis::instance()->addIncidentEnergy(e);
 }

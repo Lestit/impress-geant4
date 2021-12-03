@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <filesystem>
 #include <memory>
 #include <random>
@@ -13,22 +14,26 @@
 class ImpEnergyPickerMessenger;
 
 static const std::filesystem::path FLARE_CDFS_DIR = "flare-cdfs";
+static const std::filesystem::path ELT_INTENS_DIR = "element-intens";
+static const size_t NUM_O1_CDF = 30000;
 
 class ImpEnergyPicker
 {
     public:
-        enum class DistributionType { flare, mono, flat, gps, undefined };
+        enum class DistributionType {
+            flare, mono, flat, element,
+            gps, undefined };
 
         ImpEnergyPicker(const ImpEnergyPicker& other);
         ImpEnergyPicker& operator=(const ImpEnergyPicker& other);
 
         ImpEnergyPicker();
         // flare
-        ImpEnergyPicker(const std::string& flareSize);
+        /* ImpEnergyPicker(const std::string& flareSize); */
         // monoenergetic
-        ImpEnergyPicker(long double mono);
+        /* ImpEnergyPicker(long double mono); */
         // flat distribution
-        ImpEnergyPicker(long double flatStart, long double flatEnd);
+        /* ImpEnergyPicker(long double flatStart, long double flatEnd); */
         ~ImpEnergyPicker();
 
         void updateDistributionType(const DistributionType& dt)
@@ -37,6 +42,7 @@ class ImpEnergyPicker
         { return distrType; }
 
         void updateFlareSize(const std::string& fs);
+        void updateElement(const std::string& elt);
         void updateMonoEnergy(long double mono)
         { monoEnergy = mono; }
         void updateFlatEnergyBounds(long double start, long double end)
@@ -45,14 +51,9 @@ class ImpEnergyPicker
         long double pickEnergy();
     private:
         long double pickFlare();
+        long double pickElement();
         long double pickFlat()
         {
-            /* std::cout << "start is " << flatStart/keV << " keV" << std::endl */
-            /*           << "end is   " << flatEnd/keV   << " keV" << std::endl */
-            /*           << "diff is  " << diff/keV << " keV" << std::endl; */
-            /* std::cout << "random num is " << rand << std::endl */
-            /*           << "stride along diff is " << stride/keV << std::endl; */
-
             auto diff = flatEnd - flatStart;
             auto rand = realDis(rng);
             auto stride = diff * rand;
@@ -72,6 +73,8 @@ class ImpEnergyPicker
 
         std::vector<long double> flareEnergyVec;
         std::vector<long double> flareEnergyCdf;
+
+        std::array<long double, NUM_O1_CDF> eltEnergyO1Cdf;
 
         std::mt19937_64 rng;
         std::uniform_real_distribution<long double> realDis;

@@ -40,7 +40,7 @@ Initialize(G4HCofThisEvent* hcote)
 G4bool ImpSiSensitiveDetector::
 ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-    G4cout << "*** in optical" << G4endl;
+    /* G4cout << "*** in optical" << G4endl; */
     // with 100% efficiency hits don't really register...
     /* if (step->GetTrack()->GetParticleDefinition() == G4OpticalPhoton::Definition()) */
         /* processOptical(step); */
@@ -52,10 +52,11 @@ void ImpSiSensitiveDetector::
 processOptical(const G4Step* step)
 {
     /* G4cout << "*** in optical" << G4endl; */
-    if (step->GetTotalEnergyDeposit() == 0)
+    auto edep = step->GetTotalEnergyDeposit();
+    if (edep == 0)
         return;
 
     auto pos = step->GetPostStepPoint()->GetPosition(); //(step->GetPreStepPoint()->GetPosition() + step->GetPostStepPoint()->GetPosition()) / 2;
-    auto* hit = new ImpSiHit(channelId, pos);
+    auto* hit = new ImpSiHit(channelId, pos, edep);
     hitsCollection->insert(hit);
 }

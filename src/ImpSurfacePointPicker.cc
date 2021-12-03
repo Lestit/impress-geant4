@@ -33,7 +33,11 @@ G4ThreeVector ImpSurfacePointPicker::pickPoint()
     if (which == WhichShape::cyl) return pickCylinder();
     else if (which == WhichShape::box) return pickBox();
     
-    G4Exception("src/ImpSurfacePointPicker.cc", "", RunMustBeAborted, "no surface present to pick a point from");
+    G4Exception(
+        "src/ImpSurfacePointPicker.cc",
+        "",
+        RunMustBeAborted,
+        "no surface present to pick a point from");
     return G4ThreeVector();
 }
 

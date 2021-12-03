@@ -8,6 +8,9 @@
 #include <ImpEnergyPicker.hh>
 #include <G4SystemOfUnits.hh>
 
+// new nov 2021
+void testElement(ImpEnergyPicker& p, const std::string& eName);
+
 void testUpdates();
 void testMono(ImpEnergyPicker& p, long double monoEng);
 void testFlat(ImpEnergyPicker& p, long double start, long double end);
@@ -48,7 +51,8 @@ void testAssignCopy()
 void testUpdates()
 {
     long double monoEng = 50 * keV;
-    ImpEnergyPicker p(monoEng);
+    ImpEnergyPicker p;
+    p.updateDistributionType(ImpEnergyPicker::DistributionType::mono);
     testMono(p, monoEng);
 
     p.updateDistributionType(ImpEnergyPicker::DistributionType::flare);
@@ -103,18 +107,32 @@ void testFlat(ImpEnergyPicker& p, long double start, long double end)
     }
 }
 
+void testElement(ImpEnergyPicker& p, const std::string& eltName)
+{
+    p.updateDistributionType(ImpEnergyPicker::DistributionType::element);
+    p.updateElement(eltName);
+    const std::size_t nruns = 30;
+    for (std::size_t i = 0; i < nruns; ++i)
+    {
+        std::cout << std::setprecision(8) << p.pickEnergy() / keV << std::endl;
+    }
+}
+
 int main()
 {
-    long double monoEng = 50 * keV;
-    auto ep = ImpEnergyPicker(monoEng);
-    testMono(ep, monoEng);
-    long double start = 1. * keV, end = 300. * keV;
+    /* long double monoEng = 50 * keV; */
+    auto ep = ImpEnergyPicker();
+    /* ep.updateDistributionType(ImpEnergyPicker::DistributionType::mono); */
+    /* ep.updateMonoEnergy(monoEng); */
+    /* testMono(ep, monoEng); */
+    /* long double start = 1. * keV, end = 300. * keV; */
 
-    /* ep = ImpEnergyPicker(start, end); */
-    ep.updateDistributionType(ImpEnergyPicker::DistributionType::flat);
-    ep.updateFlatEnergyBounds(start, end);
-    testFlat(ep, start, end);
+    /* /1* ep = ImpEnergyPicker(start, end); *1/ */
+    /* ep.updateDistributionType(ImpEnergyPicker::DistributionType::flat); */
+    /* ep.updateFlatEnergyBounds(start, end); */
+    /* testFlat(ep, start, end); */
 
+    testElement(ep, "ba133");
     /* testUpdates(); */
     /* testAssignCopy(); */
     return 0;

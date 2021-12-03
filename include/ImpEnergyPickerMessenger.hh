@@ -38,18 +38,24 @@ class ImpEnergyPickerMessenger : public G4UImessenger
         const char* FLAT_ENE_UPP_STR = "/impe/flatHigh";
         const char* FLAT_ENE_HIGH_PARM = "flatHigh";
 
+        const char* ELT_ENE_STR = "/impe/element";
+        const char* ELT_ENE_PRM = "isotopeDescriptor";
+        const char* ALLOWED_ELEMENTS = "ba133";
+
         const char* DISTR_TYPE_STR = "/impe/distributionType";
         const char* DISTR_TYPE_PARM = "energyDistribution";
-        const char* ALLOWED_DISTRIBUTIONS = "mono flat flare gps";
+        const char* ALLOWED_DISTRIBUTIONS = "mono flat flare gps element";
 
-        void processFlare(const G4String & nv);
-        void processFlatLow(const G4String & nv);
-        void processFlatHigh(const G4String & nv);
-        void processMono(const G4String & nv);
+        void processFlare(const G4String& nv);
+        void processElement(const G4String& nv);
+        void processFlatLow(const G4String& nv);
+        void processFlatHigh(const G4String& nv);
+        void processMono(const G4String& nv);
         void checkType(dtype t, const char* errorMsg);
 
         G4UIdirectory* impDir;
         G4UIcmdWithAString* flareEnergyCmd;
+        G4UIcmdWithAString* elementEnergyCmd;
         G4UIcmdWithADoubleAndUnit* monoEnergyCmd;
         G4UIcmdWithADoubleAndUnit* flatEnergyLowCmd;
         G4UIcmdWithADoubleAndUnit* flatEnergyHighCmd;
@@ -59,6 +65,7 @@ class ImpEnergyPickerMessenger : public G4UImessenger
         long double flatHigh;
         long double mono;
         G4String flareSize;
+        G4String isotopeName;
 
         dtype distrType;
         static std::unordered_map<dtype, G4String> distrBackwards;

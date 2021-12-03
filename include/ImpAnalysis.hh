@@ -14,12 +14,33 @@ class G4VHitsCollection;
 class ImpScintCrystalHit;
 class ImpVHit;
 
+class ImpAnalysisFileWrapper
+{
+    public:
+        ImpAnalysisFileWrapper(
+            const G4String& prefix, bool isBinary, const G4String& flareId="");
+        ~ImpAnalysisFileWrapper();
+
+        std::ofstream& file()
+        { return outf; }
+
+        void reset(std::uint64_t newTimePfx);
+        void updateFlareId(const G4String& fid);
+    private:
+        G4String buildFilename();
+        std::uint64_t timePfx;
+        bool isBinary;
+        G4String fileNamePrefix;
+        G4String flareId;
+        std::ofstream outf;
+};
+
 class ImpAnalysis
 {
     public:
         static ImpAnalysis* instance();
 
-        void bookTuplesHistograms(G4bool isMaster);
+        void initFiles(G4bool isMaster);
         void saveFiles(G4bool isMaster);
         void saveEvent(const G4Event* evt);
 
@@ -27,17 +48,18 @@ class ImpAnalysis
         { totalEvents += nEvts; };
 
         void addIncidentEnergy(long double e);
+        void saveScintillated(std::size_t num);
+
         const std::string& peekFlareIdentifier()
         { return flareIdentifier; }
-        void updateFlareIdentifier(const std::string& fid)
-        { flareIdentifier = fid; }
+
+        void updateFlareIdentifier(const std::string& fid);
 
         ImpAnalysis(const ImpAnalysis&) =delete;
         void operator=(const ImpAnalysis&) =delete;
     private:
         ImpAnalysis();
         ~ImpAnalysis();
-        G4String buildFilename(const G4String& pfx);
         void processEvent(const G4Event* evt);
         void processHitCollection(const G4VHitsCollection* hc);
         void saveCrystalHits(const std::vector<ImpVHit*>* vec);
@@ -47,12 +69,15 @@ class ImpAnalysis
         void saveSiHits(const std::vector<ImpVHit*>* vec);
 
         G4Accumulable<std::size_t> totalEvents;
-        bool savePositions;
+        bool saveSiEnergies;
 
         std::vector<long double> incidentEnergiesChunk;
 
         std::string flareIdentifier;
-        std::ofstream specOutFile;
-        std::ofstream specInFile;
-        std::ofstream siOutFile;
+        ImpAnalysisFileWrapper crystOut;
+        ImpAnalysisFileWrapper specIn;
+        ImpAnalysisFileWrapper siOut;
+        ImpAnalysisFileWrapper siEngOut;
+        ImpAnalysisFileWrapper scintOut;
+        std::vector<ImpAnalysisFileWrapper*> wrappers;
 };

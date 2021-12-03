@@ -249,12 +249,8 @@ namespace ImpMaterials
 
         auto* simpt = new G4MaterialPropertiesTable;
         std::vector<G4double> refl(SI_BROADCOM_NUMBERS.size(), 0.);
-        // FIXME: set to zero just for testing stuff
-        /* for (size_t i = 0; i < refl.size(); ++i) */
-        /*     refl[i] = 1 - SI_BROADCOM_NUMBERS[i]; */
 
-        // set efficiency to a number that calibrates the detection number
-        // to the empirical values from Broadcom
+        // set to one and apply detection in post-processing (?)
         simpt->AddProperty(kOP_DET_EFF, SI_DET_EFF_ENERGIES, SI_DET_EFF)
              ->SetSpline(useSpline);
         simpt->AddProperty(kREFLECTIVITY, SI_DET_EFF_ENERGIES, refl)

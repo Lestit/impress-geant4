@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <random>
 #include <string>
 #include <sstream>
 
@@ -21,3 +22,4 @@
 #include <G4RunManagerFactory.hh>
 #include <G4String.hh>
 #include <G4Threading.hh>
+#include <Randomize.hh>

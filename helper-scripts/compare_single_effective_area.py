@@ -92,8 +92,8 @@ ax.bar(
     align='center')
 
 ax.set_title(f'Compare G4 to {choice}-optimized flat response : {tot_cnts} photons incident')
-ax.set_xscale('linear')
-ax.set_yscale('linear')
+ax.set_xscale('log')
+ax.set_yscale('log')
 ax.set_xlabel('Energy (keV)')
 ax.set_ylabel('Counts')
 

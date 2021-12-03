@@ -15,7 +15,9 @@
 ImpEventAction::ImpEventAction() :
     G4UserEventAction(),
     keepAllEvents(true)
-{ }
+{
+    scintPhotPerEvent.Put(0);
+}
 
 ImpEventAction::~ImpEventAction()
 { }
@@ -25,6 +27,7 @@ void ImpEventAction::BeginOfEventAction(const G4Event*)
 
 void ImpEventAction::EndOfEventAction(const G4Event* evt)
 {
+    if (!evt) return;
     auto* hcote = evt->GetHCofThisEvent();
     size_t nHitColls = 0;
     if (hcote) {
@@ -36,25 +39,24 @@ void ImpEventAction::EndOfEventAction(const G4Event* evt)
     bool keepIt = keepAllEvents || (hcote && nHitColls > 0);
     if (keepIt) ImpAnalysis::instance()->saveEvent(evt);
 
-    if (G4VVisManager::GetConcreteInstance()) {
-        auto* trjCon = evt->GetTrajectoryContainer();
-        for (G4VTrajectory* trj : *(trjCon->GetVector())) {
-            static_cast<ImpTrajectory*>(trj)->doDraw(keepIt);
-        }
-
-        sampleDrawOptical(trjCon);
+    static bool instExists = G4VVisManager::GetConcreteInstance();
+    if (instExists) {
+        sampleDrawOptical(evt->GetTrajectoryContainer());
     }
+
+    ImpAnalysis::instance()->saveScintillated(scintPhotPerEvent.Get());
+    scintPhotPerEvent.Put(0);
 }
 
 void ImpEventAction::sampleDrawOptical(G4TrajectoryContainer* trjCon)
 {
+    if (!trjCon || !trjCon->GetVector()) return;
     // only draw every #(rest) optical photons
-    G4int i = 0, rest = 10;
+    G4int i = 0, rest = 1;0;
     for (G4VTrajectory* trj : *trjCon->GetVector()) {
         auto* impTrj = static_cast<ImpTrajectory*>(trj);
         if (impTrj->GetParticleName() == "opticalphoton") {
-            if (i != 0) impTrj->doDraw(false);
-            else impTrj->doDraw(true);
+            impTrj->doDraw(i == 0);
             i = (i + 1) % rest;
         }
     }

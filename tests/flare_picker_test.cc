@@ -17,7 +17,9 @@ int main(int argc, char* argv[])
     long double eTot = 0;
     long double eMin = 0;
     long double eMax = 0;
-    auto ePicker = std::make_unique<ImpEnergyPicker>(choice);
+    auto ePicker = std::make_unique<ImpEnergyPicker>();
+    ePicker->updateDistributionType(ImpEnergyPicker::DistributionType::flare);
+    ePicker->updateFlareSize(choice);
 
     /* use helper-scripts/plot_recent_keep.py to plot this file for visual inspection */
     std::ofstream outf("recent_epick_test.txt");
