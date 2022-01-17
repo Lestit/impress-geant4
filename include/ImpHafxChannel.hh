@@ -1,18 +1,20 @@
 #pragma once
 
 #include <string>
-
 #include <ChannelConstants.hh>
 #include "G4Cache.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4PVPlacement.hh"
 #include "G4String.hh"
-#include "G4SystemOfUnits.hh"
+#include <G4SystemOfUnits.hh>
+static constexpr G4double inch = 25.4 * mm;
 
+class G4Box;
 class G4LogicalSkinSurface;
 class G4LogicalVolume;
 class G4OpticalSurface;
 class G4Tubs;
+class G4SubtractionSolid;
 class G4UnionSolid;
 
 class ImpScintCrystalSensitiveDetector;
@@ -29,7 +31,7 @@ class ImpHafxChannel : public G4PVPlacement
 
         // as crystal becomes more fleshed out, update these
         static G4double thicknessNoAttenuator()
-        { return AL_HOUSING_DEPTH + DUMB_SI_THICKNESS; }
+        { return AL_HOUSING_DEPTH + LIGHT_GUIDE_THICKNESS + SI_THICKNESS; }
         static G4double diameter()
         { return WHOLE_DIAMETER; }
         static G4double radius()
@@ -41,7 +43,8 @@ class ImpHafxChannel : public G4PVPlacement
         { return sensDetName; }
 
         void attachCrystalDetector();
-        void attachDumbSiDetector();
+        void attachSiDetector();
+        void attachAllDetectors();
 
     private:
         static G4OpticalSurface* tefSurf();
@@ -50,7 +53,7 @@ class ImpHafxChannel : public G4PVPlacement
         void attachCeBr3OpticalSurface();
 
         void buildTeflonReflector();
-        void attachTeflonOpticalSurface();
+        void attachTeflonOpticalSurface(G4LogicalVolume* tlv);
 
         void buildAlHousing();
         void buildAlAttenuator();
@@ -62,8 +65,12 @@ class ImpHafxChannel : public G4PVPlacement
         void buildBeryllium();
         void attachBeOpticalSurface();
 
-        void buildDumbSi();
-        void attachDumbSiOpticalSurface();
+        void buildPaint();
+        void attachPaintBoundarySurface(G4VPhysicalVolume* ppv, G4LogicalVolume* plv);
+        void buildLightGuide();
+
+        void buildSi();
+        void attachSiOpticalSurface();
 
         G4ThreeVector cebr3AnchorCenter;
         G4ThreeVector quartzAnchorCenter;
@@ -103,14 +110,25 @@ class ImpHafxChannel : public G4PVPlacement
         G4PVPlacement* bePlacement;
         G4LogicalSkinSurface* beSkin;
 
-        G4Tubs* dumbSiCylinder;
-        G4LogicalVolume* dumbSiLogVol;
-        G4PVPlacement* dumbSiPlacement;
-        G4LogicalSkinSurface* dumbSiSkin;
+        G4Box* lightGuideBox;
+        G4LogicalVolume* lightGuideLogVol;
+        G4PVPlacement* lightGuidePlacement;
+        G4Box* lightGuideWrapToBeCutoutBox;
+        G4UnionSolid* lightGuideWrapSolid;
+        G4LogicalVolume* lightGuideWrapLogVol;
+        G4PVPlacement* lightGuideWrapPlacement;
+
+        static constexpr size_t NUM_SIPMS = 16;
+        std::array<G4Box*, NUM_SIPMS> siBoxes;
+        std::array<G4LogicalVolume*, NUM_SIPMS> siLogVols;
+        /* G4PVPlacement* siPlacement; */
+        /* G4LogicalSkinSurface* siSkin; */
 
         G4String channelId;
         std::string sensDetName;
         G4double attenuatorWindowThickness;
+
+        static constexpr G4double WHOLE_DIAMETER = 43 * mm;
 
         static constexpr G4double BE_THICKNESS = 0.7 * mm;
 
@@ -126,7 +144,13 @@ class ImpHafxChannel : public G4PVPlacement
         static constexpr G4double QUARTZ_THICKNESS = 3 * mm;
         static constexpr G4double QUARTZ_DIAMETER = 40.5 * mm;
 
-        static constexpr G4double WHOLE_DIAMETER = 43 * mm;
+        // to be updated
+        static constexpr G4double LIGHT_GUIDE_THICKNESS = 0.25 * inch;
+        // guess for now
+        static constexpr G4double LIGHT_GUIDE_SIDE_LENGTH = 1 * inch;
 
-        static constexpr G4double DUMB_SI_THICKNESS = 0.3 * mm;
+        static constexpr G4double SI_THICKNESS = 0.3 * mm;
+        static constexpr G4double BROADCOM_FULL_LENGTH = 3.88 * mm;
+        static constexpr G4double SI_SPACING = 0.25 * mm;
+        static constexpr G4double SI_SIDE_LENGTH = 3*SI_SPACING + 4*BROADCOM_FULL_LENGTH;
 };

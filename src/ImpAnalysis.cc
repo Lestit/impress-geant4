@@ -35,9 +35,12 @@ namespace {
     static const std::string OUT_DIR = "data-out";
 }
 
+static std::string genBaseSubfolder(std::uint64_t milliz);
+
 ImpAnalysis::ImpAnalysis() :
     totalEvents(0),
     saveSiEnergies(false),
+    saveSiPositions(true),
     crystOut(kCRYST_OUT, false),
     specIn(kSPEC_IN, false),
     siOut(kSI_OUT, false),
@@ -76,10 +79,8 @@ void ImpAnalysis::initFiles(G4bool isMaster)
 
     using clk = std::chrono::system_clock;
     auto nowOut = std::chrono::duration_cast<std::chrono::milliseconds>(
-            clk::now().time_since_epoch());
+        clk::now().time_since_epoch());
     auto cnt = nowOut.count();
-    std::filesystem::path outPath(OUT_DIR);
-    std::filesystem::create_directory(outPath / std::to_string(cnt));
 
     for (auto* w : wrappers) {
         w->reset(cnt);
@@ -177,7 +178,14 @@ void ImpAnalysis::printSiHits(const std::vector<ImpVHit*>* vec)
 
 void ImpAnalysis::saveSiHits(const std::vector<ImpVHit*>* vec)
 {
-    siOut.file() << vec->size() << std::endl;
+    siOut.file() << vec->size();
+    if (saveSiPositions) {
+        for (const auto* h : *vec) {
+            siOut.file() << ' ' << h->peekPosition();
+        }
+    }
+    siOut.file() << std::endl;
+
     if (saveSiEnergies) {
         const size_t sz = vec->size();
         siEngOut.file().write(
@@ -220,8 +228,7 @@ void ImpAnalysisFileWrapper::reset(std::uint64_t newTimePfx)
 {
     outf.flush();
     outf.close();
-    if (newTimePfx)
-        timePfx = newTimePfx;
+    if (newTimePfx) timePfx = newTimePfx;
     auto fn = buildFilename();
     auto openMode = isBinary? std::ios::out : (std::ios::out | std::ios::binary);
     outf.open(fn, openMode);
@@ -229,11 +236,29 @@ void ImpAnalysisFileWrapper::reset(std::uint64_t newTimePfx)
 
 G4String ImpAnalysisFileWrapper::buildFilename()
 {
+    auto fold = genBaseSubfolder(timePfx);
+    std::filesystem::path outPath(OUT_DIR);
+    auto p = outPath / fold;
+    if (!std::filesystem::exists(p))
+        std::filesystem::create_directory(outPath / fold);
+
     std::stringstream ss;
-
     std::string fidPfx = flareId.empty() ? "" : (flareId + "-");
-    ss << OUT_DIR << "/" << timePfx << "/"
-       << fidPfx << fileNamePrefix << (isBinary? ".bin" : ".tab");
+    ss << p.string() << "/" << fidPfx << fileNamePrefix << (isBinary? ".bin" : ".tab");
 
-    return ss.str();
+    auto str = ss.str();
+    G4cout << "FILENAME IS " << str << G4endl;
+    return str;
+}
+
+static std::string genBaseSubfolder(std::uint64_t milliz)
+{
+    static const size_t TIME_FMT_LEN = 256;
+    static std::array<char, TIME_FMT_LEN> tmFmtAry;
+
+    std::time_t secondz = milliz / 1e3;
+    std::strftime(tmFmtAry.data(), TIME_FMT_LEN, "%F-%T", std::localtime(&secondz));
+    if (errno > 0) G4cerr << "Error: " << strerror(errno) << G4endl;
+    const char* d = tmFmtAry.data();
+    return std::string(d);
 }

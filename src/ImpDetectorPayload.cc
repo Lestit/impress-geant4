@@ -79,8 +79,7 @@ void ImpDetectorPayload::buildPlaceChannels()
 void ImpDetectorPayload::constructSensitiveDetectors()
 {
     for (auto* channel : crystalChannels) {
-        channel->attachCrystalDetector();
-        channel->attachDumbSiDetector();
+        channel->attachAllDetectors();
     }
 }
 

@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <map>
-
 #include <G4EventManager.hh>
 #include <G4OpBoundaryProcess.hh>
 #include <G4OpticalPhoton.hh>
@@ -123,8 +122,6 @@ void ImpSteppingAction::trackScintillation(const G4Step* step)
 
 void ImpSteppingAction::processOptical(const G4Step* step)
 {
-    /* return; */
-    // G4AutoLock l(&optMux);
     static G4ThreadLocal G4OpBoundaryProcess* boundary = nullptr;
     if (boundary == nullptr) {
         boundary = findOpticalboundary(step);
@@ -154,11 +151,14 @@ void ImpSteppingAction::processOptical(const G4Step* step)
             case FresnelRefraction:
             case FresnelReflection:
                 break;
+            // silence for now
+            case NoRINDEX:
+                break;
             default:
                 if (yesSilicon) {
                     const auto n = std::string(
-                            step? step->GetTrack()? step->GetTrack()->GetVolume()?
-                            step->GetTrack()->GetVolume()->GetName() : "" : "" : "");
+                        step? step->GetTrack()? step->GetTrack()->GetVolume()?
+                        step->GetTrack()->GetVolume()->GetName() : "" : "" : "");
                     G4cout << "something weird: " << optProcLookup[stat] << G4endl
                            << "in volume " << n << G4endl
                            << "pre volume " << preName << G4endl

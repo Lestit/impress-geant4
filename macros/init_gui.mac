@@ -17,7 +17,7 @@
 
 # color particles
 /vis/modeling/trajectories/create/drawByParticleID
-/vis/modeling/trajectories/drawByParticleID-0/setRGBA gamma 0 1 0 0.2
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA gamma 0 1 0 0.5
 /vis/modeling/trajectories/drawByParticleID-0/setRGBA opticalphoton 0.878 0.627 1 0.1
 /vis/modeling/trajectories/drawByParticleID-0/set e- blue
 /vis/modeling/trajectories/drawByParticleID-0/set e+ red

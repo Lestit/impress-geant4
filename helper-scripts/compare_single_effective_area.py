@@ -1,7 +1,16 @@
+import traceback
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import os
 import sys
+
+try:
+    plt.style.use('/Users/settwi/grad_school/glesener/agu-2021/agu.mplstyle')
+except Exception as e:
+    traceback.print_exc()
+    input("any key to continue")
+    raise
 
 choice = ''
 options = ('1m', '300k')
@@ -91,9 +100,9 @@ ax.bar(
     color='black', alpha=1, zorder=0,
     align='center')
 
-ax.set_title(f'Compare G4 to {choice}-optimized flat response : {tot_cnts} photons incident')
-ax.set_xscale('log')
-ax.set_yscale('log')
+ax.set_title(f'G4 & analytical {choice}-optimized flat')
+ax.set_xscale('linear')
+ax.set_yscale('linear')
 ax.set_xlabel('Energy (keV)')
 ax.set_ylabel('Counts')
 
@@ -102,7 +111,6 @@ ax.axvline(40.44, label='Cerium k edge @ 40.44 keV', color='blue')
 
 leg = ax.legend()
 
-fig.set_size_inches(8, 6)
 fig.tight_layout()
 
 plt.show()

@@ -52,7 +52,7 @@ void ImpEventAction::sampleDrawOptical(G4TrajectoryContainer* trjCon)
 {
     if (!trjCon || !trjCon->GetVector()) return;
     // only draw every #(rest) optical photons
-    G4int i = 0, rest = 1;0;
+    G4int i = 0, rest = 10;
     for (G4VTrajectory* trj : *trjCon->GetVector()) {
         auto* impTrj = static_cast<ImpTrajectory*>(trj);
         if (impTrj->GetParticleName() == "opticalphoton") {

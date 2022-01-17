@@ -40,4 +40,4 @@ file(COPY "data-tables/element-intens" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/
 # copy macros
 file(COPY macros DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 
-add_compile_options(-Wall -Wextra -pedantic -Werror)
+add_compile_options(-Wall -Wextra -Wpedantic -pedantic -Werror)

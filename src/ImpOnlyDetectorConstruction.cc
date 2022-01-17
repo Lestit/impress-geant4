@@ -35,8 +35,7 @@ G4VPhysicalVolume* ImpOnlyDetectorConstruction::Construct()
 
 void ImpOnlyDetectorConstruction::ConstructSDandField()
 {
-    singleDetector->attachCrystalDetector();
-    singleDetector->attachDumbSiDetector();
+    singleDetector->attachAllDetectors();
 }
 
 void ImpOnlyDetectorConstruction::constructEnclosing()
@@ -54,6 +53,7 @@ void ImpOnlyDetectorConstruction::constructEnclosing()
         boundingCylinder, vac, BOUNDING_LOG_VOL);
     G4VisAttributes bva;
     bva.SetColor(0, 1, 1, 0.2);
+    bva.SetVisibility(false);
     boundingLogVol->SetVisAttributes(bva);
 
     boundingPhysVol = new G4PVPlacement(
@@ -64,7 +64,7 @@ void ImpOnlyDetectorConstruction::constructEnclosing()
 void ImpOnlyDetectorConstruction::constructPlaceDetector()
 {
     const G4double attThickness = ImpGlobalConf::ATTENUATOR_THICKNESSES.at(flareSize);
-    const G4double totalThick = ImpHafxChannel::thicknessNoAttenuator() + attThickness;
+    /* const G4double totalThick = ImpHafxChannel::thicknessNoAttenuator() + attThickness; */
 
     G4ThreeVector adjust(0, 0, 0);//-WORLD_DEPTH/2 + totalThick/2);
     singleDetector = new ImpHafxChannel(

@@ -46,10 +46,24 @@ namespace {
     static const G4String BE_SUR_PFX = "hafx_be_sur";
 
     static const G4String CRYSTAL_SENS_DET_PFX = "hafx_crystal_sd";
-    static const G4String DUMB_SI_SENS_DET_PFX = "hafx_dumb_sd";
+    static const G4String SI_SENS_DET_PFX = "hafx_dumb_sd";
 
-    static const G4String SI_CYL_PFX = "hafx_si_cyl";
+    static const G4String LG_BOX_PFX = "hafx_light_guide_box";
+    static const G4String LG_LOG_PFX = "hafx_light_guide_log";
+    static const G4String LG_PHY_PFX = "hafx_light_guide_phy";
+    static const G4String LG_WRAP_BOX_PFX = "hafx_light_guide_wrap_box";
+    static const G4String LG_WRAP_SOL_PFX = "hafx_light_guide_wrap_sol";
+    static const G4String LG_WRAP_LOG_PFX = "hafx_light_guide_wrap_log";
+    static const G4String LG_WRAP_PHY_PFX = "hafx_light_guide_wrap_phy";
+
+    static const G4String SI_BOX_PFX = "hafx_si_box";
     static const G4String SI_LOG_PFX = "hafx_si_log";
     static const G4String SI_PHY_PFX = "hafx_si_phy";
     static const G4String SI_SUR_PFX = "hafx_si_sur";
+
+    static const G4String PAINT_CYL_PFX = "hafx_paint_cyl";
+    static const G4String PAINT_SOL_PFX = "hafx_paint_sol";
+    static const G4String PAINT_LOG_PFX = "hafx_paint_log";
+    static const G4String PAINT_PHY_PFX = "hafx_paint_phy";
+    static const G4String PAINT_SUR_PFX = "hafx_paint_sur";
 }

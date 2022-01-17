@@ -70,6 +70,7 @@ class ImpAnalysis
 
         G4Accumulable<std::size_t> totalEvents;
         bool saveSiEnergies;
+        bool saveSiPositions;
 
         std::vector<long double> incidentEnergiesChunk;
 
