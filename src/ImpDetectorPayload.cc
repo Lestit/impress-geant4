@@ -52,7 +52,7 @@ void ImpDetectorPayload::buildPlaceChannels()
 {
     static const G4double xyOffset = CRYSTAL_HOLE_SPACING;
     std::vector<G4double> attenuatorThicknesses;
-    for (const auto& p : ImpGlobalConf::ATTENUATOR_THICKNESSES) {
+    for (const auto& p : ImpGlobalConfigs::ATTENUATOR_THICKNESSES) {
         if (p.first != "test") attenuatorThicknesses.push_back(p.second);
     }
 

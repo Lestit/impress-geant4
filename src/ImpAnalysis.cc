@@ -8,7 +8,6 @@
 #include <sstream>
 #include <string>
 
-#include "g4analysis.hh"
 #include "G4AccumulableManager.hh"
 #include "G4AutoLock.hh"
 #include "G4Event.hh"
@@ -18,6 +17,7 @@
 #include "G4VHitsCollection.hh"
 
 #include "ImpAnalysis.hh"
+#include <ImpGlobalConfigs.hh>
 #include "ImpScintCrystalHit.hh"
 #include "ImpSiHit.hh"
 #include "ImpVHit.hh"
@@ -36,17 +36,19 @@ namespace {
 }
 
 static std::string genBaseSubfolder(std::uint64_t milliz);
+std::uint32_t ImpAnalysis::runNumber = 0;
 
 ImpAnalysis::ImpAnalysis() :
     totalEvents(0),
-    saveSiEnergies(false),
-    saveSiPositions(true),
     crystOut(kCRYST_OUT, false),
     specIn(kSPEC_IN, false),
     siOut(kSI_OUT, false),
     siEngOut(kSI_ENGS_OUT, true),
     scintOut(kSCINT_OUT, false)
 {
+    const auto& igc = ImpGlobalConfigs::instance();
+    saveSiEnergies = igc.configOption<bool>(ImpGlobalConfigs::kSAVE_SI_ENERGIES);
+    saveSiPositions = igc.configOption<bool>(ImpGlobalConfigs::kSAVE_SI_POSITIONS);
     G4AccumulableManager::Instance()->RegisterAccumulable(totalEvents);
     wrappers = {&crystOut, &specIn, &siOut, &siEngOut, &scintOut};
 }
@@ -63,10 +65,13 @@ ImpAnalysis* ImpAnalysis::instance()
     return anInst;
 }
 
+std::uint32_t ImpAnalysis::currentRunNumber()
+{ return runNumber; }
+
 void ImpAnalysis::updateFlareIdentifier(const std::string& fid)
 {
     flareIdentifier = fid;
-    for (const auto w : wrappers)
+    for (auto* w : wrappers)
         w->updateFlareId(fid);
 }
 
@@ -82,6 +87,7 @@ void ImpAnalysis::initFiles(G4bool isMaster)
         clk::now().time_since_epoch());
     auto cnt = nowOut.count();
 
+    (void) ++runNumber;
     for (auto* w : wrappers) {
         w->reset(cnt);
     }
@@ -128,6 +134,8 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
         saveCrystalHits(vec);
     } else if (testHit->hitType() == ImpVHit::HitType::Si) {
         saveSiHits(vec);
+        /* G4cout << "*** got an Si hit" << G4endl; */
+        /* G4cout.flush(); */
     } else
         G4Exception(
             "src/ImpAnalysis.cc processHitCollection",
@@ -237,28 +245,31 @@ void ImpAnalysisFileWrapper::reset(std::uint64_t newTimePfx)
 G4String ImpAnalysisFileWrapper::buildFilename()
 {
     auto fold = genBaseSubfolder(timePfx);
-    std::filesystem::path outPath(OUT_DIR);
-    auto p = outPath / fold;
-    if (!std::filesystem::exists(p))
-        std::filesystem::create_directory(outPath / fold);
-
+    auto pfx = ImpGlobalConfigs::instance().configOption<
+        std::string>(ImpGlobalConfigs::kSAVE_PREFIX);
     std::stringstream ss;
+    ss << pfx << "-run" << ImpAnalysis::currentRunNumber() << "-" << fold;
+    auto prefixedFolder = ss.str();
+
+    std::filesystem::path outPath(OUT_DIR);
+    auto p = outPath / prefixedFolder;
+    if (!std::filesystem::exists(p))
+        std::filesystem::create_directory(p);
+
+    ss.str("");
     std::string fidPfx = flareId.empty() ? "" : (flareId + "-");
     ss << p.string() << "/" << fidPfx << fileNamePrefix << (isBinary? ".bin" : ".tab");
 
-    auto str = ss.str();
-    G4cout << "FILENAME IS " << str << G4endl;
-    return str;
+    return ss.str();
 }
 
 static std::string genBaseSubfolder(std::uint64_t milliz)
 {
-    static const size_t TIME_FMT_LEN = 256;
+    static const std::size_t TIME_FMT_LEN = 256;
     static std::array<char, TIME_FMT_LEN> tmFmtAry;
 
     std::time_t secondz = milliz / 1e3;
     std::strftime(tmFmtAry.data(), TIME_FMT_LEN, "%F-%T", std::localtime(&secondz));
-    if (errno > 0) G4cerr << "Error: " << strerror(errno) << G4endl;
     const char* d = tmFmtAry.data();
     return std::string(d);
 }

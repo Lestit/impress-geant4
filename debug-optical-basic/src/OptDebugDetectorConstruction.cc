@@ -29,21 +29,6 @@ namespace {
       ts->SetModel(unified);
       ts->SetFinish(groundfrontpainted);
       ts->SetSigmaAlpha(0.);
-
-      /* auto* tsPt = new G4MaterialPropertiesTable; */
-      /* tsPt->AddProperty( */
-      /*   OptDebugMaterials::kREFLECTIVITY, */
-      /*   OptDebugMaterials::TEFLON_REFR_IDX_ENERGIES, */
-      /*   OptDebugMaterials::TEFLON_REFLECTIVITY); */
-      /* tsPt->AddProperty( */
-      /*   OptDebugMaterials::kREFR_IDX, */
-      /*   OptDebugMaterials::TEFLON_REFR_IDX_ENERGIES, */
-      /*   OptDebugMaterials::TEFLON_REFR_IDXS); */
-      /* tsPt->AddProperty( */
-      /*   OptDebugMaterials::kTRANSMITTANCE, */
-      /*   OptDebugMaterials::TEFLON_REFR_IDX_ENERGIES, */
-      /*   OptDebugMaterials::TEFLON_TRANSMITTANCE); */
-
       ts->SetMaterialPropertiesTable(
           G4NistManager::Instance()->
           FindOrBuildMaterial(OptDebugMaterials::kNIST_TEFLON)->
@@ -98,7 +83,7 @@ G4VPhysicalVolume* OptDebugDetectorConstruction::Construct()
       "World", nullptr, false, 0, checkOverlaps);
  
   makeCeBr3();
-  bool doMakeTeflon = true;
+  bool doMakeTeflon = false;
   if (doMakeTeflon) makeTeflon();
   bool doMakeAluminum = true;
   if (doMakeAluminum) makeAluminum();

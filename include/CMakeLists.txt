@@ -12,7 +12,6 @@ target_sources(${EXC_OUT}
         ImpEnergyPickerMessenger.hh
         ImpEventAction.hh
         ImpGlobalConfigs.hh
-        ImpGpsConfig.hh
         ImpHafxChannel.hh
         ImpMaterials.hh
         ImpOnlyDetectorConstruction.hh
@@ -32,6 +31,7 @@ target_sources(${EXC_OUT}
         ImpVDetectorConstruction.hh
         ImpVHit.hh
         ImpWholeSatelliteConstruction.hh
+        PdmsProperties.hh
         QuartzProperties.hh
         SiProperties.hh
         TeflonProperties.hh

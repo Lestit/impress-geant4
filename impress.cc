@@ -10,7 +10,7 @@ void initRandom()
 G4String pickFlareSize()
 {
     std::vector<G4String> fs;
-    for (const auto& p : ImpGlobalConf::ATTENUATOR_THICKNESSES)
+    for (const auto& p : ImpGlobalConfigs::ATTENUATOR_THICKNESSES)
         fs.push_back(p.first);
 
     std::stringstream flaresStream;
@@ -31,6 +31,8 @@ G4String pickFlareSize()
 int main(int argc, char* argv[])
 {
     initRandom();
+    // load stuff
+    (void) ImpGlobalConfigs::instance();
 
     char c = 0;
     do {

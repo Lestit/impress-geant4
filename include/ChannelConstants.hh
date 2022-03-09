@@ -1,9 +1,15 @@
 #pragma once
+#include <G4SystemOfUnits.hh>
 
 namespace {
-    /* G4Mutex teflonMux = G4MUTEX_INITIALIZER; */
-    /* G4Mutex alMux = G4MUTEX_INITIALIZER; */
-    /* G4Mutex beMux = G4MUTEX_INITIALIZER; */
+    static constexpr G4double inch = 25.4 * mm;
+
+    static const G4String CYL = "_cyl",
+                          PHY = "_phy",
+                          LOG = "_log",
+                          SUR = "_sur",
+                          EDGE = "_edge",
+                          BACK = "_back";
 
     static const G4String CHANNEL_PFX = "hafx_channel";
 
@@ -16,13 +22,14 @@ namespace {
     static const G4String CRYSTAL_PHY_PFX = "hafx_crystal_phy";
     static const G4String CRYSTAL_SUR_PFX = "hafx_crystal_sur";
 
+    static const G4String BETWEEN_TEFLON_CRYSTAL = "hafx_between";
+
     static const G4String TEFLON_RING = "hafx_teflon_ring";
     static const G4String TEFLON_CAP = "hafx_teflon_cap";
-    static const G4String TEFLON_SHAPE_PFX = "hafx_teflon_union";
-    static const G4String TEFLON_LOG_PFX = "hafx_teflon_log";
-    static const G4String TEFLON_PHY_PFX = "hafx_teflon_phy";
-    static const G4String TEFLON_SURF_PFX = "hafx_teflon_surf";
-    static const G4String TEFLON_SKIN_LOG_PFX = "hafx_teflon_skin_log";
+    static const G4String TEFLON_SURF = "hafx_teflon_surf";
+    /* static const G4String TEFLON_SHAPE_PFX = "hafx_teflon_union"; */
+    /* static const G4String TEFLON_LOG_PFX = "hafx_teflon_log"; */
+    /* static const G4String TEFLON_PHY_PFX = "hafx_teflon_phy"; */
 
     static const G4String AL_CYL_PFX = "hafx_al_cyl";
     static const G4String AL_LOG_PFX = "hafx_al_log";
@@ -66,4 +73,30 @@ namespace {
     static const G4String PAINT_LOG_PFX = "hafx_paint_log";
     static const G4String PAINT_PHY_PFX = "hafx_paint_phy";
     static const G4String PAINT_SUR_PFX = "hafx_paint_sur";
+
+    // numerics
+    static constexpr G4double WHOLE_DIAMETER = 43 * mm;
+
+    static constexpr G4double BE_THICKNESS = 0.7 * mm;
+
+    static constexpr G4double CEBR3_DIAMETER = 37 * mm;
+
+    static constexpr G4double TEFLON_THICKNESS = 0.127 * mm;
+
+    static constexpr G4double AL_HOUSING_THICKNESS = 1.25 * mm;
+    static constexpr G4double AL_DEPTH_DELTA = 6.8 * mm;
+
+    // ???
+    static constexpr G4double QUARTZ_THICKNESS = 3 * mm;
+    static constexpr G4double QUARTZ_DIAMETER = 40.5 * mm;
+
+    // to be updated
+    static constexpr G4double LIGHT_GUIDE_THICKNESS = 0.25 * inch;
+    // guess for now
+    static constexpr G4double LIGHT_GUIDE_SIDE_LENGTH = 1 * inch;
+
+    static constexpr G4double SI_THICKNESS = 0.3 * mm;
+    static constexpr G4double BROADCOM_FULL_LENGTH = 3.88 * mm;
+    static constexpr G4double SI_SPACING = 0.25 * mm;
+    static constexpr G4double SI_SIDE_LENGTH = 3*SI_SPACING + 4*BROADCOM_FULL_LENGTH;
 }

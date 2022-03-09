@@ -25,7 +25,7 @@ namespace
         }
     }
 
-    EngPointsFileData loadGenericTable(std::filesystem::path p)
+    EngPointsFileData loadGenericTable(const std::filesystem::path& p)
     {
         std::ifstream ifs(p);
         verifyIfs(ifs, p);
@@ -42,9 +42,7 @@ namespace
 
     EngPointsFileData loadFlareData(const std::string& flareSize)
     {
-        G4String cpy = flareSize;
-        cpy.toLower();
-        std::string fn = "cdf_" + cpy + ".txt";
+        std::string fn = "cdf_" + G4StrUtil::to_lower_copy(flareSize) + ".txt";
         std::filesystem::path fszPath(fn);
         return loadGenericTable(FLARE_CDFS_DIR / fszPath);
     }
@@ -52,9 +50,7 @@ namespace
     std::array<long double, NUM_O1_CDF>
     loadElementData(const std::string& elementName)
     {
-        G4String cpy = elementName;
-        cpy.toLower();
-        std::filesystem::path p(elementName + "-o1.txt");
+        std::filesystem::path p(G4StrUtil::to_lower_copy(elementName) + "-o1.txt");
         std::ifstream ifs(ELT_INTENS_DIR / p);
         verifyIfs(ifs, p);
 

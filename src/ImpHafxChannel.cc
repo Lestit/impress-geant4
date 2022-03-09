@@ -1,9 +1,12 @@
+#include <cassert>
+
 #include <G4AutoLock.hh>
 #include <G4Box.hh>
 #include <G4Color.hh>
 #include <G4LogicalSkinSurface.hh>
 #include <G4LogicalBorderSurface.hh>
 #include <G4LogicalVolume.hh>
+#include <G4MaterialPropertiesTable.hh>
 #include <G4NistManager.hh>
 #include <G4OpticalSurface.hh>
 #include <G4RotationMatrix.hh>
@@ -11,6 +14,7 @@
 #include <G4Tubs.hh>
 #include <G4SubtractionSolid.hh>
 #include <G4UnionSolid.hh>
+#include <G4UserLimits.hh>
 #include <G4VisAttributes.hh>
 
 #include <ImpHafxChannel.hh>
@@ -34,14 +38,20 @@ ImpHafxChannel::ImpHafxChannel(
     G4LogicalVolume* motherLogVol, const G4String& channelId,
     const G4double attenuatorWindowThickness)
         : G4PVPlacement(rotMat, translate, tempLogVol(), CHANNEL_PFX + channelId, motherLogVol, false, 0),
+    uLims(new G4UserLimits),
     channelId(channelId),
     sensDetName(SI_SENS_DET_PFX + channelId),
     attenuatorWindowThickness(attenuatorWindowThickness)
 {
+    const auto& igf = ImpGlobalConfigs::instance();
+    cebr3Thickness = igf.configOption<double>(ImpGlobalConfigs::kCEBR3_LENGTH) * mm;
+    teflonAirGap = igf.configOption<double>(ImpGlobalConfigs::kAIR_GAP_THICKNESS) * um;
+    alHousingDepth = cebr3Thickness + AL_DEPTH_DELTA;
+
     quartzAnchorCenter = G4ThreeVector(
-        0, 0, -thickness()/2 + QUARTZ_THICKNESS/2 + LIGHT_GUIDE_THICKNESS +SI_THICKNESS);
+        0, 0, -thickness()/2 + QUARTZ_THICKNESS/2 + LIGHT_GUIDE_THICKNESS + SI_THICKNESS);
     cebr3AnchorCenter = quartzAnchorCenter + G4ThreeVector(
-        0, 0, QUARTZ_THICKNESS/2 + CEBR3_THICKNESS/2);
+        0, 0, QUARTZ_THICKNESS/2 + cebr3Thickness/2);
 
     boundingCylinder = new G4Tubs(
         CHANNEL_CYL_PFX + channelId, 0, radius(), thickness()/2, 0 * deg, 360 * deg);
@@ -53,6 +63,10 @@ ImpHafxChannel::ImpHafxChannel(
     motherLogAttrs.SetVisibility(true);
     motherLogAttrs.SetColor(1, 0, 0, 0.1);
     logVol->SetVisAttributes(motherLogAttrs);
+
+    // kill photons from going too far
+    uLims->SetUserMaxTrackLength(1 * km);
+    logVol->SetUserLimits(uLims);
     SetLogicalVolume(logVol);
 
     buildQuartz();
@@ -64,16 +78,19 @@ ImpHafxChannel::ImpHafxChannel(
     buildSi();
     buildLightGuide();
     buildPaint();
+    finishCrystalEdges();
 }
 
 ImpHafxChannel::~ImpHafxChannel()
-{ }
+{
+    if (uLims) { delete uLims; uLims = nullptr; }
+}
 
 void ImpHafxChannel::buildCrystal()
 {
     crystalCylinder = new G4Tubs(
         CRYSTAL_CYL_PFX + channelId, 0,
-        CEBR3_DIAMETER / 2, CEBR3_THICKNESS/2, 0 * deg, 360 * deg);
+        CEBR3_DIAMETER / 2, cebr3Thickness/2, 0 * deg, 360 * deg);
 
     auto* cebr3 = G4Material::GetMaterial(ImpMaterials::kCEBR3);
     crystalLogVol = new G4LogicalVolume(
@@ -97,29 +114,40 @@ void ImpHafxChannel::buildTeflonReflector()
     static const G4double tefRad =
         (WHOLE_DIAMETER - 2*AL_HOUSING_THICKNESS) / 2;
 
+    auto startRingRadius = crystRad + teflonAirGap;
+    auto thick = cebr3Thickness + teflonAirGap;
     auto* tefRing = new G4Tubs(
-        TEFLON_RING + channelId, crystRad, tefRad, CEBR3_THICKNESS/2, 0, 2*pi);
+        TEFLON_RING + CYL + channelId, startRingRadius, tefRad, thick/2, 0, 2*pi);
     auto* tefCap = new G4Tubs(
-        TEFLON_CAP + channelId, 0, tefRad, TEFLON_THICKNESS/2, 0, 2*pi);
+        TEFLON_CAP + CYL + channelId, 0, tefRad, TEFLON_THICKNESS/2, 0, 2*pi);
 
-    G4ThreeVector displace(0, 0, (CEBR3_THICKNESS + TEFLON_THICKNESS) / 2);
-    tefSolid = new G4UnionSolid(
-        TEFLON_SHAPE_PFX + channelId, tefRing, tefCap, nullptr, displace);
+    /* tefSolid = new G4UnionSolid( */
+    /*     TEFLON_SHAPE_PFX + channelId, tefRing, tefCap, nullptr, displace); */
 
     auto* ptfe = G4NistManager::Instance()->FindOrBuildMaterial(ImpMaterials::kNIST_TEFLON);
-    tefLogVol = new G4LogicalVolume(
-        tefSolid, ptfe, TEFLON_LOG_PFX + channelId);
+    auto* tefRingLogVol = new G4LogicalVolume(
+        tefRing, ptfe, TEFLON_RING + LOG + channelId);
+    auto* tefCapLogVol = new G4LogicalVolume(
+        tefCap, ptfe, TEFLON_CAP + LOG + channelId);
     
     G4VisAttributes teflonAttrs;
     teflonAttrs.SetColor(1, 1, 1, 0.2);
     teflonAttrs.SetVisibility(true);
-    tefLogVol->SetVisAttributes(teflonAttrs);
+    tefRingLogVol->SetVisAttributes(teflonAttrs);
+    tefCapLogVol->SetVisAttributes(teflonAttrs);
 
-    tefPlacement = new G4PVPlacement(
-        nullptr, cebr3AnchorCenter, tefLogVol, TEFLON_PHY_PFX + channelId,
+    G4ThreeVector displaceRing(0, 0, teflonAirGap/2);
+    tefRingPlacement = new G4PVPlacement(
+        nullptr, cebr3AnchorCenter + displaceRing, tefRingLogVol, TEFLON_RING + PHY + channelId,
         GetLogicalVolume(), false, 0);
 
-    attachTeflonOpticalSurface(tefLogVol);
+    G4ThreeVector displaceCap(0, 0, (TEFLON_THICKNESS + thick + teflonAirGap) / 2);
+    tefCapPlacement = new G4PVPlacement(
+        nullptr, cebr3AnchorCenter + displaceCap, tefCapLogVol, TEFLON_CAP + PHY + channelId,
+        GetLogicalVolume(), false, 0);
+
+    attachTeflonOpticalSurface(tefRingLogVol);
+    attachTeflonOpticalSurface(tefCapLogVol);
 }
 
 void ImpHafxChannel::attachCrystalDetector()
@@ -159,8 +187,8 @@ void ImpHafxChannel::attachAllDetectors()
 void ImpHafxChannel::attachTeflonOpticalSurface(G4LogicalVolume* tlv)
 {
     auto* surf = teflonOpticalSurface();
-    tefSkin = new G4LogicalSkinSurface(
-        TEFLON_SURF_PFX + tlv->GetName() + channelId, tlv, surf);
+    (void) new G4LogicalSkinSurface(
+        TEFLON_SURF + tlv->GetName() + channelId, tlv, surf);
 }
 
 void ImpHafxChannel::buildAlHousing()
@@ -171,7 +199,7 @@ void ImpHafxChannel::buildAlHousing()
     alCylinder = new G4Tubs(
         AL_CYL_PFX + channelId,
         startRad, endRad,
-        AL_HOUSING_DEPTH/2, 0, 2*pi);
+        alHousingDepth/2, 0, 2*pi);
 
     auto* al = G4Material::GetMaterial(ImpMaterials::kAL);
     alLogVol = new G4LogicalVolume(
@@ -240,7 +268,7 @@ void ImpHafxChannel::buildBeryllium()
     beLogVol->SetVisAttributes(beAttrs);
 
     G4ThreeVector beAnchorAdjust = cebr3AnchorCenter + G4ThreeVector(
-        0, 0, CEBR3_THICKNESS/2 + TEFLON_THICKNESS + BE_THICKNESS/2);
+        0, 0, cebr3Thickness/2 + TEFLON_THICKNESS + teflonAirGap + BE_THICKNESS/2);
     bePlacement = new G4PVPlacement(
         nullptr, beAnchorAdjust, beLogVol, BE_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
@@ -284,9 +312,7 @@ void ImpHafxChannel::buildLightGuide()
     const auto hxy = LIGHT_GUIDE_SIDE_LENGTH / 2, hz = LIGHT_GUIDE_THICKNESS / 2;
     lightGuideBox = new G4Box(LG_BOX_PFX + channelId, hxy, hxy, hz);
 
-    // make quartz for now...
-    auto* lgMaterial = G4NistManager::Instance()
-        ->FindOrBuildMaterial(ImpMaterials::kNIST_SIO2);
+    auto* lgMaterial = G4Material::GetMaterial(ImpMaterials::kPDMS);
 
     G4VisAttributes lgAtt;
     lgAtt.SetColor(0.686, 0.521, 1, 0.3);
@@ -295,22 +321,25 @@ void ImpHafxChannel::buildLightGuide()
         lightGuideBox, lgMaterial, LG_LOG_PFX + channelId);
     lightGuideLogVol->SetVisAttributes(lgAtt);
 
-    const auto wrapThick = TEFLON_THICKNESS * mm;
+    const auto wrapThick = TEFLON_THICKNESS;
+    const auto gappedHxy = hxy + teflonAirGap/2;
+    const auto gappedHxyPlusThick = gappedHxy + wrapThick/2;
     lightGuideWrapToBeCutoutBox = new G4Box(
-        LG_WRAP_BOX_PFX + channelId, hxy + wrapThick/2, hxy + wrapThick/2, hz);
-    // just to cut the end caps off nicely
-    auto* sliceOut = new G4Box("", hxy, hxy, hz + 1 * mm);
+        LG_WRAP_BOX_PFX + channelId, gappedHxyPlusThick, gappedHxyPlusThick, hz);
+    auto* sliceOut = new G4Box(
+        "", gappedHxy, gappedHxy, hz + 1 * mm); // add 1mm to z to definitely slice off the ends
     auto* slicedRim = new G4SubtractionSolid(
         LG_WRAP_SOL_PFX + "_rim_sliced" + channelId, lightGuideWrapToBeCutoutBox, sliceOut);
 
-    // "sihxy" is kind of a funny name haha
-    const auto sihxy = SI_SIDE_LENGTH / 2, sihz = SI_THICKNESS / 2;
-    auto* sliceOutSi = new G4Box("", sihxy, sihxy, sihz + 1 * mm);
-    auto* capToSlice = new G4Box("", hxy, hxy, wrapThick / 2);
+    // "siHxy" is kind of a funny name haha
+    const auto siHxy = SI_SIDE_LENGTH / 2, siHz = SI_THICKNESS / 2;
+    auto* sliceOutSi = new G4Box("", siHxy, siHxy, siHz + 1 * mm);
+    auto* capToSlice = new G4Box(
+        "", gappedHxyPlusThick, gappedHxyPlusThick, wrapThick/2);
     auto* slicedCap = new G4SubtractionSolid(
         LG_WRAP_SOL_PFX + "_cap_sliced" + channelId, capToSlice, sliceOutSi);
 
-    G4ThreeVector displaceWrapPieces(0, 0, -hz - wrapThick/2);
+    G4ThreeVector displaceWrapPieces(0, 0, -hz - teflonAirGap - wrapThick/2);
     lightGuideWrapSolid = new G4UnionSolid(
         LG_WRAP_SOL_PFX + channelId, slicedRim, slicedCap, nullptr, displaceWrapPieces);
 
@@ -337,7 +366,7 @@ void ImpHafxChannel::buildLightGuide()
 
 void ImpHafxChannel::buildPaint()
 {
-    const auto radius = CEBR3_DIAMETER / 2;
+    const auto radius = diameter() / 2;
     const auto thick = 1 * mm;
     auto* baseCyl = new G4Tubs(
         PAINT_CYL_PFX + channelId, 0, radius, thick/2,
@@ -349,7 +378,7 @@ void ImpHafxChannel::buildPaint()
     auto* paintLogVol = new G4LogicalVolume(
         paintSubSol, tempMat, PAINT_LOG_PFX + channelId);
     G4VisAttributes pAtt;
-    pAtt.SetColor(0, 0, 0, 0.1);
+    pAtt.SetColor(0, 1, 1, 0.05);
     pAtt.SetVisibility(true);
     paintLogVol->SetVisAttributes(pAtt);
 
@@ -388,7 +417,7 @@ void ImpHafxChannel::buildSi()
 
         auto siTranslate = baseTranslate + G4ThreeVector(xtlate, ytlate, 0);
         (void) new G4PVPlacement(
-            nullptr, siTranslate, siLogVol, SI_PHY_PFX + channelId,
+            nullptr, siTranslate, siLogVol, SI_PHY_PFX + channelId + idxStr,
             GetLogicalVolume(), false, 0);
         siBoxes[i] = siBox;
         siLogVols[i] = siLogVol;
@@ -423,10 +452,96 @@ void ImpHafxChannel::attachCeBr3OpticalSurface()
 void ImpHafxChannel::attachPaintBoundarySurface(G4VPhysicalVolume* ppv, G4LogicalVolume* plv)
 {
     auto* paintSur = paintSurface();
-    new G4LogicalSkinSurface(
+    (void) new G4LogicalSkinSurface(
         PAINT_SUR_PFX + channelId, plv, paintSur);
-    new G4LogicalBorderSurface(
+    (void) new G4LogicalBorderSurface(
         PAINT_SUR_PFX + channelId, ppv, crystalPlacement, paintSur);
+}
+
+void ImpHafxChannel::finishCrystalEdges()
+{
+    const auto& igf = ImpGlobalConfigs::instance();
+    auto edgeFinish = igf.configOption<std::string>(
+        ImpGlobalConfigs::kCEBR3_EDGE_FINISH);
+    auto backFinish = igf.configOption<std::string>(
+        ImpGlobalConfigs::kCEBR3_BACK_FINISH);
+
+    if (edgeFinish != "polished" && edgeFinish != "rough" &&
+            backFinish != "polished" && backFinish != "rough") {
+        std::string excStr =
+            "\"" + edgeFinish + "\" or \"" + backFinish +
+            "\" is not a valid cerium bromide finish. choose either \"polished\" or \"rough\".";
+        G4cerr << "*** " << excStr << " ***" << G4endl;
+        G4Exception(
+            "src/ImpHafxChannel.cc", "ch0", FatalException,
+            excStr.c_str());
+    }
+
+    // let Geant figure it out
+    if (teflonAirGap == 0) {
+        return;
+    }
+
+    // need a surface to border with if there's an air gap
+    auto pvs = fillerCrystalBorderPhysicalVols();
+    static std::unordered_map<std::string, G4OpticalSurface*> surfs = {
+        {"edge", new G4OpticalSurface(
+            BETWEEN_TEFLON_CRYSTAL + SUR + EDGE, unified, 
+            (edgeFinish == "polished")? polished : ground)},
+        {"back", new G4OpticalSurface(
+            BETWEEN_TEFLON_CRYSTAL + SUR + BACK, unified,
+            (backFinish == "polished")? polished : ground)}
+    };
+
+    for (const auto& surfPair : surfs) {
+        (void) new G4LogicalBorderSurface( 
+            BETWEEN_TEFLON_CRYSTAL + SUR + surfPair.first + channelId,
+            crystalPlacement, pvs[surfPair.first], surfPair.second);
+        /* auto fin = surfPair.second->GetFinish(); */
+        /* G4cout << surfPair.first << " finish is actually " << (fin == polished? "polished" : "rough") << G4endl; */
+        /* G4cout.flush(); */
+    }
+    /* G4String stall; G4cin >> stall; */
+}
+
+std::unordered_map<std::string, G4VPhysicalVolume*>
+ImpHafxChannel::fillerCrystalBorderPhysicalVols()
+{
+    /* G4cout << "in filler func (type key & hit return to continue) --> "; G4cout.flush(); G4String stall; G4cin >> stall; */
+    std::unordered_map<std::string, G4VPhysicalVolume*> ret;
+
+    G4VisAttributes va;
+    va.SetVisibility(false);
+    auto* edgeCyl = new G4Tubs(
+        BETWEEN_TEFLON_CRYSTAL + CYL + EDGE + channelId,
+        CEBR3_DIAMETER/2, CEBR3_DIAMETER/2 + teflonAirGap,
+        cebr3Thickness/2, 0, 2 * pi);
+    auto* backCyl = new G4Tubs(
+        BETWEEN_TEFLON_CRYSTAL + CYL + BACK + channelId,
+        0, CEBR3_DIAMETER/2 + teflonAirGap,
+        teflonAirGap/2, 0, 2*pi);
+
+    auto* edgeLv = new G4LogicalVolume(
+        edgeCyl, G4Material::GetMaterial(ImpMaterials::kVACUUM),
+        BETWEEN_TEFLON_CRYSTAL + LOG + EDGE + channelId);
+    auto* backLv = new G4LogicalVolume(
+        backCyl, G4Material::GetMaterial(ImpMaterials::kVACUUM),
+        BETWEEN_TEFLON_CRYSTAL + LOG + BACK + channelId);
+    edgeLv->SetVisAttributes(va);
+    backLv->SetVisAttributes(va);
+
+    ret["edge"] = new G4PVPlacement(
+        nullptr, cebr3AnchorCenter, edgeLv,
+        BETWEEN_TEFLON_CRYSTAL + PHY + EDGE + channelId, GetLogicalVolume(),
+        false, 0);
+
+    G4ThreeVector displace(0, 0, cebr3Thickness/2 + teflonAirGap/2);
+    ret["back"] = new G4PVPlacement(
+        nullptr, cebr3AnchorCenter + displace, backLv,
+        BETWEEN_TEFLON_CRYSTAL + PHY + BACK + channelId, GetLogicalVolume(),
+        false, 0);
+
+    return ret;
 }
 
 static G4OpticalSurface* siOpticalSurface()
@@ -446,18 +561,19 @@ static G4OpticalSurface* siOpticalSurface()
 
 static G4OpticalSurface* teflonOpticalSurface()
 {
-    /* G4AutoLock l(&teflonMux); */
     static G4OpticalSurface* ts = nullptr;
     if (ts) return ts;
-    ts = new G4OpticalSurface(TEFLON_SURF_PFX);
+
+    ts = new G4OpticalSurface(TEFLON_SURF);
+    ts->SetType(dielectric_dielectric);
+    ts->SetModel(unified);
+    // 23 February 2022: teflon LUT are bad
+    ts->SetFinish(groundfrontpainted);
+    ts->SetSigmaAlpha(0.);
     ts->SetMaterialPropertiesTable(
         G4NistManager::Instance()->
         FindOrBuildMaterial(ImpMaterials::kNIST_TEFLON)->
         GetMaterialPropertiesTable());
-    ts->SetType(dielectric_LUTDAVIS);
-    ts->SetModel(DAVIS);
-    // conveniently able to specify teflon as a surface :)
-    ts->SetFinish(RoughTeflon_LUT);
     return ts;
 }
 
@@ -467,6 +583,9 @@ static G4OpticalSurface* alOpticalSurface()
     static G4OpticalSurface* as = nullptr;
     if (as) return as;
     as = new G4OpticalSurface(AL_SURF_PFX);
+
+    // build real + complex indices here bc giving them to aluminum doesn't
+    // do what we want
     as->SetMaterialPropertiesTable(
         G4Material::GetMaterial(ImpMaterials::kAL)->
         GetMaterialPropertiesTable());
@@ -486,7 +605,7 @@ static G4OpticalSurface* beOpticalSurface()
         GetMaterialPropertiesTable());
     bs->SetType(dielectric_metal);
     bs->SetModel(unified);
-    bs->SetFinish(ground);  // ground == rough
+    bs->SetFinish(groundfrontpainted);  // ground == rough
     return bs;
 }
 
@@ -524,10 +643,19 @@ static G4OpticalSurface* paintSurface()
     static G4OpticalSurface* sur = nullptr;
     if (sur) return sur;
     sur = new G4OpticalSurface(PAINT_SUR_PFX);
-    sur->SetModel(LUT);
-    sur->SetType(dielectric_LUT);
+    sur->SetModel(unified);
+    sur->SetFinish(groundfrontpainted);
+    sur->SetSigmaAlpha(0.);
+    sur->SetType(dielectric_dielectric);
+    sur->SetMaterialPropertiesTable(
+        G4Material::GetMaterial(ImpMaterials::kVACUUM)->
+        GetMaterialPropertiesTable());
+
+    // LUT . . . lets light through?
+    /* sur->SetModel(LUT); */
+    /* sur->SetType(dielectric_LUT); */
     // from https://geant4-userdoc.web.cern.ch/UsersGuides/ForApplicationDeveloper/html/TrackingAndPhysics/physicsProcess.html#codeblock62
     // chemically etched surface, with tio paint
-    sur->SetFinish(groundtioair);
+    /* sur->SetFinish(polishedtioair); */
     return sur;
 }

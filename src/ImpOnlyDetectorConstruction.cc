@@ -40,8 +40,12 @@ void ImpOnlyDetectorConstruction::ConstructSDandField()
 
 void ImpOnlyDetectorConstruction::constructEnclosing()
 {
-    static const G4double extraRoom = 0 * mm;
-    static const G4double thickness = WORLD_DEPTH;
+    static const G4double extraRoom = 4 * cm;
+    static G4double thickness =
+        ImpGlobalConfigs::
+            instance().
+            configOption<double>(ImpGlobalConfigs::kCEBR3_LENGTH) * mm * 3;
+    thickness = std::max(thickness, WORLD_DEPTH);
     const G4double boundingRad = ImpHafxChannel::radius() + extraRoom;
 
     boundingCylinder = new G4Tubs(
@@ -52,8 +56,8 @@ void ImpOnlyDetectorConstruction::constructEnclosing()
     boundingLogVol = new G4LogicalVolume(
         boundingCylinder, vac, BOUNDING_LOG_VOL);
     G4VisAttributes bva;
-    bva.SetColor(0, 1, 1, 0.2);
-    bva.SetVisibility(false);
+    bva.SetColor(0, 1, 1, 0.1);
+    bva.SetVisibility(true);
     boundingLogVol->SetVisAttributes(bva);
 
     boundingPhysVol = new G4PVPlacement(
@@ -63,7 +67,7 @@ void ImpOnlyDetectorConstruction::constructEnclosing()
 
 void ImpOnlyDetectorConstruction::constructPlaceDetector()
 {
-    const G4double attThickness = ImpGlobalConf::ATTENUATOR_THICKNESSES.at(flareSize);
+    const G4double attThickness = ImpGlobalConfigs::ATTENUATOR_THICKNESSES.at(flareSize);
     /* const G4double totalThick = ImpHafxChannel::thicknessNoAttenuator() + attThickness; */
 
     G4ThreeVector adjust(0, 0, 0);//-WORLD_DEPTH/2 + totalThick/2);

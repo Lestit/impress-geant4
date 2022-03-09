@@ -5,6 +5,7 @@ Release
 
 scientific-references/__pycache__
 helper-scripts/__pycache__
+helper-scripts/**/__pycache__
 
 *.pdf
 *.swp

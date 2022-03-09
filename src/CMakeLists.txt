@@ -6,7 +6,7 @@ target_sources(${EXC_OUT}
         ImpEnergyPicker.cc
         ImpEnergyPickerMessenger.cc
         ImpEventAction.cc
-        ImpGpsConfig.cc
+        ImpGlobalConfigs.cc
         ImpHafxChannel.cc
         ImpMaterials.cc
         ImpOnlyDetectorConstruction.cc

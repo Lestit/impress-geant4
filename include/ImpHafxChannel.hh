@@ -1,13 +1,16 @@
 #pragma once
 
+#include <any>
+#include <memory>
 #include <string>
+
 #include <ChannelConstants.hh>
+#include <ImpGlobalConfigs.hh>
+
 #include "G4Cache.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4PVPlacement.hh"
 #include "G4String.hh"
-#include <G4SystemOfUnits.hh>
-static constexpr G4double inch = 25.4 * mm;
 
 class G4Box;
 class G4LogicalSkinSurface;
@@ -16,6 +19,7 @@ class G4OpticalSurface;
 class G4Tubs;
 class G4SubtractionSolid;
 class G4UnionSolid;
+class G4UserLimits;
 
 class ImpScintCrystalSensitiveDetector;
 class ImpSiSensitiveDetector;
@@ -31,7 +35,11 @@ class ImpHafxChannel : public G4PVPlacement
 
         // as crystal becomes more fleshed out, update these
         static G4double thicknessNoAttenuator()
-        { return AL_HOUSING_DEPTH + LIGHT_GUIDE_THICKNESS + SI_THICKNESS; }
+        {
+            auto crystalThick = ImpGlobalConfigs::instance().configOption<double>(
+                ImpGlobalConfigs::kCEBR3_LENGTH) * mm;
+            return crystalThick + AL_DEPTH_DELTA + LIGHT_GUIDE_THICKNESS + SI_THICKNESS;
+        }
         static G4double diameter()
         { return WHOLE_DIAMETER; }
         static G4double radius()
@@ -72,6 +80,9 @@ class ImpHafxChannel : public G4PVPlacement
         void buildSi();
         void attachSiOpticalSurface();
 
+        void finishCrystalEdges();
+        std::unordered_map<std::string, G4VPhysicalVolume*> fillerCrystalBorderPhysicalVols();
+
         G4ThreeVector cebr3AnchorCenter;
         G4ThreeVector quartzAnchorCenter;
 
@@ -84,10 +95,12 @@ class ImpHafxChannel : public G4PVPlacement
         G4Cache<ImpScintCrystalSensitiveDetector*> crystalSensDet;
         G4Cache<ImpSiSensitiveDetector*> siSensDet;
 
-        G4UnionSolid* tefSolid;
+        /* G4UnionSolid* tefSolid; */
+        /* G4LogicalVolume* tefRingPlacement; // just the ring around the crystal */
         G4LogicalVolume* tefLogVol;
-        G4PVPlacement* tefPlacement;
-        G4LogicalSkinSurface* tefSkin;
+        /* G4PVPlacement* tefPlacement; */
+        G4PVPlacement* tefRingPlacement;
+        G4PVPlacement* tefCapPlacement;
 
         G4Tubs* alCylinder;
         G4LogicalVolume* alLogVol;
@@ -118,39 +131,16 @@ class ImpHafxChannel : public G4PVPlacement
         G4LogicalVolume* lightGuideWrapLogVol;
         G4PVPlacement* lightGuideWrapPlacement;
 
-        static constexpr size_t NUM_SIPMS = 16;
+        G4UserLimits* uLims;
+
+        static constexpr std::size_t NUM_SIPMS = 16;
         std::array<G4Box*, NUM_SIPMS> siBoxes;
         std::array<G4LogicalVolume*, NUM_SIPMS> siLogVols;
-        /* G4PVPlacement* siPlacement; */
-        /* G4LogicalSkinSurface* siSkin; */
 
         G4String channelId;
         std::string sensDetName;
         G4double attenuatorWindowThickness;
-
-        static constexpr G4double WHOLE_DIAMETER = 43 * mm;
-
-        static constexpr G4double BE_THICKNESS = 0.7 * mm;
-
-        static constexpr G4double CEBR3_THICKNESS = 5 * mm;
-        static constexpr G4double CEBR3_DIAMETER = 37 * mm;
-
-        static constexpr G4double TEFLON_THICKNESS = 0.127 * mm;
-
-        static constexpr G4double AL_HOUSING_THICKNESS = 1.25 * mm;
-        static constexpr G4double AL_HOUSING_DEPTH = 11.3 * mm;
-
-        // ???
-        static constexpr G4double QUARTZ_THICKNESS = 3 * mm;
-        static constexpr G4double QUARTZ_DIAMETER = 40.5 * mm;
-
-        // to be updated
-        static constexpr G4double LIGHT_GUIDE_THICKNESS = 0.25 * inch;
-        // guess for now
-        static constexpr G4double LIGHT_GUIDE_SIDE_LENGTH = 1 * inch;
-
-        static constexpr G4double SI_THICKNESS = 0.3 * mm;
-        static constexpr G4double BROADCOM_FULL_LENGTH = 3.88 * mm;
-        static constexpr G4double SI_SPACING = 0.25 * mm;
-        static constexpr G4double SI_SIDE_LENGTH = 3*SI_SPACING + 4*BROADCOM_FULL_LENGTH;
+        G4double cebr3Thickness;
+        G4double teflonAirGap;
+        G4double alHousingDepth;
 };

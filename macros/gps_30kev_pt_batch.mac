@@ -1,0 +1,13 @@
+# bypass the ImpEnergyPicker and just use the gps
+/impe/distributionType gps
+
+/gps/particle gamma
+
+/gps/pos/centre 0 0 1 cm
+/gps/pos/type Point
+
+/gps/ang/type iso
+
+/gps/ene/type Mono
+/gps/ene/mono 30 keV
+/run/beamOn 5000

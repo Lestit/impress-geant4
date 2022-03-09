@@ -25,5 +25,5 @@ class OptDebugDetectorConstruction : public G4VUserDetectorConstruction
     constexpr static G4double CRYST_SIZE = 2 * cm;
     constexpr static G4double TEF_THICK = 1 * mm;
     constexpr static G4double AL_THICK = 1 * mm;
-    constexpr static G4double AIR_GAP = 10 * um;
+    constexpr static G4double AIR_GAP = 10 * mm;
 };

@@ -11,6 +11,7 @@ namespace ImpMaterials {
     void makeBeryllium();
     void makeHousingAluminumAlloy();
     void makeSilicon();
+    void makePdms();
 }
 
 namespace {
@@ -43,6 +44,8 @@ namespace ImpMaterials
             makeBeryllium();
         if (!G4Material::GetMaterial(kHOUSING_ALLOY))
             makeHousingAluminumAlloy();
+        if (!G4Material::GetMaterial(kPDMS))
+            makePdms();
     }
 
     void configureTeflon()
@@ -51,7 +54,8 @@ namespace ImpMaterials
         auto* teflon = nistMan->FindOrBuildMaterial(kNIST_TEFLON);
         auto* tefPt = new G4MaterialPropertiesTable;
 
-        /* tefPt->AddProperty(kREFR_IDX, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFR_IDXS)->SetSpline(useSpline); */
+        tefPt->AddProperty(kREFR_IDX, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFR_IDXS, useSpline);
+        tefPt->AddProperty(kREFLECTIVITY, TEFLON_REFR_IDX_ENERGIES, TEFLON_REFLECTIVITY, useSpline);
 
         teflon->SetMaterialPropertiesTable(tefPt);
     }
@@ -84,8 +88,8 @@ namespace ImpMaterials
                 "Optical parameters table not instantiated");
         }
         opp->SetScintFiniteRiseTime(false);
-        opp->SetScintEnhancedTimeConstants(false);
-        // etc . . .
+        // Removed in G4 v11 - ws March 2022
+        /* opp->SetScintEnhancedTimeConstants(false); */
 
         auto* cebr3 = G4Material::GetMaterial(kCEBR3);
         if (!cebr3) {
@@ -99,25 +103,18 @@ namespace ImpMaterials
         auto* scintPt = new G4MaterialPropertiesTable;
 
         scintPt->AddConstProperty(kSCINT_YIELD, CEBR3_SCINT_YIELD);
-        // refractive index depends on energy
-        scintPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, CEBR3_REFR_IDXS)->SetSpline(useSpline);
-        /* scintPt->AddProperty(kREFR_IDX_REAL, CEBR3_REFR_IDX_ENERGIES, CEBR3_REFR_IDXS)->SetSpline(useSpline); */
-        /* scintPt->AddProperty( */
-        /*     kREFR_IDX_IMAG, CEBR3_REFR_IDX_ENERGIES, */
-        /*     std::vector<G4double>(CEBR3_REFR_IDXS.size(), 0))->SetSpline(useSpline); */
+        scintPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, CEBR3_REFR_IDXS, useSpline);
 
-        // we are only required to set one of either FASTCOMPONENT or SLOWCOMPONENT
-        // optical photon relative intensitiesto get scintillation working.
-        // for CeBr3 everything is fast anyway, so we just set the fast component.
-        scintPt->AddProperty(kOPTICAL_FAST_COMP, CEBR3_SCINT_OPTICAL_ENERGIES, CEBR3_SCINT_OPTICAL_INTENSITIES)->SetSpline(useSpline);
-
-        // similarly for the decay time constant.
-        scintPt->AddConstProperty(kFAST_TIME_CONSTANT, CEBR3_DECAY_TIME_CONSTANT);
+        // updated in v11
+        scintPt->AddProperty(
+            kONLY_SCINT_COMPONENT, CEBR3_SCINT_OPTICAL_ENERGIES,
+            CEBR3_SCINT_OPTICAL_INTENSITIES, useSpline);
+        scintPt->AddConstProperty(kONLY_TIME_CONSTANT, CEBR3_DECAY_TIME_CONSTANT);
 
         // # of photons emitted = RESOLUTION_SCALE * sqrt(mean # of photons)
         // TODO: modify source to make energy resolution energy-dependent
         scintPt->AddConstProperty(kRESOLUTION_SCALE, CEBR3_SCINT_RESLN_SCALE);
-        scintPt->AddProperty(kABSORPTION_LEN, CEBR3_ABS_LEN_ENERGIES, CEBR3_ABS_LEN)->SetSpline(useSpline);
+        scintPt->AddProperty(kABSORPTION_LEN, CEBR3_ABS_LEN_ENERGIES, CEBR3_ABS_LEN, useSpline);
         // skip optical Rayleigh scattering (not important)
         // skip Mie scattering (doesn't apply)
 
@@ -138,9 +135,9 @@ namespace ImpMaterials
         auto* vacPt = new G4MaterialPropertiesTable;
 
         std::vector<G4double> indices(CEBR3_REFR_IDX_ENERGIES.size(), 1.);
-        vacPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, indices)->SetSpline(useSpline);
-        /* vacPt->AddProperty(kREFR_IDX_REAL, CEBR3_REFR_IDX_ENERGIES, indices)->SetSpline(useSpline); */
-        /* vacPt->AddProperty(kREFR_IDX_IMAG, CEBR3_REFR_IDX_ENERGIES, std::vector<G4double>(indices.size(), 0.))->SetSpline(useSpline); */
+        vacPt->AddProperty(kREFR_IDX, CEBR3_REFR_IDX_ENERGIES, indices, useSpline);
+        /* vacPt->AddProperty(kREFR_IDX_REAL, CEBR3_REFR_IDX_ENERGIES, indices, useSpline); */
+        /* vacPt->AddProperty(kREFR_IDX_IMAG, CEBR3_REFR_IDX_ENERGIES, std::vector<G4double>(indices.size(), 0.), useSpline); */
 
         vacMat->SetMaterialPropertiesTable(vacPt);
     }
@@ -156,11 +153,13 @@ namespace ImpMaterials
             AL_DENSITY,
             AL_NUM_COMPONENTS,
             kStateSolid,
-            SATELLITE_TEMP);
+            SATELLITE_TEMP,
+            VACUUM_PRESSURE);
 
         al->AddElement(alElt, G4double(1.0));
         auto* alPt = new G4MaterialPropertiesTable;
 
+        // DO NOT ADD JUST RINDEX!!!!!!!!!!!!!!!!!!!1
         /* alPt->AddProperty(kREFR_IDX, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_REAL); */
         alPt->AddProperty(kREFR_IDX_REAL, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_REAL);
         alPt->AddProperty(kREFR_IDX_IMAG, AL_REFR_IDX_ENERGIES, AL_REFR_IDX_IMAG);
@@ -239,31 +238,48 @@ namespace ImpMaterials
     void makeSilicon()
     {
         auto* si = G4NistManager::Instance()->FindOrBuildMaterial(kNIST_SI);
-        if (!si) {
-            G4Exception(
-                "src/ImpMaterials.cc makeSilicon()",
-                "[no error code]",
-                RunMustBeAborted,
-                "Silicon can't be loaded from NIST manager");
-        }
 
         auto* simpt = new G4MaterialPropertiesTable;
         std::vector<G4double> refl(SI_BROADCOM_NUMBERS.size(), 0.);
 
         // set to one and apply detection in post-processing (?)
-        simpt->AddProperty(kOP_DET_EFF, SI_DET_EFF_ENERGIES, SI_DET_EFF)
-             ->SetSpline(useSpline);
-        simpt->AddProperty(kREFLECTIVITY, SI_DET_EFF_ENERGIES, refl)
-             ->SetSpline(useSpline);
-        simpt->AddProperty(kTRANSMITTANCE, SI_DET_EFF_ENERGIES, SI_TRANSMITTANCE)
-             ->SetSpline(useSpline);
-        simpt->AddProperty(kREFR_IDX, SI_REFR_IDX_ENERGY, SI_REFR_IDX_REAL)
-             ->SetSpline(useSpline);
-        simpt->AddProperty(kREFR_IDX_REAL, SI_REFR_IDX_ENERGY, SI_REFR_IDX_REAL)
-             ->SetSpline(useSpline);
-        simpt->AddProperty(kREFR_IDX_IMAG, SI_REFR_IDX_ENERGY, SI_REFR_IDX_IMAG)
-             ->SetSpline(useSpline);
+        simpt->AddProperty(kOP_DET_EFF, SI_DET_EFF_ENERGIES, SI_DET_EFF, useSpline);
+        simpt->AddProperty(kREFLECTIVITY, SI_DET_EFF_ENERGIES, refl, useSpline);
+        simpt->AddProperty(kTRANSMITTANCE, SI_DET_EFF_ENERGIES, SI_TRANSMITTANCE, useSpline);
+        simpt->AddProperty(kREFR_IDX, SI_REFR_IDX_ENERGY, SI_REFR_IDX_REAL, useSpline);
+        simpt->AddProperty(kREFR_IDX_REAL, SI_REFR_IDX_ENERGY, SI_REFR_IDX_REAL, useSpline);
+        simpt->AddProperty(kREFR_IDX_IMAG, SI_REFR_IDX_ENERGY, SI_REFR_IDX_IMAG, useSpline);
 
         si->SetMaterialPropertiesTable(simpt);
+    }
+
+    void makePdms()
+    {
+        auto* nm = G4NistManager::Instance();
+        auto* hydrogen = nm->FindOrBuildMaterial("G4_H");
+        auto* carbon = nm->FindOrBuildMaterial("G4_C");
+        auto* oxygen = nm->FindOrBuildMaterial("G4_O");
+        auto* silicon = nm->FindOrBuildMaterial("G4_Si");
+
+        std::array<G4Material*, 4> elMats = {hydrogen, carbon, oxygen, silicon};
+        // for computing mass fraction later
+        double totalMass = 0;
+        std::array<std::uint8_t, 4> atomz = {6, 2, 1, 1};
+        for (std::size_t i = 0; i < atomz.size(); ++i) {
+            totalMass += elMats[i]->GetMassOfMolecule() * atomz[i];
+        }
+
+        auto* pdms = new G4Material(
+            kPDMS, PDMS_DENSITY, G4int(atomz.size()),
+            kStateSolid, SATELLITE_TEMP, VACUUM_PRESSURE);
+
+        for (std::size_t i = 0; i < atomz.size(); ++i) {
+            double massFrac = elMats[i]->GetMassOfMolecule() / totalMass;
+            pdms->AddMaterial(elMats[i], atomz[i] * massFrac);
+        }
+
+        auto* pdmsPt = new G4MaterialPropertiesTable;
+        pdmsPt->AddProperty(kREFR_IDX, PDMS_REFR_IDX_ENERGIES, PDMS_REFR_IDXS, useSpline);
+        pdms->SetMaterialPropertiesTable(pdmsPt);
     }
 }

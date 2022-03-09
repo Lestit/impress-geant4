@@ -8,8 +8,8 @@ namespace OptDebugMaterials {
 
     // scintillation
     static const G4String kSCINT_YIELD = "SCINTILLATIONYIELD";
-    static const G4String kOPTICAL_FAST_COMP = "FASTCOMPONENT";
-    static const G4String kFAST_TIME_CONSTANT = "FASTTIMECONSTANT";
+    static const G4String kONLY_SCINT_COMPONENT = "SCINTILLATIONCOMPONENT1";
+    static const G4String kONLY_TIME_CONSTANT = "SCINTILLATIONTIMECONSTANT1";
     static const G4String kRESOLUTION_SCALE = "RESOLUTIONSCALE";
 
     // optical photon stuff

@@ -135,7 +135,9 @@ void ImpSteppingAction::processOptical(const G4Step* step)
 
     const auto preName = preVol? preVol->GetName() : "";
     const auto postName = postVol? postVol->GetName() : "";
-    bool yesSilicon = postName.contains(SI_PHY_PFX) || preName.contains(SI_PHY_PFX);
+    bool yesSilicon =
+        G4StrUtil::contains(postName, SI_PHY_PFX) ||
+        G4StrUtil::contains(preName, SI_PHY_PFX);
 
     if (postPt->GetStepStatus() == fGeomBoundary) {
         auto stat = boundary->GetStatus();
@@ -153,7 +155,9 @@ void ImpSteppingAction::processOptical(const G4Step* step)
                 break;
             // silence for now
             case NoRINDEX:
-                break;
+                G4cout << "NoRINDEX: " << G4endl
+                       << "pre vol" << preName << G4endl
+                       << "post vol" << postName << G4endl;
             default:
                 if (yesSilicon) {
                     const auto n = std::string(
@@ -173,7 +177,8 @@ void ImpSteppingAction::processDetected(
     const G4VPhysicalVolume* preVol, const G4VPhysicalVolume* postVol, const G4Step* step)
 {
     // allow for ad-hoc efficiency
-    if (G4UniformRand() > ImpGlobalConf::HACKY_DETECTOR_EFF) return;
+    // removed 3 March 2022 (just detect all photons)
+    /* if (G4UniformRand() > ImpGlobalConf::HACKY_DETECTOR_EFF) return; */
 
     std::array<const G4VPhysicalVolume*, 2> volz = {preVol, postVol};
     for (const auto* v : volz) {

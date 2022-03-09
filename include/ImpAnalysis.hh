@@ -39,6 +39,7 @@ class ImpAnalysis
 {
     public:
         static ImpAnalysis* instance();
+        static std::uint32_t currentRunNumber();
 
         void initFiles(G4bool isMaster);
         void saveFiles(G4bool isMaster);
@@ -58,6 +59,8 @@ class ImpAnalysis
         ImpAnalysis(const ImpAnalysis&) =delete;
         void operator=(const ImpAnalysis&) =delete;
     private:
+        static std::uint32_t runNumber;
+
         ImpAnalysis();
         ~ImpAnalysis();
         void processEvent(const G4Event* evt);

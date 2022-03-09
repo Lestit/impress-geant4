@@ -17,6 +17,7 @@
 #include "CeBr3Properties.hh"
 #include "HousingAlloyProperties.hh"
 #include "QuartzProperties.hh"
+#include "PdmsProperties.hh"
 #include "SiProperties.hh"
 #include "TeflonProperties.hh"
 

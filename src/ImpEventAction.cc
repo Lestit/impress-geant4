@@ -8,6 +8,7 @@
 
 #include "ImpAnalysis.hh"
 #include "ImpEventAction.hh"
+#include <ImpGlobalConfigs.hh>
 #include "ImpScintCrystalHit.hh"
 #include "ImpTrajectory.hh"
 #include "ImpVHit.hh"
@@ -52,7 +53,9 @@ void ImpEventAction::sampleDrawOptical(G4TrajectoryContainer* trjCon)
 {
     if (!trjCon || !trjCon->GetVector()) return;
     // only draw every #(rest) optical photons
-    G4int i = 0, rest = 10;
+    std::size_t i = 0;
+    std::size_t rest = ImpGlobalConfigs::instance().configOption<G4int>(
+        ImpGlobalConfigs::kOPTICAL_DRAW_FREQUENCY);
     for (G4VTrajectory* trj : *trjCon->GetVector()) {
         auto* impTrj = static_cast<ImpTrajectory*>(trj);
         if (impTrj->GetParticleName() == "opticalphoton") {

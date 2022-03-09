@@ -1,0 +1,2 @@
+/control/execute macros/john-sample-beam-move-radially-outwards/setup_gps.mac
+/control/loop macros/john-sample-beam-move-radially-outwards/run_radial.mac x_pos 0 2 0.25
