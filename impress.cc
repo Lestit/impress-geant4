@@ -54,8 +54,12 @@ int main(int argc, char* argv[])
     }
 
     auto* runMan = new G4MTRunManager;
-    // no hyperthreading
-    runMan->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+#if __APPLE__
+    int hyperthread = 1;
+#else
+    int hyperthread = 2;
+#endif
+    runMan->SetNumberOfThreads(hyperthread * G4Threading::G4GetNumberOfCores());
 
     auto* physList = new ImpPhysicsList;
     physList->SetVerboseLevel(0);

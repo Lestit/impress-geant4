@@ -8,7 +8,7 @@
 #include <G4Material.hh>
 #include <G4PVPlacement.hh>
 #include <G4VPhysicalVolume.hh>
-#include <G4Rotationmatrix.hh>
+#include <G4RotationMatrix.hh>
 #include <G4SystemOfUnits.hh>
 #include <G4VisAttributes.hh>
 

@@ -3,7 +3,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4THitsCollection.hh"
 #include "G4ThreeVector.hh"
-#include "G4VVismanager.hh"
+#include "G4VVisManager.hh"
 #include "G4VTrajectory.hh"
 
 #include "ImpAnalysis.hh"

@@ -13,7 +13,7 @@ enable_testing()
 add_subdirectory(tests)
 
 include_directories(
-    ${Geant4_INCLUDE_DIR}
+#    ${Geant4_INCLUDE_DIR}
     "${PROJECT_SOURCE_DIR}/include"
 )
 
