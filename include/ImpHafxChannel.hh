@@ -8,6 +8,7 @@
 #include <ImpGlobalConfigs.hh>
 
 #include "G4Cache.hh"
+#include <G4OpticalSurface.hh>
 #include "G4PhysicalConstants.hh"
 #include "G4PVPlacement.hh"
 #include "G4String.hh"
@@ -82,6 +83,9 @@ class ImpHafxChannel : public G4PVPlacement
 
         void finishCrystalEdges();
         std::unordered_map<std::string, G4VPhysicalVolume*> fillerCrystalBorderPhysicalVols();
+        void buildCrystalOpticalBorders(
+            const std::string& edgeFinish, const std::string& backFinish,
+            bool edgeLut, bool backLut);
 
         G4ThreeVector cebr3AnchorCenter;
         G4ThreeVector quartzAnchorCenter;

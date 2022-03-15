@@ -1,0 +1,13 @@
+__ CHANGES __
+
+add teflon transmittance, set to zero.
+    not necessary
+SetSigmaAlpha(0.)
+make new MaterialPropertiesTable for surface
+    not necessary
+GROUNDFRONTPAINTED UNIFIED MODEL
+cebr3 attenuation length = 1km
+re-format aluminum refractive indices
+only real & imaginary refractive indices for aluminum
+
+add 1km cut to track lengths

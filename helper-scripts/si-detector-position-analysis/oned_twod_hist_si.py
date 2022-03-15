@@ -15,7 +15,7 @@ SIPM_EDGES = [
 '''
 change me
 '''
-NUM_BINS_PER_PIXEL = 10
+NUM_BINS_PER_PIXEL = 20
 SIPM_BINS = np.array([
     np.linspace(e[0], e[1], NUM_BINS_PER_PIXEL) for e in SIPM_EDGES
 ]).flatten()

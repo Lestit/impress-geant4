@@ -84,5 +84,7 @@ namespace ImpMaterials
     //  total internal reflection is a huge issue so the 1km attenuation length makes more sense (maybe?)
     // update 22 February 2022:
     //  lower to . . . 1 meter.
-    const std::vector<G4double> CEBR3_ABS_LEN(CEBR3_ABS_LEN_ENERGIES.size(), 1. * km);
+    // update 15 March 2022:
+    //  pretty sure this should be WAY lower, more like ~100cm as per Attenuation length in strip scintillators by Jonathan Button, William McGrew, Y.-W. Lui, D. H. Youngblood
+    const std::vector<G4double> CEBR3_ABS_LEN(CEBR3_ABS_LEN_ENERGIES.size(), 100. * cm);
 }

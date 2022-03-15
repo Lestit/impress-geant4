@@ -31,6 +31,15 @@ static G4OpticalSurface* qzOpticalSurface();
 static G4OpticalSurface* cebr3OpticalSurface();
 static G4OpticalSurface* paintSurface();
 
+namespace {
+    // specifying crystal finishes later on
+    using os = G4OpticalSurfaceFinish;
+    const std::unordered_map<std::string, G4OpticalSurfaceFinish> CONVERT_FINISH = {
+        {"polished", os::polished},               {"rough", os::ground},
+        {"Rough_LUT", os::Rough_LUT},             {"Polished_LUT", os::Polished_LUT},
+        {"RoughTeflon_LUT", os::RoughTeflon_LUT}, {"PolishedTeflon_LUT", os::PolishedTeflon_LUT}
+    };
+}
 
 // i sure love constructors
 ImpHafxChannel::ImpHafxChannel(
@@ -466,48 +475,37 @@ void ImpHafxChannel::finishCrystalEdges()
     auto backFinish = igf.configOption<std::string>(
         ImpGlobalConfigs::kCEBR3_BACK_FINISH);
 
-    if (edgeFinish != "polished" && edgeFinish != "rough" &&
-            backFinish != "polished" && backFinish != "rough") {
+    bool foundEdge = false, foundBack = false;
+    for (const auto& pr : CONVERT_FINISH) {
+        foundEdge = foundEdge || edgeFinish == pr.first;
+        foundBack = foundBack || backFinish == pr.first;
+    }
+    if (!foundEdge || !foundBack) {
+        std::string allowedFinishes = "";
+        for (const auto& pr : CONVERT_FINISH) allowedFinishes += (pr.first + ", ");
+        (void) allowedFinishes.pop_back();
+        allowedFinishes[allowedFinishes.size()-1] = '.';
         std::string excStr =
             "\"" + edgeFinish + "\" or \"" + backFinish +
-            "\" is not a valid cerium bromide finish. choose either \"polished\" or \"rough\".";
-        G4cerr << "*** " << excStr << " ***" << G4endl;
+            "\" is not a valid cerium bromide finish. choose from: " + allowedFinishes;
         G4Exception(
             "src/ImpHafxChannel.cc", "ch0", FatalException,
             excStr.c_str());
     }
 
     // let Geant figure it out
-    if (teflonAirGap == 0) {
+    auto edgeLut = edgeFinish.find("LUT") != std::string::npos;
+    auto backLut = backFinish.find("LUT") != std::string::npos;
+    if (teflonAirGap == 0 && (!backLut || !edgeLut)) {
         return;
     }
 
-    // need a surface to border with if there's an air gap
-    auto pvs = fillerCrystalBorderPhysicalVols();
-    static std::unordered_map<std::string, G4OpticalSurface*> surfs = {
-        {"edge", new G4OpticalSurface(
-            BETWEEN_TEFLON_CRYSTAL + SUR + EDGE, unified, 
-            (edgeFinish == "polished")? polished : ground)},
-        {"back", new G4OpticalSurface(
-            BETWEEN_TEFLON_CRYSTAL + SUR + BACK, unified,
-            (backFinish == "polished")? polished : ground)}
-    };
-
-    for (const auto& surfPair : surfs) {
-        (void) new G4LogicalBorderSurface( 
-            BETWEEN_TEFLON_CRYSTAL + SUR + surfPair.first + channelId,
-            crystalPlacement, pvs[surfPair.first], surfPair.second);
-        /* auto fin = surfPair.second->GetFinish(); */
-        /* G4cout << surfPair.first << " finish is actually " << (fin == polished? "polished" : "rough") << G4endl; */
-        /* G4cout.flush(); */
-    }
-    /* G4String stall; G4cin >> stall; */
+    buildCrystalOpticalBorders(edgeFinish, backFinish, edgeLut, backLut);
 }
 
 std::unordered_map<std::string, G4VPhysicalVolume*>
 ImpHafxChannel::fillerCrystalBorderPhysicalVols()
 {
-    /* G4cout << "in filler func (type key & hit return to continue) --> "; G4cout.flush(); G4String stall; G4cin >> stall; */
     std::unordered_map<std::string, G4VPhysicalVolume*> ret;
 
     G4VisAttributes va;
@@ -530,18 +528,41 @@ ImpHafxChannel::fillerCrystalBorderPhysicalVols()
     edgeLv->SetVisAttributes(va);
     backLv->SetVisAttributes(va);
 
-    ret["edge"] = new G4PVPlacement(
+    ret[EDGE] = new G4PVPlacement(
         nullptr, cebr3AnchorCenter, edgeLv,
         BETWEEN_TEFLON_CRYSTAL + PHY + EDGE + channelId, GetLogicalVolume(),
         false, 0);
 
     G4ThreeVector displace(0, 0, cebr3Thickness/2 + teflonAirGap/2);
-    ret["back"] = new G4PVPlacement(
+    ret[BACK] = new G4PVPlacement(
         nullptr, cebr3AnchorCenter + displace, backLv,
         BETWEEN_TEFLON_CRYSTAL + PHY + BACK + channelId, GetLogicalVolume(),
         false, 0);
 
     return ret;
+}
+
+void ImpHafxChannel::buildCrystalOpticalBorders(
+    const std::string& edgeFinish, const std::string& backFinish,
+    bool edgeLut, bool backLut)
+{
+    auto pvs = fillerCrystalBorderPhysicalVols();
+    auto* edgeSurf = new G4OpticalSurface(BETWEEN_TEFLON_CRYSTAL + SUR + EDGE);
+    auto* backSurf = new G4OpticalSurface(BETWEEN_TEFLON_CRYSTAL + SUR + BACK);
+
+    edgeSurf->SetType(edgeLut? dielectric_LUTDAVIS : dielectric_dielectric);
+    edgeSurf->SetModel(edgeLut? DAVIS : unified);
+    edgeSurf->SetFinish(CONVERT_FINISH.at(edgeFinish));
+    (void) new G4LogicalBorderSurface(
+        BETWEEN_TEFLON_CRYSTAL + SUR + EDGE + channelId,
+        crystalPlacement, pvs[EDGE], edgeSurf);
+
+    backSurf->SetType(backLut? dielectric_LUTDAVIS : dielectric_dielectric);
+    backSurf->SetModel(backLut? DAVIS : unified);
+    backSurf->SetFinish(CONVERT_FINISH.at(backFinish));
+    (void) new G4LogicalBorderSurface(
+        BETWEEN_TEFLON_CRYSTAL + SUR + BACK + channelId,
+        crystalPlacement, pvs[BACK], backSurf);
 }
 
 static G4OpticalSurface* siOpticalSurface()
