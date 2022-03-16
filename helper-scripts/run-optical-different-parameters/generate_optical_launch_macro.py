@@ -1,9 +1,11 @@
 import numpy as np
 import os
+import sys
 import subprocess
+sys.path.append(os.path.dirname(__file__) + '/..')
+from optical_params_shared import NUM_RUNS
 
 MACRO_OUT_FN = 'macros/optical_position_run.mac'
-NUM_RUNS = 50000
 
 G4_EXECUTABLE = 'impress'
 G4_CFG_FN = 'impress.conf'
@@ -13,9 +15,20 @@ DEFAULT_INPUT = 'ydc1'
 BACK_FINISH_KEY = 'cebr3-back-finish'
 EDGE_FINISH_KEY = 'cebr3-edge-finish'
 PREFIX_KEY = 'data-folder-prefix'
-ROUGH_FINISH = 'rough'
-POLISH_FINISH = 'polished'
-FINISHEZ = [POLISH_FINISH] #[ROUGH_FINISH, POLISH_FINISH]
+ROUGH_TEF = 'RoughTeflon_LUT'     # with teflon
+POLISH_TEF = 'PolishedTeflon_LUT' # with teflon
+POLISH = 'Polished_LUT'           # bare
+ROUGH = 'Rough_LUT'               # bare
+FINISH_PAIRS = [
+    # {'edge': ROUGH_TEF, 'back': ROUGH_TEF},
+    # {'edge': ROUGH_TEF, 'back': POLISH_TEF},
+    # {'edge': POLISH_TEF, 'back': ROUGH_TEF},
+    # {'edge': POLISH_TEF, 'back': POLISH_TEF},
+    {'edge': POLISH, 'back': POLISH},
+    {'edge': ROUGH, 'back': ROUGH},
+    {'edge': ROUGH, 'back': POLISH},
+    {'edge': POLISH, 'back': ROUGH}
+]
 
 # tell ImpEnergyPicker to use G4GeneralParticleSource
 IMPE_INIT_CMD = '/impe/distributionType gps'
@@ -39,7 +52,7 @@ def generate_run_macro_file():
     print('generated macro file', MACRO_OUT_FN)
 
 
-def execute_run(back=ROUGH_FINISH, edge=POLISH_FINISH):
+def execute_run(back=ROUGH_TEF, edge=POLISH_TEF):
     props = dict()
     with open(G4_CFG_FN, 'r+') as cfg_file:
         for line in cfg_file:
@@ -48,7 +61,7 @@ def execute_run(back=ROUGH_FINISH, edge=POLISH_FINISH):
 
         props[EDGE_FINISH_KEY] = edge
         props[BACK_FINISH_KEY] = back
-        props[PREFIX_KEY] = f'e{edge[:3]}-b{back[:3]}'
+        props[PREFIX_KEY] = f'e{edge}-b{back}'
         cfg_file.seek(0)
         cfg_file.write(os.linesep.join(f'{k} {v}' for (k, v) in props.items()))
         cfg_file.truncate()
@@ -59,9 +72,8 @@ def execute_run(back=ROUGH_FINISH, edge=POLISH_FINISH):
 
 
 def run_different_finishes():
-    for back_finish in FINISHEZ:
-        for edge_finish in FINISHEZ:
-            execute_run(back=back_finish, edge=edge_finish)
+    for fin in FINISH_PAIRS:
+        execute_run(**fin)
 
 
 def main():

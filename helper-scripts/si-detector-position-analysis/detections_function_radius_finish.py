@@ -3,26 +3,30 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import sys
-
+sys.path.append(os.path.dirname(__file__) + '/..')
+from optical_params_shared import NUM_RUNS, RADIUSES
+INCIDENT_COUNTS = NUM_RUNS
 plt.style.use('/Users/settwi/mpl-styles/fig.mplstyle')
 
-PREFIXES = [
-    'erou-brou', 'epol-brou',
-    'erou-bpol', 'epol-bpol'
-]
-DECODED = [
-    'rough edge & rough back', 'polished edge & rough back',
-    'rough edge & polished back', 'polished edge & polished back'
-]
-PFX_MAP = {k: v for (k, v) in zip(PREFIXES, DECODED)}
-RADIUSES = np.linspace(0, 37/2 - 1, num=10)
-INCIDENT_COUNTS = 50000
+# OLD_PREFIXES = [
+#     'eRou-bRou', 'ePol-bRou',
+#     'eRou-bPol', 'ePol-bPol'
+# ]
+PREFIX_FIRST_DECODE = {
+    'Polished_LUT': 'raw+polishedLUT', 'Rough_LUT': 'raw+roughLUT',
+    'PolishedTeflon_LUT': 'teflon+polishedLUT', 'RoughTeflon_LUT': 'teflon+roughLUT',
+    'DirectlyCoupled': 'perfectly diffuse wrapping'
+}
+PFX_MAP = dict()
+for first_pfx, first_decode in PREFIX_FIRST_DECODE.items():
+    for second_pfx, second_decode in PREFIX_FIRST_DECODE.items():
+        PFX_MAP[f'e{first_pfx}-b{second_pfx}'] = f'edge {first_decode}, back {second_decode}'
 
 def die():
     print()
     print(f'\tusage: python {__file__.split("/")[-1]} diff-finish-path')
     print('\tdiff-finish-path: folder containing a bunch of folders with the following prefixes, identifying different finishes:')
-    print('\t\t' + '; '.join(PREFIXES))
+    print('\t\t' + '; '.join(PREFIX_FIRST_DECODE.keys()))
     print()
     sys.exit(1)
 
@@ -32,6 +36,7 @@ def y_map(y_vals):
 
 
 def srt_help(s):
+    # sort based on run number
     return int(s.split('run')[1].split('202')[0].replace('-', ''))
 
 
@@ -49,7 +54,7 @@ def plot_func_rad(direc):
     folds = os.listdir(direc)
     att_fn = None
     dat = dict()
-    for pfx in PREFIXES:
+    for pfx in PFX_MAP.keys():
         dat[pfx] = list()
         wanted = [fold for fold in folds if pfx in fold]
         wanted.sort(key=srt_help)
@@ -63,19 +68,20 @@ def plot_func_rad(direc):
 
     fig, ax = plt.subplots()
     for lab, cts in dat.items():
+        if len(cts) == 0: continue
         # last run has truncated data
-        num_plot = len(cts) if len(cts) == len(RADIUSES) else (len(cts) - 1)
+        num_plot = len(cts) #if len(cts) == len(RADIUSES) else (len(cts) - 1)
         ax.plot(RADIUSES[:num_plot], y_map(cts[:num_plot]), label=PFX_MAP[lab], marker='o', ms=8, alpha=0.8)
 
     ax.axhline(y=y_map(INCIDENT_COUNTS), label=f'{INCIDENT_COUNTS} launched opticals', color='k')
-    ax.set_title(f'Counts vs launch radius, different finishes')
+    ax.set_title('Counts vs launch radius, different finishes')
     ax.set_ylabel('SiPM counts')
     # ax.set_ylabel('Proportion of opticals detected')
     ax.set_xlabel('Radius along $x$ (mm)')
-    ax.legend()
+    ax.legend()#loc=(0.05, 0.6))
     fig.tight_layout()
-    fig.savefig('fixed.pdf')
-    # plt.show()
+    # fig.savefig('fixed.pdf')
+    plt.show()
 
 
 if __name__ == '__main__': main()

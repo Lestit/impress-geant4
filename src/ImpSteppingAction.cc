@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <map>
+#include <G4Circle.hh>
+#include <G4Color.hh>
 #include <G4EventManager.hh>
 #include <G4OpBoundaryProcess.hh>
 #include <G4OpticalPhoton.hh>
@@ -7,6 +9,9 @@
 #include <G4SDManager.hh>
 #include <G4Step.hh>
 #include <G4Threading.hh>
+#include <G4VisAttributes.hh>
+#include <G4VMarker.hh>
+#include <G4VVisManager.hh>
 #include <Randomize.hh>
 
 #include <ImpGlobalConfigs.hh>
@@ -133,14 +138,28 @@ void ImpSteppingAction::processOptical(const G4Step* step)
     const auto* preVol = prePt? prePt->GetPhysicalVolume() : nullptr;
     const auto* postVol = postPt? postPt->GetPhysicalVolume() : nullptr;
 
-    const auto preName = preVol? preVol->GetName() : "";
-    const auto postName = postVol? postVol->GetName() : "";
+    const G4String preName = preVol? preVol->GetName() : "";
+    const G4String postName = postVol? postVol->GetName() : "";
     bool yesSilicon =
         G4StrUtil::contains(postName, SI_PHY_PFX) ||
         G4StrUtil::contains(preName, SI_PHY_PFX);
 
     if (postPt->GetStepStatus() == fGeomBoundary) {
         auto stat = boundary->GetStatus();
+        /* if (preName.find("hafx_teflon") != G4String::npos || postName.find("hafx_teflon") != G4String::npos) { */ 
+        /*     G4cout << "HIT THE TEFLON THING" << G4endl; */
+        /*     auto* visMan = G4VVisManager::GetConcreteInstance(); */
+        /*     if (visMan) { */
+        /*         G4Circle c(prePt->GetPosition()); */
+        /*         c.SetDiameter(G4VMarker::screen, 4); */
+        /*         c.SetFillStyle(G4Circle::filled); */
+        /*         G4VisAttributes a(G4Color(1, 1, 0)); */
+        /*         a.SetVisibility(true); */
+        /*         c.SetVisAttributes(a); */
+        /*         visMan->Draw(c); */
+        /*     } */
+        /*     else { G4cout << "NO VIS MANAGER" << G4endl; } */
+        /* } */
         switch (stat) {
             // detect it here bc it dies before it can actually register inside the detector
             case Detection:

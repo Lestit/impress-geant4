@@ -7,7 +7,6 @@ import common_csv
 def scatter_channels(channels, run_type, maxe, loglin):
     fig, ax = plt.subplots()
     common_csv.common_plot_cfg(fig, ax)
-    
 
 def main():
     if len(sys.argv) < 2:

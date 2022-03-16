@@ -494,12 +494,12 @@ void ImpHafxChannel::finishCrystalEdges()
     }
 
     // let Geant figure it out
-    auto edgeLut = edgeFinish.find("LUT") != std::string::npos;
-    auto backLut = backFinish.find("LUT") != std::string::npos;
-    if (teflonAirGap == 0 && (!backLut || !edgeLut)) {
+    if (teflonAirGap == 0) {
         return;
     }
 
+    auto edgeLut = edgeFinish.find("LUT") != std::string::npos;
+    auto backLut = backFinish.find("LUT") != std::string::npos;
     buildCrystalOpticalBorders(edgeFinish, backFinish, edgeLut, backLut);
 }
 

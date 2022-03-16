@@ -19,7 +19,6 @@ void ImpVHit::Draw()
     if (visMan == nullptr) return;
 
     G4Circle c(peekPosition());
-    //c.SetScreenDiameter(2);
     c.SetDiameter(G4VMarker::screen, 5);
 
     c.SetFillStyle(G4Circle::filled);
