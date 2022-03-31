@@ -78,10 +78,11 @@ def plot_func_rad(direc):
     ax.set_ylabel('SiPM counts')
     # ax.set_ylabel('Proportion of opticals detected')
     ax.set_xlabel('Radius along $x$ (mm)')
+    ax.set_ylim(0, 55000)
     ax.legend()#loc=(0.05, 0.6))
     fig.tight_layout()
-    # fig.savefig('fixed.pdf')
-    plt.show()
+    fig.savefig('fixed.pdf')
+    # plt.show()
 
 
 if __name__ == '__main__': main()
