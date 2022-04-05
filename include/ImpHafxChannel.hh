@@ -37,9 +37,10 @@ class ImpHafxChannel : public G4PVPlacement
         // as crystal becomes more fleshed out, update these
         static G4double thicknessNoAttenuator()
         {
-            auto crystalThick = ImpGlobalConfigs::instance().configOption<double>(
-                ImpGlobalConfigs::kCEBR3_LENGTH) * mm;
-            return crystalThick + AL_DEPTH_DELTA + LIGHT_GUIDE_THICKNESS + SI_THICKNESS;
+            const auto& igf = ImpGlobalConfigs::instance();
+            auto crystalThick = igf.configOption<double>(ImpGlobalConfigs::kCEBR3_LENGTH) * mm;
+            auto lgThick = igf.configOption<double>(ImpGlobalConfigs::kLIGHT_GUIDE_THICKNESS) * mm;
+            return crystalThick + AL_DEPTH_DELTA + lgThick + SI_THICKNESS;
         }
         static G4double diameter()
         { return WHOLE_DIAMETER; }
@@ -56,7 +57,7 @@ class ImpHafxChannel : public G4PVPlacement
         void attachAllDetectors();
 
     private:
-        static G4OpticalSurface* tefSurf();
+        void loadConfigVars();
 
         void buildCrystal();
         void attachCeBr3OpticalSurface();
@@ -77,6 +78,7 @@ class ImpHafxChannel : public G4PVPlacement
         void buildPaint();
         void attachPaintBoundarySurface(G4VPhysicalVolume* ppv, G4LogicalVolume* plv);
         void buildLightGuide();
+        void buildLightGuideWrap(const G4ThreeVector& translate);
 
         void buildSi();
         void attachSiOpticalSurface();
@@ -101,7 +103,7 @@ class ImpHafxChannel : public G4PVPlacement
 
         /* G4UnionSolid* tefSolid; */
         /* G4LogicalVolume* tefRingPlacement; // just the ring around the crystal */
-        G4LogicalVolume* tefLogVol;
+        /* G4LogicalVolume* tefLogVol; */
         /* G4PVPlacement* tefPlacement; */
         G4PVPlacement* tefRingPlacement;
         G4PVPlacement* tefCapPlacement;
@@ -114,7 +116,7 @@ class ImpHafxChannel : public G4PVPlacement
         G4Tubs* attCylinder;
         G4LogicalVolume* attLogVol;
         G4PVPlacement* attPlacement;
-        G4LogicalSkinSurface* attSkin;
+        /* G4LogicalSkinSurface* attSkin; */
 
         G4Tubs* qzCylinder;
         G4LogicalVolume* qzLogVol;
@@ -147,4 +149,8 @@ class ImpHafxChannel : public G4PVPlacement
         G4double cebr3Thickness;
         G4double teflonAirGap;
         G4double alHousingDepth;
+        G4double lightGuideThickness;
+        G4double siSpacing;
+        G4double siSideLength;
+        bool doBuildLightGuideReflector;
 };

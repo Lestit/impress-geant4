@@ -52,13 +52,10 @@ ImpHafxChannel::ImpHafxChannel(
     sensDetName(SI_SENS_DET_PFX + channelId),
     attenuatorWindowThickness(attenuatorWindowThickness)
 {
-    const auto& igf = ImpGlobalConfigs::instance();
-    cebr3Thickness = igf.configOption<double>(ImpGlobalConfigs::kCEBR3_LENGTH) * mm;
-    teflonAirGap = igf.configOption<double>(ImpGlobalConfigs::kAIR_GAP_THICKNESS) * um;
-    alHousingDepth = cebr3Thickness + AL_DEPTH_DELTA;
+    loadConfigVars();
 
     quartzAnchorCenter = G4ThreeVector(
-        0, 0, -thickness()/2 + QUARTZ_THICKNESS/2 + LIGHT_GUIDE_THICKNESS + SI_THICKNESS);
+        0, 0, -thickness()/2 + QUARTZ_THICKNESS/2 + lightGuideThickness + SI_THICKNESS);
     cebr3AnchorCenter = quartzAnchorCenter + G4ThreeVector(
         0, 0, QUARTZ_THICKNESS/2 + cebr3Thickness/2);
 
@@ -93,6 +90,21 @@ ImpHafxChannel::ImpHafxChannel(
 ImpHafxChannel::~ImpHafxChannel()
 {
     if (uLims) { delete uLims; uLims = nullptr; }
+}
+
+void ImpHafxChannel::loadConfigVars()
+{
+    const auto& igf = ImpGlobalConfigs::instance();
+    cebr3Thickness = igf.configOption<double>(ImpGlobalConfigs::kCEBR3_LENGTH) * mm;
+    alHousingDepth = cebr3Thickness + AL_DEPTH_DELTA;
+
+    teflonAirGap = igf.configOption<double>(ImpGlobalConfigs::kAIR_GAP_THICKNESS) * um;
+
+    lightGuideThickness = igf.configOption<double>(ImpGlobalConfigs::kLIGHT_GUIDE_THICKNESS) * mm;
+    doBuildLightGuideReflector = igf.configOption<bool>(ImpGlobalConfigs::kBUILD_LIGHT_GUIDE_REFLECTOR);
+
+    siSpacing = igf.configOption<double>(ImpGlobalConfigs::kSI_SPACING) * mm;
+    siSideLength = 3*siSpacing + 4*BROADCOM_FULL_LENGTH;
 }
 
 void ImpHafxChannel::buildCrystal()
@@ -221,7 +233,7 @@ void ImpHafxChannel::buildAlHousing()
 
     // account for attenuator window (and silicon at the back)
     G4ThreeVector alAnchorCenter(
-        0, 0, -attenuatorWindowThickness/2 + SI_THICKNESS/2 + LIGHT_GUIDE_THICKNESS/2);
+        0, 0, -attenuatorWindowThickness/2 + SI_THICKNESS/2 + lightGuideThickness/2);
     alPlacement = new G4PVPlacement(
         nullptr, alAnchorCenter, alLogVol, AL_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
@@ -318,7 +330,7 @@ void ImpHafxChannel::buildAlAttenuator()
 
 void ImpHafxChannel::buildLightGuide()
 {
-    const auto hxy = LIGHT_GUIDE_SIDE_LENGTH / 2, hz = LIGHT_GUIDE_THICKNESS / 2;
+    const auto hxy = LIGHT_GUIDE_SIDE_LENGTH / 2, hz = lightGuideThickness / 2;
     lightGuideBox = new G4Box(LG_BOX_PFX + channelId, hxy, hxy, hz);
 
     auto* lgMaterial = G4Material::GetMaterial(ImpMaterials::kPDMS);
@@ -329,6 +341,19 @@ void ImpHafxChannel::buildLightGuide()
     lightGuideLogVol = new G4LogicalVolume(
         lightGuideBox, lgMaterial, LG_LOG_PFX + channelId);
     lightGuideLogVol->SetVisAttributes(lgAtt);
+
+    const auto lgTranslate = quartzAnchorCenter + G4ThreeVector(
+        0, 0, -QUARTZ_THICKNESS/2 - lightGuideThickness/2);
+    lightGuidePlacement = new G4PVPlacement(
+        nullptr, lgTranslate, lightGuideLogVol, LG_PHY_PFX + channelId,
+        GetLogicalVolume(), false, 0);
+
+    buildLightGuideWrap(lgTranslate);
+}
+
+void ImpHafxChannel::buildLightGuideWrap(const G4ThreeVector& translate)
+{
+    const auto hxy = lightGuideBox->GetXHalfLength(), hz = lightGuideBox->GetZHalfLength();
 
     const auto wrapThick = TEFLON_THICKNESS;
     const auto gappedHxy = hxy + teflonAirGap/2;
@@ -341,7 +366,7 @@ void ImpHafxChannel::buildLightGuide()
         LG_WRAP_SOL_PFX + "_rim_sliced" + channelId, lightGuideWrapToBeCutoutBox, sliceOut);
 
     // "siHxy" is kind of a funny name haha
-    const auto siHxy = SI_SIDE_LENGTH / 2, siHz = SI_THICKNESS / 2;
+    const auto siHxy = siSideLength / 2, siHz = SI_THICKNESS / 2;
     auto* sliceOutSi = new G4Box("", siHxy, siHxy, siHz + 1 * mm);
     auto* capToSlice = new G4Box(
         "", gappedHxyPlusThick, gappedHxyPlusThick, wrapThick/2);
@@ -352,31 +377,33 @@ void ImpHafxChannel::buildLightGuide()
     lightGuideWrapSolid = new G4UnionSolid(
         LG_WRAP_SOL_PFX + channelId, slicedRim, slicedCap, nullptr, displaceWrapPieces);
 
-    auto* ptfe = G4NistManager::Instance()
-        ->FindOrBuildMaterial(ImpMaterials::kNIST_TEFLON);
-    lightGuideWrapLogVol = new G4LogicalVolume(
-        lightGuideWrapSolid, ptfe, LG_WRAP_LOG_PFX + channelId);
-    attachTeflonOpticalSurface(lightGuideWrapLogVol);
-
     G4VisAttributes wrAtt;
     wrAtt.SetColor(1, 0, 0, 0.1);
-    wrAtt.SetVisibility(true);
+    if (doBuildLightGuideReflector) {
+        auto* ptfe = G4NistManager::Instance()
+            ->FindOrBuildMaterial(ImpMaterials::kNIST_TEFLON);
+        lightGuideWrapLogVol = new G4LogicalVolume(
+            lightGuideWrapSolid, ptfe, LG_WRAP_LOG_PFX + channelId);
+        attachTeflonOpticalSurface(lightGuideWrapLogVol);
+    }
+    else {
+        auto* vac = G4Material::GetMaterial(ImpMaterials::kVACUUM);
+        lightGuideWrapLogVol = new G4LogicalVolume(
+            lightGuideWrapSolid, vac, LG_WRAP_LOG_PFX + channelId);
+    }
+
+    wrAtt.SetVisibility(doBuildLightGuideReflector);
     lightGuideWrapLogVol->SetVisAttributes(wrAtt);
 
-    const auto lgTranslate = quartzAnchorCenter + G4ThreeVector(
-        0, 0, -QUARTZ_THICKNESS/2 - LIGHT_GUIDE_THICKNESS/2);
-    lightGuidePlacement = new G4PVPlacement(
-        nullptr, lgTranslate, lightGuideLogVol, LG_PHY_PFX + channelId,
-        GetLogicalVolume(), false, 0);
     lightGuideWrapPlacement = new G4PVPlacement(
-        nullptr, lgTranslate, lightGuideWrapLogVol, LG_WRAP_PHY_PFX + channelId,
+        nullptr, translate, lightGuideWrapLogVol, LG_WRAP_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
 }
 
 void ImpHafxChannel::buildPaint()
 {
     const auto radius = diameter() / 2;
-    const auto thick = 1 * mm;
+    const auto thick = 1 * um;
     auto* baseCyl = new G4Tubs(
         PAINT_CYL_PFX + channelId, 0, radius, thick/2,
         0, 2*pi);
@@ -403,12 +430,12 @@ void ImpHafxChannel::buildPaint()
 void ImpHafxChannel::buildSi()
 {
     const auto halfxy = BROADCOM_FULL_LENGTH / 2, halfz = SI_THICKNESS / 2;
-    const auto deltaxy = BROADCOM_FULL_LENGTH + SI_SPACING;
+    const auto deltaxy = BROADCOM_FULL_LENGTH + siSpacing;
     /* siBox = new G4Box(SI_BOX_PFX + channelId, half_xy, half_xy, half_z); */
     auto* si = G4NistManager::Instance()
         ->FindOrBuildMaterial(ImpMaterials::kNIST_SI);
     auto baseTranslate = quartzAnchorCenter + G4ThreeVector(
-        0, 0, -QUARTZ_THICKNESS/2 - LIGHT_GUIDE_THICKNESS - SI_THICKNESS/2);
+        0, 0, -QUARTZ_THICKNESS/2 - lightGuideThickness - SI_THICKNESS/2);
     G4VisAttributes siAttrs;
     siAttrs.SetColor(0, 0, 1, 0.3);
     siAttrs.SetVisibility(true);

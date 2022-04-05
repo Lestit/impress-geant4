@@ -91,12 +91,11 @@ namespace {
     static constexpr G4double QUARTZ_DIAMETER = 40.5 * mm;
 
     // to be updated
-    static constexpr G4double LIGHT_GUIDE_THICKNESS = 0.25 * inch;
+    /* static constexpr G4double LIGHT_GUIDE_THICKNESS = 0.25 * inch; */
     // guess for now
     static constexpr G4double LIGHT_GUIDE_SIDE_LENGTH = 1 * inch;
-
     static constexpr G4double SI_THICKNESS = 0.3 * mm;
     static constexpr G4double BROADCOM_FULL_LENGTH = 3.88 * mm;
-    static constexpr G4double SI_SPACING = 0.25 * mm;
-    static constexpr G4double SI_SIDE_LENGTH = 3*SI_SPACING + 4*BROADCOM_FULL_LENGTH;
+    /* static constexpr G4double SI_SPACING = 0.25 * mm; */
+    /* static constexpr G4double SI_SIDE_LENGTH = 3*SI_SPACING + 4*BROADCOM_FULL_LENGTH; */
 }

@@ -1,4 +1,5 @@
 #include "impress.hh"
+/* #define RUN_UNTIL_DIE */
 
 void initRandom()
 {
@@ -74,6 +75,7 @@ int main(int argc, char* argv[])
 
     auto* uiMan = G4UImanager::GetUIpointer();
 
+    uiMan->ApplyCommand("/process/had/verbose 0");
     G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", doScintillate);
     G4OpticalParameters::Instance()->SetProcessActivation("Cerenkov", doScintillate);
 
@@ -96,6 +98,12 @@ int main(int argc, char* argv[])
         std::stringstream ss;
         ss << "/control/execute " << argv[1];
         uiMan->ApplyCommand(ss.str());
+#ifdef RUN_UNTIL_DIE
+        while (true) {
+            G4cout << "RUN AGAIN" << G4endl;
+            uiMan->ApplyCommand("/run/beamOn 10000");
+        }
+#endif
     }
 
     delete runMan;

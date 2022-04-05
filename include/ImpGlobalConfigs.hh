@@ -47,6 +47,9 @@ class ImpGlobalConfigs
             kCEBR3_EDGE_FINISH,
             kCEBR3_BACK_FINISH,
             kOPTICAL_DRAW_FREQUENCY,
+            kLIGHT_GUIDE_THICKNESS,
+            kBUILD_LIGHT_GUIDE_REFLECTOR,
+            kSI_SPACING,
             kSAVE_PREFIX;
 
         enum class ParseType { vBOOL, vDOUBLE, vINT, vSTRING };

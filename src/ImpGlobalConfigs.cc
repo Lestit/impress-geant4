@@ -15,24 +15,30 @@ const std::unordered_map<std::string, G4double> ImpGlobalConfigs::ATTENUATOR_THI
     {"test", 5 * mm}
 };
 
-const std::string ImpGlobalConfigs::kSAVE_SI_POSITIONS      = "save-si-positions";
-const std::string ImpGlobalConfigs::kSAVE_SI_ENERGIES       = "save-si-energies";
-const std::string ImpGlobalConfigs::kAIR_GAP_THICKNESS      = "air-gap-thickness";
-const std::string ImpGlobalConfigs::kCEBR3_LENGTH           = "cebr3-length";
-const std::string ImpGlobalConfigs::kCEBR3_EDGE_FINISH      = "cebr3-edge-finish";
-const std::string ImpGlobalConfigs::kCEBR3_BACK_FINISH      = "cebr3-back-finish";
-const std::string ImpGlobalConfigs::kOPTICAL_DRAW_FREQUENCY = "optical-photon-draw-freq";
-const std::string ImpGlobalConfigs::kSAVE_PREFIX            = "data-folder-prefix";
+const std::string ImpGlobalConfigs::kSAVE_SI_POSITIONS            = "save-si-positions";
+const std::string ImpGlobalConfigs::kSAVE_SI_ENERGIES             = "save-si-energies";
+const std::string ImpGlobalConfigs::kAIR_GAP_THICKNESS            = "air-gap-thickness";
+const std::string ImpGlobalConfigs::kCEBR3_LENGTH                 = "cebr3-length";
+const std::string ImpGlobalConfigs::kCEBR3_EDGE_FINISH            = "cebr3-edge-finish";
+const std::string ImpGlobalConfigs::kCEBR3_BACK_FINISH            = "cebr3-back-finish";
+const std::string ImpGlobalConfigs::kOPTICAL_DRAW_FREQUENCY       = "optical-photon-draw-freq";
+const std::string ImpGlobalConfigs::kLIGHT_GUIDE_THICKNESS        = "light-guide-thickness";
+const std::string ImpGlobalConfigs::kBUILD_LIGHT_GUIDE_REFLECTOR  = "build-light-guide-reflector";
+const std::string ImpGlobalConfigs::kSI_SPACING                   = "si-spacing";
+const std::string ImpGlobalConfigs::kSAVE_PREFIX                  = "data-folder-prefix";
 
 const std::unordered_map<std::string, ImpGlobalConfigs::ParseType> ImpGlobalConfigs::KEY_TYPE_PARSE = {
-    {kSAVE_SI_POSITIONS,      ImpGlobalConfigs::ParseType::vBOOL},
-    {kSAVE_SI_ENERGIES,       ImpGlobalConfigs::ParseType::vBOOL},
-    {kAIR_GAP_THICKNESS,      ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kCEBR3_LENGTH,           ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kCEBR3_EDGE_FINISH,      ImpGlobalConfigs::ParseType::vSTRING},
-    {kCEBR3_BACK_FINISH,      ImpGlobalConfigs::ParseType::vSTRING},
-    {kOPTICAL_DRAW_FREQUENCY, ImpGlobalConfigs::ParseType::vINT},
-    {kSAVE_PREFIX,            ImpGlobalConfigs::ParseType::vSTRING}
+    {kSAVE_SI_POSITIONS,            ImpGlobalConfigs::ParseType::vBOOL},
+    {kSAVE_SI_ENERGIES,             ImpGlobalConfigs::ParseType::vBOOL},
+    {kAIR_GAP_THICKNESS,            ImpGlobalConfigs::ParseType::vDOUBLE},
+    {kCEBR3_LENGTH,                 ImpGlobalConfigs::ParseType::vDOUBLE},
+    {kCEBR3_EDGE_FINISH,            ImpGlobalConfigs::ParseType::vSTRING},
+    {kCEBR3_BACK_FINISH,            ImpGlobalConfigs::ParseType::vSTRING},
+    {kOPTICAL_DRAW_FREQUENCY,       ImpGlobalConfigs::ParseType::vINT},
+    {kLIGHT_GUIDE_THICKNESS,        ImpGlobalConfigs::ParseType::vDOUBLE},
+    {kBUILD_LIGHT_GUIDE_REFLECTOR, ImpGlobalConfigs::ParseType::vBOOL},
+    {kSI_SPACING,                   ImpGlobalConfigs::ParseType::vDOUBLE},
+    {kSAVE_PREFIX,                  ImpGlobalConfigs::ParseType::vSTRING}
 };
 
 const ImpGlobalConfigs& ImpGlobalConfigs::instance()
@@ -48,19 +54,6 @@ ImpGlobalConfigs::ImpGlobalConfigs()
 
 ImpGlobalConfigs::~ImpGlobalConfigs()
 { }
-
-/* template<class T> */
-/* T ImpGlobalConfigs::configOption(const std::string& key) const */
-/* { */
-/*     try { */
-/*         return std::any_cast<T>(configMap.at(key)); */
-/*     } catch (std::out_of_range& e) { */
-/*         std::cerr */
-/*             << "key was: " << key << std::endl */
-/*             << "emsg:    " << e.what() << std::endl; */
-/*         throw; */
-/*     } */
-/* } */
 
 void ImpGlobalConfigs::loadConfig()
 {

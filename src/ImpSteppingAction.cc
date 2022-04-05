@@ -23,7 +23,7 @@
 
 namespace {
     G4Mutex optMux = G4MUTEX_INITIALIZER;
-    std::map<size_t, const char*> optProcLookup = {
+    static const std::map<size_t, const char*> optProcLookup = {
         {0, "Undefined"},
         {1, "Transmission"},
         {2, "FresnelRefraction"},
@@ -87,7 +87,9 @@ namespace {
         }
 
         if (boundary == nullptr) {
-            G4cout << "******** issue finding optical boundary" << G4endl;
+            G4Exception(
+                "ImpSteppingAction/findOpticalBoundary",
+                "fob1", RunMustBeAborted, "issue finding optical boundary");
         }
 
         return boundary; 
@@ -182,7 +184,7 @@ void ImpSteppingAction::processOptical(const G4Step* step)
                     const auto n = std::string(
                         step? step->GetTrack()? step->GetTrack()->GetVolume()?
                         step->GetTrack()->GetVolume()->GetName() : "" : "" : "");
-                    G4cout << "something weird: " << optProcLookup[stat] << G4endl
+                    G4cout << "something weird: " << optProcLookup.at(stat) << G4endl
                            << "in volume " << n << G4endl
                            << "pre volume " << preName << G4endl
                            << "post volume " << postName << G4endl;
