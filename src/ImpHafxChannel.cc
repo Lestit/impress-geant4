@@ -594,7 +594,7 @@ void ImpHafxChannel::buildCrystalOpticalBorders(
 
 static G4OpticalSurface* siOpticalSurface()
 {
-    static G4OpticalSurface* ss = nullptr;
+    static G4ThreadLocal G4OpticalSurface* ss = nullptr;
     if (ss) return ss;
     ss = new G4OpticalSurface(SI_SUR_PFX);
     ss->SetMaterialPropertiesTable(
@@ -609,7 +609,7 @@ static G4OpticalSurface* siOpticalSurface()
 
 static G4OpticalSurface* teflonOpticalSurface()
 {
-    static G4OpticalSurface* ts = nullptr;
+    static G4ThreadLocal G4OpticalSurface* ts = nullptr;
     if (ts) return ts;
 
     ts = new G4OpticalSurface(TEFLON_SURF);
@@ -628,7 +628,7 @@ static G4OpticalSurface* teflonOpticalSurface()
 static G4OpticalSurface* alOpticalSurface()
 {
     /* G4AutoLock l(&alMux); */
-    static G4OpticalSurface* as = nullptr;
+    static G4ThreadLocal G4OpticalSurface* as = nullptr;
     if (as) return as;
     as = new G4OpticalSurface(AL_SURF_PFX);
 
@@ -645,7 +645,7 @@ static G4OpticalSurface* alOpticalSurface()
 
 static G4OpticalSurface* beOpticalSurface()
 {
-    static G4OpticalSurface* bs = nullptr;
+    static G4ThreadLocal G4OpticalSurface* bs = nullptr;
     if (bs) return bs;
     bs = new G4OpticalSurface(BE_SUR_PFX);
     bs->SetMaterialPropertiesTable(
@@ -659,7 +659,7 @@ static G4OpticalSurface* beOpticalSurface()
 
 static G4OpticalSurface* qzOpticalSurface()
 {
-    static G4OpticalSurface* qs = nullptr;
+    static G4ThreadLocal G4OpticalSurface* qs = nullptr;
     if (qs) return qs;
     qs = new G4OpticalSurface(QZ_SUR_PFX);
     qs->SetMaterialPropertiesTable(
@@ -674,7 +674,7 @@ static G4OpticalSurface* qzOpticalSurface()
 
 static G4OpticalSurface* cebr3OpticalSurface()
 {
-    static G4OpticalSurface* sur = nullptr;
+    static G4ThreadLocal G4OpticalSurface* sur = nullptr;
     if (sur) return sur;
     sur = new G4OpticalSurface(CRYSTAL_SUR_PFX);
     sur->SetMaterialPropertiesTable(
@@ -688,7 +688,7 @@ static G4OpticalSurface* cebr3OpticalSurface()
 
 static G4OpticalSurface* paintSurface()
 {
-    static G4OpticalSurface* sur = nullptr;
+    static G4ThreadLocal G4OpticalSurface* sur = nullptr;
     if (sur) return sur;
     sur = new G4OpticalSurface(PAINT_SUR_PFX);
     sur->SetModel(unified);
