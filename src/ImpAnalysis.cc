@@ -189,7 +189,11 @@ void ImpAnalysis::saveSiHits(const std::vector<ImpVHit*>* vec)
     siOut.file() << vec->size();
     if (saveSiPositions) {
         for (const auto* h : *vec) {
-            siOut.file() << ' ' << h->peekPosition();
+            const auto& p = h->peekPosition();
+            const auto tofa = h->peekArrivalTime();
+            siOut.file()
+                << " (" << p.x()/mm << ',' << p.y()/mm << ',' << p.z()/mm
+                << ',' << tofa/ns << ')';
         }
     }
     siOut.file() << std::endl;
