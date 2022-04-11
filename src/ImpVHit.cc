@@ -6,8 +6,9 @@
 #include <G4VisAttributes.hh>
 #include <G4VVisManager.hh>
 
-ImpVHit::ImpVHit(const G4String& channelId, const G4ThreeVector& position) :
+ImpVHit::ImpVHit(const G4String& channelId, const G4ThreeVector& position, G4double arrivalTime) :
     assocChannelId(channelId),
+    arrivalTime(arrivalTime),
     position(position)
 { }
 

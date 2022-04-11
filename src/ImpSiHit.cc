@@ -10,8 +10,8 @@ namespace
 }
 
 ImpSiHit::ImpSiHit(
-    const G4String& channelId, const G4ThreeVector& position, G4double depositedEnergy) :
-        ImpVHit(channelId, position), depositedEnergy(depositedEnergy)
+    const G4String& channelId, const G4ThreeVector& position, G4double arrivalTime, G4double depositedEnergy) :
+        ImpVHit(channelId, position, arrivalTime), depositedEnergy(depositedEnergy)
 { }
 
 ImpSiHit::~ImpSiHit()
@@ -24,6 +24,7 @@ void ImpSiHit::Print()
         << "=== Begin SiCrystalHit ===" << G4endl
         << "Energy deposited: " << std::setw(7) << G4BestUnit(depositedEnergy, "Energy") << G4endl
         << "Position:         " << std::setw(7) << G4BestUnit(position, "Length") << G4endl
+        << "Arrival time:     " << std::setw(7) << G4BestUnit(arrivalTime, "Time") << G4endl
         << "Channel ID:       " << std::setw(7) << assocChannelId << G4endl
         << "=== End SiCrystalHit ===" << G4endl;
     G4cout.flags(f);
@@ -35,6 +36,7 @@ bool ImpSiHit::operator==(const ImpSiHit& rhs)
     return
         position == rhs.peekPosition() &&
         assocChannelId == rhs.peekAssociatedChannelId() &&
+        arrivalTime == rhs.peekArrivalTime() &&
         depositedEnergy == rhs.peekDepositedEnergy();
 }
 
@@ -42,6 +44,7 @@ const ImpSiHit& ImpSiHit::operator=(const ImpSiHit& rhs)
 {
     position = rhs.peekPosition();
     assocChannelId = rhs.peekAssociatedChannelId();
+    arrivalTime = rhs.peekArrivalTime();
     depositedEnergy = rhs.peekDepositedEnergy();
     return *this;
 }

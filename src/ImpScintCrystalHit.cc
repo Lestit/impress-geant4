@@ -10,7 +10,7 @@ namespace {
 
 ImpScintCrystalHit::ImpScintCrystalHit(
         G4double depositedEnergy, const G4String& channelId, const G4ThreeVector& position) :
-    ImpVHit(channelId, position),
+    ImpVHit(channelId, position, 0),
     depositedEnergy(depositedEnergy)
 { }
 

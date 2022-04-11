@@ -8,7 +8,9 @@
 class ImpSiHit : public ImpVHit
 {
     public:
-        ImpSiHit(const G4String& channelId, const G4ThreeVector& position, G4double depositedEnergy);
+        ImpSiHit(
+            const G4String& channelId, const G4ThreeVector& position,
+            G4double arrivalTime, G4double depositedEnergy);
         ~ImpSiHit();
         const ImpSiHit& operator=(const ImpSiHit& rhs);
         bool operator==(const ImpSiHit& rhs);
