@@ -26,6 +26,7 @@ const std::string ImpGlobalConfigs::kLIGHT_GUIDE_THICKNESS        = "light-guide
 const std::string ImpGlobalConfigs::kBUILD_LIGHT_GUIDE_REFLECTOR  = "build-light-guide-reflector";
 const std::string ImpGlobalConfigs::kSI_SPACING                   = "si-spacing";
 const std::string ImpGlobalConfigs::kSAVE_PREFIX                  = "data-folder-prefix";
+const std::string ImpGlobalConfigs::kSCINT_TIME_CONST             = "scint-time-const";
 
 const std::unordered_map<std::string, ImpGlobalConfigs::ParseType> ImpGlobalConfigs::KEY_TYPE_PARSE = {
     {kSAVE_SI_POSITIONS,            ImpGlobalConfigs::ParseType::vBOOL},
@@ -36,9 +37,10 @@ const std::unordered_map<std::string, ImpGlobalConfigs::ParseType> ImpGlobalConf
     {kCEBR3_BACK_FINISH,            ImpGlobalConfigs::ParseType::vSTRING},
     {kOPTICAL_DRAW_FREQUENCY,       ImpGlobalConfigs::ParseType::vINT},
     {kLIGHT_GUIDE_THICKNESS,        ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kBUILD_LIGHT_GUIDE_REFLECTOR, ImpGlobalConfigs::ParseType::vBOOL},
+    {kBUILD_LIGHT_GUIDE_REFLECTOR,  ImpGlobalConfigs::ParseType::vBOOL},
     {kSI_SPACING,                   ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kSAVE_PREFIX,                  ImpGlobalConfigs::ParseType::vSTRING}
+    {kSAVE_PREFIX,                  ImpGlobalConfigs::ParseType::vSTRING},
+    {kSCINT_TIME_CONST,             ImpGlobalConfigs::ParseType::vDOUBLE}
 };
 
 const ImpGlobalConfigs& ImpGlobalConfigs::instance()

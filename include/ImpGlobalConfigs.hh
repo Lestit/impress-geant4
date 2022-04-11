@@ -50,7 +50,8 @@ class ImpGlobalConfigs
             kLIGHT_GUIDE_THICKNESS,
             kBUILD_LIGHT_GUIDE_REFLECTOR,
             kSI_SPACING,
-            kSAVE_PREFIX;
+            kSAVE_PREFIX,
+            kSCINT_TIME_CONST;
 
         enum class ParseType { vBOOL, vDOUBLE, vINT, vSTRING };
         static const std::unordered_map<std::string, ParseType> KEY_TYPE_PARSE;
