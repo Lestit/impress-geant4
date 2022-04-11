@@ -1,5 +1,7 @@
 #include "ImpMaterials.hh"
 
+#include <ImpGlobalConfigs.hh>
+
 // forward declare here; don't put in header
 namespace ImpMaterials {
     void configureTeflon();
@@ -109,7 +111,9 @@ namespace ImpMaterials
         scintPt->AddProperty(
             kONLY_SCINT_COMPONENT, CEBR3_SCINT_OPTICAL_ENERGIES,
             CEBR3_SCINT_OPTICAL_INTENSITIES, useSpline);
-        scintPt->AddConstProperty(kONLY_TIME_CONSTANT, CEBR3_DECAY_TIME_CONSTANT);
+        scintPt->AddConstProperty(
+            kONLY_TIME_CONSTANT,
+            ImpGlobalConfigs::instance().configOption<double>(ImpGlobalConfigs::kSCINT_TIME_CONST) * ns);
 
         // # of photons emitted = RESOLUTION_SCALE * sqrt(mean # of photons)
         // TODO: modify source to make energy resolution energy-dependent

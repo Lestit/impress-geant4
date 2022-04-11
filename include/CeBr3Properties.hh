@@ -27,7 +27,7 @@ namespace ImpMaterials
     static const G4double CEBR3_SCINT_RESLN_SCALE = 1;
     // Quarati et al (not encapsulated)
     static const G4double CEBR3_SCINT_YIELD = 60000 / MeV;
-    static const G4double CEBR3_DECAY_TIME_CONSTANT = 20 * ns;
+    /* static const G4double CEBR3_DECAY_TIME_CONSTANT = 20 * ns; */
 
     // Quarati et al, 2.5mm thickness
     const std::vector<G4double> CEBR3_SCINT_OPTICAL_ENERGIES = {
