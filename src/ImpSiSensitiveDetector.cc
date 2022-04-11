@@ -38,7 +38,7 @@ Initialize(G4HCofThisEvent* hcote)
 }
 
 G4bool ImpSiSensitiveDetector::
-ProcessHits(G4Step* step, G4TouchableHistory*)
+ProcessHits(G4Step*, G4TouchableHistory*)
 {
     /* G4cout << "*** in optical" << G4endl; */
     // with 100% efficiency hits don't really register...
@@ -51,12 +51,14 @@ ProcessHits(G4Step* step, G4TouchableHistory*)
 void ImpSiSensitiveDetector::
 processOptical(const G4Step* step)
 {
-    /* G4cout << "*** in optical" << G4endl; */
     auto edep = step->GetTotalEnergyDeposit();
     if (edep == 0)
         return;
 
-    auto pos = step->GetPostStepPoint()->GetPosition(); //(step->GetPreStepPoint()->GetPosition() + step->GetPostStepPoint()->GetPosition()) / 2;
-    auto* hit = new ImpSiHit(channelId, pos, edep);
+    auto pos = step->GetPostStepPoint()->GetPosition();
+    // we want GlobalTime because it's the time since the last *event* started!
+    // LocalTime is the time since the track was created (we don't want this)
+    auto t = step->GetPostStepPoint()->GetGlobalTime();
+    auto* hit = new ImpSiHit(channelId, pos, t, edep);
     hitsCollection->insert(hit);
 }
