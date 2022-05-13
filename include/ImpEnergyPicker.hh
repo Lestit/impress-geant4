@@ -21,7 +21,7 @@ class ImpEnergyPicker
 {
     public:
         enum class DistributionType {
-            flare, mono, flat, element,
+            flare, mono, flat,
             gps, undefined };
 
         ImpEnergyPicker(const ImpEnergyPicker& other);
@@ -42,7 +42,6 @@ class ImpEnergyPicker
         { return distrType; }
 
         void updateFlareSize(const std::string& fs);
-        void updateElement(const std::string& elt);
         void updateMonoEnergy(long double mono)
         { monoEnergy = mono; }
         void updateFlatEnergyBounds(long double start, long double end)
@@ -51,7 +50,6 @@ class ImpEnergyPicker
         long double pickEnergy();
     private:
         long double pickFlare();
-        long double pickElement();
         long double pickFlat()
         {
             auto diff = flatEnd - flatStart;
@@ -73,8 +71,6 @@ class ImpEnergyPicker
 
         std::vector<long double> flareEnergyVec;
         std::vector<long double> flareEnergyCdf;
-
-        std::array<long double, NUM_O1_CDF> eltEnergyO1Cdf;
 
         std::mt19937_64 rng;
         std::uniform_real_distribution<long double> realDis;

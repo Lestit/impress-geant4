@@ -32,15 +32,12 @@ target_link_libraries(${EXC_OUT} ${Geant4_LIBRARIES})
 # file(COPY "flare-data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/data-out")
 
-# copy flare CDF tables
-file(COPY "data-tables/flare-cdfs" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
-# copy element spectrum tables
-file(COPY "data-tables/element-intens" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
-# copy config file
-file(COPY "impress.conf" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
-
-# copy macros
-# file(COPY macros DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
-file(CREATE_LINK "${CMAKE_BINARY_DIR}/../macros" "${CMAKE_CURRENT_BINARY_DIR}/macros" SYMBOLIC)
+# change copies to symlinks
+# flare CDF tables
+file(CREATE_LINK "${CMAKE_SOURCE_DIR}/data-tables/flare-cdfs" "${CMAKE_CURRENT_BINARY_DIR}/flare-cdfs" SYMBOLIC)
+# config file
+file(CREATE_LINK "${CMAKE_SOURCE_DIR}/impress.conf" "${CMAKE_CURRENT_BINARY_DIR}/impress.conf" SYMBOLIC)
+# macros
+file(CREATE_LINK "${CMAKE_SOURCE_DIR}/macros" "${CMAKE_CURRENT_BINARY_DIR}/macros" SYMBOLIC)
 
 add_compile_options(-Wall -Wextra -Wpedantic -pedantic -Werror)

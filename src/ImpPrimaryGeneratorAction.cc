@@ -48,12 +48,6 @@ void ImpPrimaryGeneratorAction::GeneratePrimaries(G4Event* evt)
         gps->GeneratePrimaryVertex(evt);
         e = gps->GetParticleEnergy();
     }
-    else if (energyPicker->peekDistributionType() == dt::element) {
-        gps->GetCurrentSource()
-            ->GetEneDist()
-            ->SetMonoEnergy(e);
-        gps->GeneratePrimaryVertex(evt);
-    }
     else if (pointPicker) {
         gun->SetParticlePosition(pointPicker->pickPoint());
         gun->SetParticleEnergy(e);

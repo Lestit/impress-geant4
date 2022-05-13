@@ -12,14 +12,12 @@ ImpEnergyPickerMessenger::distrBackwards = {
     {ImpEnergyPickerMessenger::dtype::flat, "flat"},
     {ImpEnergyPickerMessenger::dtype::flare, "flare"},
     {ImpEnergyPickerMessenger::dtype::gps, "gps"},
-    {ImpEnergyPickerMessenger::dtype::element, "element"}
 };
 
 ImpEnergyPickerMessenger::ImpEnergyPickerMessenger(ImpEnergyPicker* ePicker)
         : ePicker(ePicker),
     impDir(new G4UIdirectory(IMP_DIR_STR)),
     flareEnergyCmd(new G4UIcmdWithAString(FLARE_ENE_STR, this)),
-    elementEnergyCmd(new G4UIcmdWithAString(ELT_ENE_STR, this)),
     monoEnergyCmd(new G4UIcmdWithADoubleAndUnit(MONO_ENE_STR, this)),
     flatEnergyLowCmd(new G4UIcmdWithADoubleAndUnit(FLAT_ENE_LOW_STR, this)),
     flatEnergyHighCmd(new G4UIcmdWithADoubleAndUnit(FLAT_ENE_UPP_STR,this)),
@@ -30,10 +28,6 @@ ImpEnergyPickerMessenger::ImpEnergyPickerMessenger(ImpEnergyPicker* ePicker)
     flareEnergyCmd->SetParameterName(FLARE_ENE_PRM, false);
     flareEnergyCmd->SetDefaultValue("x1");
     flareEnergyCmd->SetCandidates(ALLOWED_FLARES);
-
-    elementEnergyCmd->SetParameterName(ELT_ENE_PRM, false);
-    elementEnergyCmd->SetDefaultValue("ba133");
-    elementEnergyCmd->SetCandidates(ALLOWED_ELEMENTS);
 
     distributionTypeCmd->SetParameterName(DISTR_TYPE_PARM, false);
     distributionTypeCmd->SetDefaultValue("mono");
@@ -56,7 +50,6 @@ ImpEnergyPickerMessenger::~ImpEnergyPickerMessenger()
 {
     SAFE_DELETE(impDir);
     SAFE_DELETE(flareEnergyCmd);
-    SAFE_DELETE(elementEnergyCmd);
     SAFE_DELETE(monoEnergyCmd);
     SAFE_DELETE(flatEnergyLowCmd);
     SAFE_DELETE(flatEnergyHighCmd);
@@ -70,13 +63,11 @@ void ImpEnergyPickerMessenger::SetNewValue(
         distrType = newValues == "mono" ? dtype::mono       : 
                     newValues == "flat" ? dtype::flat       :
                     newValues == "gps"  ? dtype::gps        :
-                    newValues == "element" ? dtype::element : dtype::flare;
+                    dtype::flare;
         ePicker->updateDistributionType(distrType);
     }
     else if (cmd == flareEnergyCmd)
         processFlare(newValues);
-    else if (cmd == elementEnergyCmd)
-        processElement(newValues);
     else if (cmd == flatEnergyLowCmd)
         processFlatLow(newValues);
     else if (cmd == flatEnergyHighCmd)
@@ -89,8 +80,6 @@ G4String ImpEnergyPickerMessenger::GetCurrentValue(G4UIcommand *cmd)
 {
     if (cmd == flareEnergyCmd)
         return flareSize;
-    else if (cmd == elementEnergyCmd)
-        return isotopeName;
     else if (cmd == monoEnergyCmd)
         return monoEnergyCmd->ConvertToString(G4double(mono));
     else if (cmd == flatEnergyLowCmd)
@@ -108,13 +97,6 @@ void ImpEnergyPickerMessenger::processFlare(const G4String& nv)
     checkType(dtype::flare, "Not using flare distribution");
     flareSize = nv;
     ePicker->updateFlareSize(flareSize);
-}
-
-void ImpEnergyPickerMessenger::processElement(const G4String& nv)
-{
-    checkType(dtype::element, "Not using element distribution");
-    isotopeName = nv;
-    ePicker->updateElement(isotopeName);
 }
 
 void ImpEnergyPickerMessenger::processFlatLow(const G4String& nv)

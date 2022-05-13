@@ -107,17 +107,6 @@ void testFlat(ImpEnergyPicker& p, long double start, long double end)
     }
 }
 
-void testElement(ImpEnergyPicker& p, const std::string& eltName)
-{
-    p.updateDistributionType(ImpEnergyPicker::DistributionType::element);
-    p.updateElement(eltName);
-    const std::size_t nruns = 30;
-    for (std::size_t i = 0; i < nruns; ++i)
-    {
-        std::cout << std::setprecision(8) << p.pickEnergy() / keV << std::endl;
-    }
-}
-
 int main()
 {
     /* long double monoEng = 50 * keV; */
@@ -132,7 +121,6 @@ int main()
     /* ep.updateFlatEnergyBounds(start, end); */
     /* testFlat(ep, start, end); */
 
-    testElement(ep, "ba133");
     /* testUpdates(); */
     /* testAssignCopy(); */
     return 0;
