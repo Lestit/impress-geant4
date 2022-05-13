@@ -8,11 +8,11 @@
 const std::string ImpGlobalConfigs::CFG_FN = "impress.conf";
 
 const std::unordered_map<std::string, G4double> ImpGlobalConfigs::ATTENUATOR_THICKNESSES = {
-    {"c1", 00.000 * um},
-    {"m1", 60.000 * um},
-    {"m5", 210.00 * um},
-    {"x1", 340.00 * um},
-    {"test", 5 * mm}
+    {"c1",   00.000 * um},
+    {"m1",   60.000 * um},
+    {"m5",   210.00 * um},
+    {"x1",   340.00 * um},
+    {"test", 5.0000 * mm}
 };
 
 const std::string ImpGlobalConfigs::kSAVE_SI_POSITIONS            = "save-si-positions";

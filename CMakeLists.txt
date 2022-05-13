@@ -40,6 +40,7 @@ file(COPY "data-tables/element-intens" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/
 file(COPY "impress.conf" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 
 # copy macros
-file(COPY macros DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+# file(COPY macros DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+file(CREATE_LINK "${CMAKE_BINARY_DIR}/../macros" "${CMAKE_CURRENT_BINARY_DIR}/macros" SYMBOLIC)
 
 add_compile_options(-Wall -Wextra -Wpedantic -pedantic -Werror)
