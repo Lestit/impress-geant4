@@ -1,0 +1,20 @@
+/impe/distributionType gps
+
+/gps/particle gamma
+/gps/direction 0 0 -1
+
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/centre 0 0 3 cm
+# CeBr3 crystal radius (smaller than enclosure)
+/gps/pos/radius 18.5 mm
+
+# flat distribution
+/gps/ene/type Lin
+/gps/ene/gradient 0
+/gps/ene/intercept 1
+
+/gps/ene/min 1 keV
+/gps/ene/max 300 keV
+
+/run/beamOn 500000

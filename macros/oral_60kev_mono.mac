@@ -1,0 +1,11 @@
+/impe/distributionType gps
+
+/gps/pos/centre 0 0 1 cm
+/gps/direction 0 0 -1
+
+/gps/particle gamma
+/gps/pos/type Point
+/gps/ene/type Mono
+/gps/ene/mono 60 keV
+
+/run/beamOn 100000
