@@ -110,6 +110,8 @@ void ImpAnalysis::saveFiles(G4bool isMaster)
 void ImpAnalysis::saveEvent(const G4Event* evt)
 {
     G4AutoLock l(&dataMux);
+    static const std::vector<ImpVHit*> empty;
+
     auto* hcote = evt->GetHCofThisEvent();
     if (hcote == nullptr) return; 
     
@@ -134,12 +136,11 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
         saveCrystalHits(vec);
     } else if (testHit->hitType() == ImpVHit::HitType::Si) {
         saveSiHits(vec);
-        /* G4cout << "*** got an Si hit" << G4endl; */
-        /* G4cout.flush(); */
-    } else
+    } else {
         G4Exception(
             "src/ImpAnalysis.cc processHitCollection",
             "", FatalException, "unrecognized hit. what?");
+    }
 
     saveIncidentSpectrumChunk();
 }

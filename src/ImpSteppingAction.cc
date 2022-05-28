@@ -66,33 +66,25 @@ namespace {
         {39, "Dichroic"},
     };
 
-    G4OpBoundaryProcess* findOpticalboundary(const G4Step* step)
+    const G4OpBoundaryProcess* findOpticalboundary(const G4Step* step)
     {
-        G4OpBoundaryProcess* boundary = nullptr;
-        auto* pv = step->
+        const auto* pv = step->
             GetTrack()->
             GetDefinition()->
             GetProcessManager()->
             GetProcessList();
-        size_t cnt = 0;
+
         for (size_t i = 0; i < pv->size(); ++i) {
             if ((*pv)[i]->GetProcessName() == "OpBoundary") {
-                boundary = static_cast<G4OpBoundaryProcess*>((*pv)[i]);
-                if (cnt++ > 0) {
-                    G4Exception(
-                        "ImpSteppingAction/findOpticalBoundary",
-                        "fob0", RunMustBeAborted, "More than one optical boundary present. Uh oh.");
-                }
+                return static_cast<const G4OpBoundaryProcess*>((*pv)[i]);
             }
         }
 
-        if (boundary == nullptr) {
-            G4Exception(
-                "ImpSteppingAction/findOpticalBoundary",
-                "fob1", RunMustBeAborted, "issue finding optical boundary");
-        }
+        G4Exception(
+            "ImpSteppingAction/findOpticalBoundary",
+            "fob1", RunMustBeAborted, "issue finding optical boundary");
 
-        return boundary; 
+        return nullptr; 
     }
 }
 
@@ -129,10 +121,7 @@ void ImpSteppingAction::trackScintillation(const G4Step* step)
 
 void ImpSteppingAction::processOptical(const G4Step* step)
 {
-    static G4ThreadLocal G4OpBoundaryProcess* boundary = nullptr;
-    if (boundary == nullptr) {
-        boundary = findOpticalboundary(step);
-    }
+    static const G4ThreadLocal G4OpBoundaryProcess* boundary = findOpticalboundary(step);
 
     const auto* prePt = step->GetPreStepPoint();
     const auto* postPt = step->GetPostStepPoint();
@@ -148,20 +137,6 @@ void ImpSteppingAction::processOptical(const G4Step* step)
 
     if (postPt->GetStepStatus() == fGeomBoundary) {
         auto stat = boundary->GetStatus();
-        /* if (preName.find("hafx_teflon") != G4String::npos || postName.find("hafx_teflon") != G4String::npos) { */ 
-        /*     G4cout << "HIT THE TEFLON THING" << G4endl; */
-        /*     auto* visMan = G4VVisManager::GetConcreteInstance(); */
-        /*     if (visMan) { */
-        /*         G4Circle c(prePt->GetPosition()); */
-        /*         c.SetDiameter(G4VMarker::screen, 4); */
-        /*         c.SetFillStyle(G4Circle::filled); */
-        /*         G4VisAttributes a(G4Color(1, 1, 0)); */
-        /*         a.SetVisibility(true); */
-        /*         c.SetVisAttributes(a); */
-        /*         visMan->Draw(c); */
-        /*     } */
-        /*     else { G4cout << "NO VIS MANAGER" << G4endl; } */
-        /* } */
         switch (stat) {
             // detect it here bc it dies before it can actually register inside the detector
             case Detection:
@@ -181,11 +156,11 @@ void ImpSteppingAction::processOptical(const G4Step* step)
                        << "post vol" << postName << G4endl;
             default:
                 if (yesSilicon) {
-                    const auto n = std::string(
-                        step? step->GetTrack()? step->GetTrack()->GetVolume()?
-                        step->GetTrack()->GetVolume()->GetName() : "" : "" : "");
+                    /* const auto n = std::string( */
+                    /*     step? step->GetTrack()? step->GetTrack()->GetVolume()? */
+                    /*     step->GetTrack()->GetVolume()->GetName() : "" : "" : ""); */
                     G4cout << "something weird: " << optProcLookup.at(stat) << G4endl
-                           << "in volume " << n << G4endl
+                           /* << "in volume " << n << G4endl */
                            << "pre volume " << preName << G4endl
                            << "post volume " << postName << G4endl;
                 }
