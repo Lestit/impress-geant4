@@ -15,6 +15,7 @@ const std::unordered_map<std::string, G4double> ImpGlobalConfigs::ATTENUATOR_THI
     {"test", 5.0000 * mm}
 };
 
+// static specified in .hh
 const std::string ImpGlobalConfigs::kSAVE_SI_POSITIONS            = "save-si-positions";
 const std::string ImpGlobalConfigs::kSAVE_SI_ENERGIES             = "save-si-energies";
 const std::string ImpGlobalConfigs::kAIR_GAP_THICKNESS            = "air-gap-thickness";
@@ -27,6 +28,8 @@ const std::string ImpGlobalConfigs::kBUILD_LIGHT_GUIDE_REFLECTOR  = "build-light
 const std::string ImpGlobalConfigs::kSI_SPACING                   = "si-spacing";
 const std::string ImpGlobalConfigs::kSAVE_PREFIX                  = "data-folder-prefix";
 const std::string ImpGlobalConfigs::kSCINT_TIME_CONST             = "scint-time-const";
+const std::string ImpGlobalConfigs::kSAVE_CRYST_POSITIONS         = "save-cryst-positions";
+const std::string ImpGlobalConfigs::kMAKE_ONLY_CRYSTAL            = "make-only-crystal";
 
 const std::unordered_map<std::string, ImpGlobalConfigs::ParseType> ImpGlobalConfigs::KEY_TYPE_PARSE = {
     {kSAVE_SI_POSITIONS,            ImpGlobalConfigs::ParseType::vBOOL},
@@ -40,7 +43,9 @@ const std::unordered_map<std::string, ImpGlobalConfigs::ParseType> ImpGlobalConf
     {kBUILD_LIGHT_GUIDE_REFLECTOR,  ImpGlobalConfigs::ParseType::vBOOL},
     {kSI_SPACING,                   ImpGlobalConfigs::ParseType::vDOUBLE},
     {kSAVE_PREFIX,                  ImpGlobalConfigs::ParseType::vSTRING},
-    {kSCINT_TIME_CONST,             ImpGlobalConfigs::ParseType::vDOUBLE}
+    {kSCINT_TIME_CONST,             ImpGlobalConfigs::ParseType::vDOUBLE},
+    {kSAVE_CRYST_POSITIONS,         ImpGlobalConfigs::ParseType::vBOOL},
+    {kMAKE_ONLY_CRYSTAL,            ImpGlobalConfigs::ParseType::vBOOL}
 };
 
 const ImpGlobalConfigs& ImpGlobalConfigs::instance()

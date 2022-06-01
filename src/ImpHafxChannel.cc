@@ -75,16 +75,22 @@ ImpHafxChannel::ImpHafxChannel(
     logVol->SetUserLimits(uLims);
     SetLogicalVolume(logVol);
 
-    buildQuartz();
     buildCrystal();
-    buildTeflonReflector();
-    buildBeryllium();
-    buildAlHousing();
-    if (attenuatorWindowThickness > 0) buildAlAttenuator();
-    buildSi();
-    buildLightGuide();
-    buildPaint();
-    finishCrystalEdges();
+    auto makeOnlyCrystal =
+        ImpGlobalConfigs::instance().
+        configOption<bool>(
+            ImpGlobalConfigs::kMAKE_ONLY_CRYSTAL);
+    if (not makeOnlyCrystal) {
+        buildQuartz();
+        buildTeflonReflector();
+        buildBeryllium();
+        buildAlHousing();
+        if (attenuatorWindowThickness > 0) buildAlAttenuator();
+        buildSi();
+        buildLightGuide();
+        buildPaint();
+        finishCrystalEdges();
+    }
 }
 
 ImpHafxChannel::~ImpHafxChannel()

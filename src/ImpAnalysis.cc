@@ -147,22 +147,41 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
 
 void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
 {
+    static const bool saveCrystPos =
+        ImpGlobalConfigs::instance().
+        configOption<bool>(ImpGlobalConfigs::kSAVE_CRYST_POSITIONS);
+
     std::map<G4String, G4double> deposits;
+    std::map<G4String, std::vector<G4ThreeVector> > crystHitPositions;
+
     for (const auto h : *vec) {
         auto* niceHit = static_cast<ImpScintCrystalHit*>(h);
         const auto& chId = niceHit->peekAssociatedChannelId();
-        if (!deposits.contains(niceHit->peekAssociatedChannelId()))
+        if (!deposits.contains(chId))
             deposits[chId] = 0;
         auto curEng = niceHit->peekDepositedEnergy();
         deposits[chId] += curEng;
+
+        if (saveCrystPos) {
+            if (!crystHitPositions.contains(chId))
+                crystHitPositions[chId] = {};
+            crystHitPositions[chId].push_back(niceHit->peekPosition());
+        }
     }
 
     // from scattering out of one into another, etc.
     std::size_t crystalsTouched = deposits.size();
     addEvents(crystalsTouched);
 
-    for (const auto& p : deposits)
-        crystOut.file() << (p.second / keV) << '\t' << p.first << std::endl;
+    for (const auto& p : deposits) {
+        crystOut.file() << (p.second / keV) << ' ' << p.first;
+        if (saveCrystPos) {
+            for (const auto& hitPos : crystHitPositions[p.first])
+                crystOut.file() << ' ' << hitPos;
+        }
+        crystOut.file() << std::endl;
+    }
+
 }
 
 void ImpAnalysis::addIncidentEnergy(long double e)
