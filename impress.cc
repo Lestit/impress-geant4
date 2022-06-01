@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 
     uiMan->ApplyCommand("/process/had/verbose 0");
     G4OpticalParameters::Instance()->SetProcessActivation("Scintillation", doScintillate);
-    G4OpticalParameters::Instance()->SetProcessActivation("Cerenkov", doScintillate);
+    G4OpticalParameters::Instance()->SetProcessActivation("Cerenkov", false);
 
     // silence annoying physics lists
     uiMan->ApplyCommand("/process/had/verbose 0");
