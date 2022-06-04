@@ -346,7 +346,7 @@ void ImpHafxChannel::buildCentralSipmShim()
     auto* shimBoxToCut = new G4Box(SIPM_SHIM_BOX_PFX + channelId, hxy, hxy, hz);
     auto* shimBoxMat = G4Material::GetMaterial(ImpMaterials::kPDMS);
     auto reflectorHalfLength = ImpGlobalConfigs::instance().configOption<double>(
-        ImpGlobalConfigs::kREFLECTOR_SHIM_SIDE_LENGTH) / 2;
+        ImpGlobalConfigs::kREFLECTOR_SHIM_SIDE_LENGTH) / 2 * mm;
 
     G4LogicalVolume* outerShimLogVol = nullptr;
     G4LogicalVolume* innerShimLogVol = nullptr;
