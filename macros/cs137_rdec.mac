@@ -1,0 +1,10 @@
+# switch to allow gps . . .
+/impe/distributionType gps
+
+# cesium 137
+/gps/particle ion
+/gps/ion 55 137
+/gps/pos/centre 0 0 2 cm
+/gps/ang/type iso
+
+/run/printProgress 10000

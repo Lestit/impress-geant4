@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cmath>
 
 #include <G4AutoLock.hh>
 #include <G4Box.hh>
@@ -55,9 +56,10 @@ ImpHafxChannel::ImpHafxChannel(
     loadConfigVars();
 
     quartzAnchorCenter = G4ThreeVector(
-        0, 0, -thickness()/2 + QUARTZ_THICKNESS/2 + lightGuideThickness + SI_THICKNESS);
-    cebr3AnchorCenter = quartzAnchorCenter + G4ThreeVector(
-        0, 0, QUARTZ_THICKNESS/2 + cebr3Thickness/2);
+        0, 0, -thickness()/2 + QUARTZ_THICKNESS/2 + SIPM_REFLECTOR_SHIM_DEPTH + lightGuideThickness + SI_THICKNESS);
+    cebr3AnchorCenter =
+        quartzAnchorCenter +
+        G4ThreeVector(0, 0, QUARTZ_THICKNESS/2 + cebr3Thickness/2);
 
     boundingCylinder = new G4Tubs(
         CHANNEL_CYL_PFX + channelId, 0, radius(), thickness()/2, 0 * deg, 360 * deg);
@@ -86,8 +88,9 @@ ImpHafxChannel::ImpHafxChannel(
         buildBeryllium();
         buildAlHousing();
         if (attenuatorWindowThickness > 0) buildAlAttenuator();
-        buildSi();
+        buildCentralSipmShim();
         buildLightGuide();
+        buildSi();
         buildPaint();
         finishCrystalEdges();
     }
@@ -110,7 +113,10 @@ void ImpHafxChannel::loadConfigVars()
     doBuildLightGuideReflector = igf.configOption<bool>(ImpGlobalConfigs::kBUILD_LIGHT_GUIDE_REFLECTOR);
 
     siSpacing = igf.configOption<double>(ImpGlobalConfigs::kSI_SPACING) * mm;
-    siSideLength = 3*siSpacing + 4*BROADCOM_FULL_LENGTH;
+    numSipms = static_cast<std::size_t>(igf.configOption<int>(ImpGlobalConfigs::kNUM_SIPMS));
+
+    sipmsOnSide = std::sqrt(numSipms);
+    siSideLength = (sipmsOnSide - 1)*siSpacing + sipmsOnSide*BROADCOM_FULL_LENGTH;
 }
 
 void ImpHafxChannel::buildCrystal()
@@ -239,7 +245,7 @@ void ImpHafxChannel::buildAlHousing()
 
     // account for attenuator window (and silicon at the back)
     G4ThreeVector alAnchorCenter(
-        0, 0, -attenuatorWindowThickness/2 + SI_THICKNESS/2 + lightGuideThickness/2);
+        0, 0, -attenuatorWindowThickness/2 + SIPM_REFLECTOR_SHIM_DEPTH/2 + SI_THICKNESS/2 + lightGuideThickness/2);
     alPlacement = new G4PVPlacement(
         nullptr, alAnchorCenter, alLogVol, AL_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
@@ -334,6 +340,64 @@ void ImpHafxChannel::buildAlAttenuator()
     attachAlOpticalSurface(attLogVol);
 }
 
+void ImpHafxChannel::buildCentralSipmShim()
+{
+    const auto hxy = LIGHT_GUIDE_SIDE_LENGTH / 2, hz = SIPM_REFLECTOR_SHIM_DEPTH / 2;
+    auto* shimBoxToCut = new G4Box(SIPM_SHIM_BOX_PFX + channelId, hxy, hxy, hz);
+    auto* shimBoxMat = G4Material::GetMaterial(ImpMaterials::kPDMS);
+    auto reflectorHalfLength = ImpGlobalConfigs::instance().configOption<double>(
+        ImpGlobalConfigs::kREFLECTOR_SHIM_SIDE_LENGTH) / 2;
+
+    G4LogicalVolume* outerShimLogVol = nullptr;
+    G4LogicalVolume* innerShimLogVol = nullptr;
+    G4VSolid* outerShimSolid = nullptr;
+    G4VSolid* innerShimSolid = nullptr;
+    if (reflectorHalfLength > 0) {
+        innerShimSolid = new G4Box(
+            SIPM_SHIM_BOX_PFX + "reflector" + channelId,
+            reflectorHalfLength, reflectorHalfLength, hz);
+        outerShimSolid = new G4SubtractionSolid(
+            SIPM_SHIM_BOX_PFX + "sliced" + channelId,
+            shimBoxToCut, innerShimSolid);
+
+        outerShimLogVol = new G4LogicalVolume(
+            outerShimSolid, shimBoxMat, SIPM_SHIM_LOG_PFX + "sliced" + channelId);
+        innerShimLogVol = new G4LogicalVolume(
+            innerShimSolid, shimBoxMat, SIPM_SHIM_LOG_PFX + "reflector" + channelId);
+
+        // make it a diffuse reflector
+        attachTeflonOpticalSurface(innerShimLogVol);
+    }
+    else {
+        outerShimLogVol = new G4LogicalVolume(
+            shimBoxToCut, shimBoxMat, SIPM_SHIM_LOG_PFX + "unsliced" + channelId);
+        outerShimSolid = shimBoxToCut;
+    }
+
+    const auto translate =
+        quartzAnchorCenter +
+        G4ThreeVector(0, 0, -QUARTZ_THICKNESS/2 - SIPM_REFLECTOR_SHIM_DEPTH/2);
+    G4VisAttributes va;
+    va.SetVisibility(false);
+    outerShimLogVol->SetVisAttributes(va);
+    (void) new G4PVPlacement(
+        nullptr, translate, outerShimLogVol, SIPM_SHIM_PHY_PFX + "outer" + channelId,
+        GetLogicalVolume(), false, 0);
+
+    if (innerShimLogVol != nullptr) {
+        va.SetColor(1, 1, 1, 1);
+        va.SetVisibility(true);
+        innerShimLogVol->SetVisAttributes(va);
+        (void) new G4PVPlacement(
+            nullptr, translate, innerShimLogVol, SIPM_SHIM_PHY_PFX + "inner" + channelId,
+            GetLogicalVolume(), false, 0);
+    }
+    /* G4cout << "DONE" << G4endl; */
+    /* G4cout.flush(); */
+    /* G4String strang; */
+    /* G4cin >> strang; */
+}
+
 void ImpHafxChannel::buildLightGuide()
 {
     const auto hxy = LIGHT_GUIDE_SIDE_LENGTH / 2, hz = lightGuideThickness / 2;
@@ -349,7 +413,7 @@ void ImpHafxChannel::buildLightGuide()
     lightGuideLogVol->SetVisAttributes(lgAtt);
 
     const auto lgTranslate = quartzAnchorCenter + G4ThreeVector(
-        0, 0, -QUARTZ_THICKNESS/2 - lightGuideThickness/2);
+        0, 0, -QUARTZ_THICKNESS/2 - SIPM_REFLECTOR_SHIM_DEPTH - lightGuideThickness/2);
     lightGuidePlacement = new G4PVPlacement(
         nullptr, lgTranslate, lightGuideLogVol, LG_PHY_PFX + channelId,
         GetLogicalVolume(), false, 0);
@@ -359,11 +423,11 @@ void ImpHafxChannel::buildLightGuide()
 
 void ImpHafxChannel::buildLightGuideWrap(const G4ThreeVector& translate)
 {
-    const auto hxy = lightGuideBox->GetXHalfLength(), hz = lightGuideBox->GetZHalfLength();
-
+    const auto hxy = lightGuideBox->GetXHalfLength(), hz = lightGuideBox->GetZHalfLength() + SIPM_REFLECTOR_SHIM_DEPTH;
     const auto wrapThick = TEFLON_THICKNESS;
     const auto gappedHxy = hxy + teflonAirGap/2;
     const auto gappedHxyPlusThick = gappedHxy + wrapThick/2;
+
     lightGuideWrapToBeCutoutBox = new G4Box(
         LG_WRAP_BOX_PFX + channelId, gappedHxyPlusThick, gappedHxyPlusThick, hz);
     auto* sliceOut = new G4Box(
@@ -437,18 +501,19 @@ void ImpHafxChannel::buildSi()
 {
     const auto halfxy = BROADCOM_FULL_LENGTH / 2, halfz = SI_THICKNESS / 2;
     const auto deltaxy = BROADCOM_FULL_LENGTH + siSpacing;
+    const double baseDeltaXyAdjust = (sipmsOnSide - 1) / 2.0;
     /* siBox = new G4Box(SI_BOX_PFX + channelId, half_xy, half_xy, half_z); */
     auto* si = G4NistManager::Instance()
         ->FindOrBuildMaterial(ImpMaterials::kNIST_SI);
     auto baseTranslate = quartzAnchorCenter + G4ThreeVector(
-        0, 0, -QUARTZ_THICKNESS/2 - lightGuideThickness - SI_THICKNESS/2);
+        0, 0, -QUARTZ_THICKNESS/2 - SIPM_REFLECTOR_SHIM_DEPTH - lightGuideThickness - SI_THICKNESS/2);
     G4VisAttributes siAttrs;
     siAttrs.SetColor(0, 0, 1, 0.3);
     siAttrs.SetVisibility(true);
 
-    for (size_t i = 0; i < ImpHafxChannel::NUM_SIPMS; ++i) {
-        const auto xtlate = (i%4 - 1.5) * deltaxy;
-        const auto ytlate = (i/4 - 1.5) * deltaxy;
+    for (size_t i = 0; i < numSipms; ++i) {
+        const auto xtlate = (i%sipmsOnSide - baseDeltaXyAdjust) * deltaxy;
+        const auto ytlate = (i/sipmsOnSide - baseDeltaXyAdjust) * deltaxy;
         const auto idxStr = std::to_string(i);
 
         auto* siBox = new G4Box(
@@ -461,8 +526,8 @@ void ImpHafxChannel::buildSi()
         (void) new G4PVPlacement(
             nullptr, siTranslate, siLogVol, SI_PHY_PFX + channelId + idxStr,
             GetLogicalVolume(), false, 0);
-        siBoxes[i] = siBox;
-        siLogVols[i] = siLogVol;
+        siBoxes.push_back(siBox);
+        siLogVols.push_back(siLogVol);
     }
 
     attachSiOpticalSurface();

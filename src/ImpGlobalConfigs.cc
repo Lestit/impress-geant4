@@ -30,22 +30,29 @@ const std::string ImpGlobalConfigs::kSAVE_PREFIX                  = "data-folder
 const std::string ImpGlobalConfigs::kSCINT_TIME_CONST             = "scint-time-const";
 const std::string ImpGlobalConfigs::kSAVE_CRYST_POSITIONS         = "save-cryst-positions";
 const std::string ImpGlobalConfigs::kMAKE_ONLY_CRYSTAL            = "make-only-crystal";
+const std::string ImpGlobalConfigs::kNUM_SIPMS                    = "num-sipms";
+const std::string ImpGlobalConfigs::kSAVE_EACH_CRYST_HIT_ENERGY   = "save-each-crystal-hit-energy";
+const std::string ImpGlobalConfigs::kREFLECTOR_SHIM_SIDE_LENGTH   = "reflector-shim-side-length";
 
-const std::unordered_map<std::string, ImpGlobalConfigs::ParseType> ImpGlobalConfigs::KEY_TYPE_PARSE = {
-    {kSAVE_SI_POSITIONS,            ImpGlobalConfigs::ParseType::vBOOL},
-    {kSAVE_SI_ENERGIES,             ImpGlobalConfigs::ParseType::vBOOL},
-    {kAIR_GAP_THICKNESS,            ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kCEBR3_LENGTH,                 ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kCEBR3_EDGE_FINISH,            ImpGlobalConfigs::ParseType::vSTRING},
-    {kCEBR3_BACK_FINISH,            ImpGlobalConfigs::ParseType::vSTRING},
-    {kOPTICAL_DRAW_FREQUENCY,       ImpGlobalConfigs::ParseType::vINT},
-    {kLIGHT_GUIDE_THICKNESS,        ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kBUILD_LIGHT_GUIDE_REFLECTOR,  ImpGlobalConfigs::ParseType::vBOOL},
-    {kSI_SPACING,                   ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kSAVE_PREFIX,                  ImpGlobalConfigs::ParseType::vSTRING},
-    {kSCINT_TIME_CONST,             ImpGlobalConfigs::ParseType::vDOUBLE},
-    {kSAVE_CRYST_POSITIONS,         ImpGlobalConfigs::ParseType::vBOOL},
-    {kMAKE_ONLY_CRYSTAL,            ImpGlobalConfigs::ParseType::vBOOL}
+namespace { using pt = ImpGlobalConfigs::ParseType; }
+const std::unordered_map<std::string, pt> ImpGlobalConfigs::KEY_TYPE_PARSE = {
+    {kSAVE_SI_POSITIONS,            pt::vBOOL},
+    {kSAVE_SI_ENERGIES,             pt::vBOOL},
+    {kAIR_GAP_THICKNESS,            pt::vDOUBLE},
+    {kCEBR3_LENGTH,                 pt::vDOUBLE},
+    {kCEBR3_EDGE_FINISH,            pt::vSTRING},
+    {kCEBR3_BACK_FINISH,            pt::vSTRING},
+    {kOPTICAL_DRAW_FREQUENCY,       pt::vINT},
+    {kLIGHT_GUIDE_THICKNESS,        pt::vDOUBLE},
+    {kBUILD_LIGHT_GUIDE_REFLECTOR,  pt::vBOOL},
+    {kSI_SPACING,                   pt::vDOUBLE},
+    {kSAVE_PREFIX,                  pt::vSTRING},
+    {kSCINT_TIME_CONST,             pt::vDOUBLE},
+    {kSAVE_CRYST_POSITIONS,         pt::vBOOL},
+    {kMAKE_ONLY_CRYSTAL,            pt::vBOOL},
+    {kNUM_SIPMS,                    pt::vINT},
+    {kSAVE_EACH_CRYST_HIT_ENERGY,   pt::vBOOL},
+    {kREFLECTOR_SHIM_SIDE_LENGTH,   pt::vDOUBLE}
 };
 
 const ImpGlobalConfigs& ImpGlobalConfigs::instance()

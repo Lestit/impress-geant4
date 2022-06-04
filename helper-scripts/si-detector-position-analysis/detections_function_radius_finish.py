@@ -6,12 +6,8 @@ import sys
 sys.path.append(os.path.dirname(__file__) + '/..')
 from optical_params_shared import NUM_RUNS, RADIUSES
 INCIDENT_COUNTS = NUM_RUNS
-plt.style.use('/Users/settwi/mpl-styles/fig.mplstyle')
+plt.style.use(os.getenv('MPL_DEFAULT_STYLE'))
 
-# OLD_PREFIXES = [
-#     'eRou-bRou', 'ePol-bRou',
-#     'eRou-bPol', 'ePol-bPol'
-# ]
 PREFIX_FIRST_DECODE = {
     'Polished_LUT': 'raw+polishedLUT', 'Rough_LUT': 'raw+roughLUT',
     'PolishedTeflon_LUT': 'teflon+polishedLUT', 'RoughTeflon_LUT': 'teflon+roughLUT',
@@ -47,11 +43,17 @@ def main():
     except IndexError as e:
         die()
 
-    plot_func_rad(sys.argv[1])
+    radial_data = load_radial_data(sys.argv[1])
+    fig, ax = plt.subplots()
+    plot_func_rad(radial_data)
+
+    fig.tight_layout()
+    # fig.savefig('fixed.pdf')
+    plt.show()
 
 
-def plot_func_rad(direc):
-    folds = os.listdir(direc)
+def load_radial_data(rad_dir: str) -> dict:
+    folds = os.listdir(rad_dir)
     att_fn = None
     dat = dict()
     for pfx in PFX_MAP.keys():
@@ -60,13 +62,17 @@ def plot_func_rad(direc):
         wanted.sort(key=srt_help)
         print([srt_help(w) for w in wanted])
         for w in wanted:
-            full_path_no_file = os.path.join(direc, w)
+            full_path_no_file = os.path.join(rad_dir, w)
             att_fn = att_fn or next(f for f in os.listdir(full_path_no_file) if 'si-out' in f)
             with open(os.path.join(full_path_no_file, att_fn)) as inf:
                 dat[pfx].append(inf.read().count(os.linesep) + 1)
         print(pfx, dat[pfx])
 
-    fig, ax = plt.subplots()
+    return dat
+
+
+def plot_func_rad(dat: dict):
+    fig, ax = plt.gcf(), plt.gca()
     for lab, cts in dat.items():
         if len(cts) == 0: continue
         # last run has truncated data
@@ -79,10 +85,7 @@ def plot_func_rad(direc):
     # ax.set_ylabel('Proportion of opticals detected')
     ax.set_xlabel('Radius along $x$ (mm)')
     ax.set_ylim(0, 55000)
-    ax.legend()#loc=(0.05, 0.6))
-    fig.tight_layout()
-    fig.savefig('fixed.pdf')
-    # plt.show()
+    ax.legend()
 
 
 if __name__ == '__main__': main()

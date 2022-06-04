@@ -4,10 +4,15 @@ import numpy as np
 import os
 import sys
 
+fns = sys.argv[1:]
+
+if len(fns) == 0:
+    print("Supply silicon detection files to command line arguments to histogram the arrival times.")
+    sys.exit(1)
+
 fig, ax = plt.subplots()
 NUM_BINS = 1000
 
-fns = sys.argv[1:]
 for fn in fns:
     num_det = 0
     arrival_times = []
@@ -26,7 +31,8 @@ for fn in fns:
     lab = ' '.join(os.path.dirname(fn).split('-')[:-1])
     ax.hist(
         arrival_times, bins=bins,
-        alpha=0.5, histtype='stepfilled', density=True, label=lab + f' {num_det} detected')
+        alpha=0.5, histtype='step', density=True,
+        label=lab + f' {num_det} detected')
 
 ax.set_xlabel('Photon arrival time (ns)')
 ax.set_ylabel('Density')

@@ -40,7 +40,7 @@ class ImpHafxChannel : public G4PVPlacement
             const auto& igf = ImpGlobalConfigs::instance();
             auto crystalThick = igf.configOption<double>(ImpGlobalConfigs::kCEBR3_LENGTH) * mm;
             auto lgThick = igf.configOption<double>(ImpGlobalConfigs::kLIGHT_GUIDE_THICKNESS) * mm;
-            return crystalThick + AL_DEPTH_DELTA + lgThick + SI_THICKNESS;
+            return crystalThick + AL_DEPTH_DELTA + lgThick + SIPM_REFLECTOR_SHIM_DEPTH + SI_THICKNESS;
         }
         static G4double diameter()
         { return WHOLE_DIAMETER; }
@@ -79,6 +79,7 @@ class ImpHafxChannel : public G4PVPlacement
         void attachPaintBoundarySurface(G4VPhysicalVolume* ppv, G4LogicalVolume* plv);
         void buildLightGuide();
         void buildLightGuideWrap(const G4ThreeVector& translate);
+        void buildCentralSipmShim();
 
         void buildSi();
         void attachSiOpticalSurface();
@@ -139,9 +140,10 @@ class ImpHafxChannel : public G4PVPlacement
 
         G4UserLimits* uLims;
 
-        static constexpr std::size_t NUM_SIPMS = 16;
-        std::array<G4Box*, NUM_SIPMS> siBoxes;
-        std::array<G4LogicalVolume*, NUM_SIPMS> siLogVols;
+        std::size_t numSipms;
+        std::size_t sipmsOnSide;
+        std::vector<G4Box*> siBoxes;
+        std::vector<G4LogicalVolume*> siLogVols;
 
         G4String channelId;
         std::string sensDetName;

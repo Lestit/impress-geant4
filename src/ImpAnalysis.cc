@@ -147,20 +147,20 @@ void ImpAnalysis::processHitCollection(const G4VHitsCollection* hc)
 
 void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
 {
-    static const bool saveCrystPos =
-        ImpGlobalConfigs::instance().
-        configOption<bool>(ImpGlobalConfigs::kSAVE_CRYST_POSITIONS);
+    const auto& igc = ImpGlobalConfigs::instance();
+    bool saveCrystPos = igc.configOption<bool>(ImpGlobalConfigs::kSAVE_CRYST_POSITIONS);
+    bool saveEachHitEnergy = igc.configOption<bool>(ImpGlobalConfigs::kSAVE_EACH_CRYST_HIT_ENERGY);
 
-    std::map<G4String, G4double> deposits;
+    std::map<G4String, std::vector<G4double> > deposits;
     std::map<G4String, std::vector<G4ThreeVector> > crystHitPositions;
 
     for (const auto h : *vec) {
         auto* niceHit = static_cast<ImpScintCrystalHit*>(h);
         const auto& chId = niceHit->peekAssociatedChannelId();
         if (!deposits.contains(chId))
-            deposits[chId] = 0;
+            deposits[chId] = {};
         auto curEng = niceHit->peekDepositedEnergy();
-        deposits[chId] += curEng;
+        deposits[chId].push_back(curEng);
 
         if (saveCrystPos) {
             if (!crystHitPositions.contains(chId))
@@ -174,10 +174,28 @@ void ImpAnalysis::saveCrystalHits(const std::vector<ImpVHit*>* vec)
     addEvents(crystalsTouched);
 
     for (const auto& p : deposits) {
-        crystOut.file() << (p.second / keV) << ' ' << p.first;
-        if (saveCrystPos) {
-            for (const auto& hitPos : crystHitPositions[p.first])
-                crystOut.file() << ' ' << hitPos;
+        if (not saveEachHitEnergy) {
+            // channel second here just for legacy purposes
+            double sum = std::accumulate(p.second.begin(), p.second.end(), 0.);
+            crystOut.file() << (sum / keV) << ' ' << p.first;
+            if (saveCrystPos) {
+                for (const auto& hitPos : crystHitPositions[p.first])
+                    crystOut.file() << ' ' << hitPos;
+            }
+        }
+        else {
+            // channel comes FIRST because . . . easier to parse
+            crystOut.file() << ' ' << p.first;
+            for (std::size_t i = 0; i < p.second.size(); ++i) {
+                auto e = p.second[i];
+                auto pos = crystHitPositions[p.first][i];
+                crystOut.file()
+                    << " ("
+                        << pos.x()/mm << ','
+                        << pos.y()/mm << ','
+                        << pos.z()/mm << ','
+                        << e/keV      << ')';
+            }
         }
         crystOut.file() << std::endl;
     }

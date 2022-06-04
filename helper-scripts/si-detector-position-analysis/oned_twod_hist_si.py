@@ -4,7 +4,7 @@ import numpy as np
 import sys
 
 # plt.style.use('/Users/settwi/mpl-styles/fig.mplstyle')
-SPACING = 0.25
+SPACING = 0.2
 WIDTH = 3.88
 DELTA = 1e-2
 START = -(3*SPACING + 4*WIDTH) / 2
@@ -27,19 +27,13 @@ def main():
         for line in f:
             cur_positions = line.split(' ')[1:]
             for tup in cur_positions:
-                x, y, _ = tup.split(',')
+                x, y, *_ = tup.split(',')
                 positions['x'].append(float(x[1:]))
                 positions['y'].append(float(y))
 
     print('number of opticals detected', len(positions['x']))
     one_dim_hist(positions)
-    # fpath = '/Users/settwi/Desktop/1dh.png'
-    # plt.gca().set_ylim(0.055)
-    # plt.gcf().savefig(fpath)
     two_dim_hist(positions)
-    # fpath = '/Users/settwi/Desktop/2dh.png'
-    # plt.gcf().savefig(fpath)
-    # print('saved to', fpath)
 
 
 def one_dim_hist(positions):

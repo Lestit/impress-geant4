@@ -1,0 +1,32 @@
+/impe/distributionType gps
+/control/execute macros/optical_diagnose.mac
+
+/gps/pos/centre 0.000 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 1.944 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 3.889 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 5.833 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 7.778 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 9.722 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 11.667 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 13.611 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 15.556 0 3 mm
+/run/beamOn 50000
+
+/gps/pos/centre 17.500 0 3 mm
+/run/beamOn 50000
