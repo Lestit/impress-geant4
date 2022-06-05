@@ -48,12 +48,12 @@ ImpEnergyPickerMessenger::ImpEnergyPickerMessenger(ImpEnergyPicker* ePicker)
 
 ImpEnergyPickerMessenger::~ImpEnergyPickerMessenger()
 {
-    SAFE_DELETE(impDir);
     SAFE_DELETE(flareEnergyCmd);
     SAFE_DELETE(monoEnergyCmd);
     SAFE_DELETE(flatEnergyLowCmd);
     SAFE_DELETE(flatEnergyHighCmd);
     SAFE_DELETE(distributionTypeCmd);
+    SAFE_DELETE(impDir);
 }
 
 void ImpEnergyPickerMessenger::SetNewValue(
