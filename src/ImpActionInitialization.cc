@@ -38,21 +38,5 @@ void ImpActionInitialization::Build() const
 
 void ImpActionInitialization::setupPrimaryGenerator() const
 {
-    if (dc == nullptr) {
-        SetUserAction(new ImpPrimaryGeneratorAction);
-        return;
-    }
-
-    auto* pga = new ImpPrimaryGeneratorAction;
-    using ct = ImpVDetectorConstruction::ConstructionType;
-    if (dc->detectorConstructionType() == ct::wholeSatellite) {
-        const auto* whole = static_cast<const ImpWholeSatelliteConstruction*>(dc);
-        pga->updateWorldVolume(whole->peekBoundingBox());
-        SetUserAction(pga);
-    }
-    else if (dc->detectorConstructionType() == ct::onlyDetector) {
-        const auto* onlyDet = static_cast<const ImpOnlyDetectorConstruction*>(dc);
-        pga->updateWorldVolume(onlyDet->peekBoundingCyl());
-        SetUserAction(pga);
-    }
+    SetUserAction(new ImpPrimaryGeneratorAction);
 }

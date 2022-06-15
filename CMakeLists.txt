@@ -9,9 +9,6 @@ find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
 add_executable(${EXC_OUT} impress.cc)
 
-enable_testing()
-add_subdirectory(tests)
-
 include_directories(
 #    ${Geant4_INCLUDE_DIR}
     "${PROJECT_SOURCE_DIR}/include"
@@ -41,3 +38,4 @@ file(CREATE_LINK "${CMAKE_SOURCE_DIR}/impress.conf" "${CMAKE_CURRENT_BINARY_DIR}
 file(CREATE_LINK "${CMAKE_SOURCE_DIR}/macros" "${CMAKE_CURRENT_BINARY_DIR}/macros" SYMBOLIC)
 
 add_compile_options(-Wall -Wextra -Wpedantic -pedantic -Werror)
+add_compile_definitions(CMAKE_CURRENT_BINARY_DIR="${CMAKE_CURRENT_BINARY_DIR}")

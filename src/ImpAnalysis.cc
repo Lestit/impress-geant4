@@ -32,7 +32,7 @@ namespace {
     static const G4String kSI_OUT = "si-out";
     static const G4String kSCINT_OUT = "scint-phots-out";
     static const G4String kSI_ENGS_OUT = "si-energies-out";
-    static const std::string OUT_DIR = "data-out";
+    static const std::string OUT_DIR = "./data-out";
 }
 
 static std::string genBaseSubfolder(std::uint64_t milliz);

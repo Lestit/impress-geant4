@@ -1,5 +1,5 @@
 # switch to allow gps . . .
-/impe/distributionType gps
+# /impe/distributionType gps
 
 # barium 133
 /gps/particle ion

@@ -1,4 +1,4 @@
-/impe/distributionType gps
+# /impe/distributionType gps
 
 /gps/pos/centre 0 0 1 cm
 /gps/direction 0 0 -1
@@ -8,4 +8,5 @@
 /gps/ene/type Mono
 /gps/ene/mono 60 keV
 
-/run/beamOn 100000
+/run/printProgress 100
+/run/beamOn 1000

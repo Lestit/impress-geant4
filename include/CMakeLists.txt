@@ -8,8 +8,8 @@ target_sources(${EXC_OUT}
         ImpActionInitialization.hh
         ImpAnalysis.hh
         ImpDetectorPayload.hh
-        ImpEnergyPicker.hh
-        ImpEnergyPickerMessenger.hh
+        # ImpEnergyPicker.hh
+        # ImpEnergyPickerMessenger.hh
         ImpEventAction.hh
         ImpGlobalConfigs.hh
         ImpHafxChannel.hh
@@ -24,7 +24,7 @@ target_sources(${EXC_OUT}
         ImpSiHit.hh
         ImpSiSensitiveDetector.hh
         ImpSteppingAction.hh
-        ImpSurfacePointPicker.hh
+        # ImpSurfacePointPicker.hh
         ImpTempLogVol.hh
         ImpTrackingAction.hh
         ImpTrajectory.hh
@@ -37,9 +37,9 @@ target_sources(${EXC_OUT}
         TeflonProperties.hh
 )
 
-target_sources(rand_test
-    PRIVATE ImpSurfacePointPicker.hh)
+# target_sources(rand_test
+# PRIVATE ImpSurfacePointPicker.hh)
 
-target_sources(flare_picker_test PRIVATE ImpEnergyPicker.hh ImpEnergyPickerMessenger.hh)
+# target_sources(flare_picker_test PRIVATE ImpEnergyPicker.hh ImpEnergyPickerMessenger.hh)
 
-target_sources(mono_flat_energy_test PRIVATE ImpEnergyPicker.hh ImpEnergyPickerMessenger.hh)
+# target_sources(mono_flat_energy_test PRIVATE ImpEnergyPicker.hh ImpEnergyPickerMessenger.hh)

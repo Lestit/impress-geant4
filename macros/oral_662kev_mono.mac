@@ -1,4 +1,4 @@
-/impe/distributionType gps
+# /impe/distributionType gps
 
 /gps/pos/centre 0 0 1 cm
 /gps/direction 0 0 -1
