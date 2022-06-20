@@ -19,7 +19,16 @@ int main(int argc, char* argv[])
     ImpAnalysis::instance()->updateFlareIdentifier(flareSize);
 
     auto* runMan = new G4MTRunManager;
-    runMan->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+    std::string envNumCores = std::getenv("SLURM_NUM_CORES");
+    size_t numCores;
+    if (not envNumCores.empty()) {
+        std::stringstream ss(envNumCores);
+        ss >> numCores;
+    }
+    else {
+        numCores = G4Threading::G4GetNumberOfCores();
+    }
+    runMan->SetNumberOfThreads(numCores);
 
     auto* physList = new ImpPhysicsList;
     physList->SetVerboseLevel(0);
