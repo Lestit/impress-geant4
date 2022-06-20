@@ -16,6 +16,9 @@ const std::unordered_map<std::string, G4double> ImpGlobalConfigs::ATTENUATOR_THI
 };
 
 // static specified in .hh
+const std::string ImpGlobalConfigs::kENABLE_SCINTILLATION         = "enable-scintillation";
+const std::string ImpGlobalConfigs::kBUILD_ONLY_DETECTOR          = "only-build-one-detector";
+const std::string ImpGlobalConfigs::kATTENUATOR_CHOICE            = "attenuator-choice-single-detector";
 const std::string ImpGlobalConfigs::kSAVE_SI_POSITIONS            = "save-si-positions";
 const std::string ImpGlobalConfigs::kSAVE_SI_ENERGIES             = "save-si-energies";
 const std::string ImpGlobalConfigs::kAIR_GAP_THICKNESS            = "air-gap-thickness";
@@ -37,6 +40,9 @@ const std::string ImpGlobalConfigs::kBUILD_TEFLON_BETWEEN_SIPMS   = "build-teflo
 
 namespace { using pt = ImpGlobalConfigs::ParseType; }
 const std::unordered_map<std::string, pt> ImpGlobalConfigs::KEY_TYPE_PARSE = {
+    {kENABLE_SCINTILLATION,         pt::vBOOL},
+    {kBUILD_ONLY_DETECTOR,          pt::vBOOL},
+    {kATTENUATOR_CHOICE,            pt::vSTRING},
     {kSAVE_SI_POSITIONS,            pt::vBOOL},
     {kSAVE_SI_ENERGIES,             pt::vBOOL},
     {kAIR_GAP_THICKNESS,            pt::vDOUBLE},

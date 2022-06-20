@@ -40,6 +40,9 @@ class ImpGlobalConfigs
 
         // see .cc for what these are
         static const std::string
+            kENABLE_SCINTILLATION,
+            kBUILD_ONLY_DETECTOR,
+            kATTENUATOR_CHOICE,
             kSAVE_SI_POSITIONS,
             kSAVE_SI_ENERGIES,
             kAIR_GAP_THICKNESS,
