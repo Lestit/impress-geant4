@@ -5,6 +5,7 @@ namespace {
     static constexpr G4double inch = 25.4 * mm;
 
     static const G4String CYL = "_cyl",
+                          BOX = "_box",
                           PHY = "_phy",
                           LOG = "_log",
                           SUR = "_sur",
@@ -78,6 +79,8 @@ namespace {
     static const G4String SIPM_SHIM_LOG_PFX = "hafx_sipm_shim_log";
     static const G4String SIPM_SHIM_PHY_PFX = "hafx_sipm_shim_phy";
 
+    static const G4String REFL_BETW_SIPM_BOX_PFX = "hafx_reflector_between_sipms";
+
     // numerics
     static constexpr G4double WHOLE_DIAMETER = 43 * mm;
 
@@ -95,7 +98,7 @@ namespace {
     static constexpr G4double QUARTZ_DIAMETER = 40.5 * mm;
 
     // guess for now
-    static constexpr G4double LIGHT_GUIDE_SIDE_LENGTH = 1 * inch;
+    static constexpr G4double LIGHT_GUIDE_SIDE_LENGTH = 26 * mm;
     static constexpr G4double SI_THICKNESS = 0.3 * mm;
     static constexpr G4double BROADCOM_FULL_LENGTH = 3.88 * mm;
 

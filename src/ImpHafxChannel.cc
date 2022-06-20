@@ -93,6 +93,7 @@ ImpHafxChannel::ImpHafxChannel(
         buildSi();
         buildPaint();
         finishCrystalEdges();
+        if (doBuildReflectorBetweenSipms) buildReflectorBetweenSipms();
     }
 }
 
@@ -111,6 +112,7 @@ void ImpHafxChannel::loadConfigVars()
 
     lightGuideThickness = igf.configOption<double>(ImpGlobalConfigs::kLIGHT_GUIDE_THICKNESS) * mm;
     doBuildLightGuideReflector = igf.configOption<bool>(ImpGlobalConfigs::kBUILD_LIGHT_GUIDE_REFLECTOR);
+    doBuildReflectorBetweenSipms = igf.configOption<bool>(ImpGlobalConfigs::kBUILD_TEFLON_BETWEEN_SIPMS);
 
     siSpacing = igf.configOption<double>(ImpGlobalConfigs::kSI_SPACING) * mm;
     numSipms = static_cast<std::size_t>(igf.configOption<int>(ImpGlobalConfigs::kNUM_SIPMS));
@@ -392,10 +394,38 @@ void ImpHafxChannel::buildCentralSipmShim()
             nullptr, translate, innerShimLogVol, SIPM_SHIM_PHY_PFX + "inner" + channelId,
             GetLogicalVolume(), false, 0);
     }
-    /* G4cout << "DONE" << G4endl; */
-    /* G4cout.flush(); */
-    /* G4String strang; */
-    /* G4cin >> strang; */
+}
+
+void ImpHafxChannel::buildReflectorBetweenSipms()
+{
+    auto* baseBox = new G4Box(
+        REFL_BETW_SIPM_BOX_PFX + BOX, 
+        siSideLength / 2 - 1*um, siSideLength / 2 - 1*um, TEFLON_THICKNESS / 2);
+
+    G4Box* slice = siBoxes[0];
+    G4SubtractionSolid* betwixtSolid = nullptr;
+    for (std::size_t i = 0; i < siBoxes.size(); ++i) {
+        auto baseTranslate = siTranslations[i];
+        auto horizTranslate = G4ThreeVector(baseTranslate.x(), baseTranslate.y(), 0);
+        betwixtSolid = new G4SubtractionSolid( 
+            REFL_BETW_SIPM_BOX_PFX + std::to_string(i),
+            betwixtSolid? static_cast<G4VSolid*>(betwixtSolid) : static_cast<G4VSolid*>(baseBox),
+            slice,
+            nullptr,
+            horizTranslate);
+    }
+
+    auto* tef = G4NistManager::Instance()->FindOrBuildMaterial(ImpMaterials::kNIST_TEFLON);
+    auto* betwixtLv = new G4LogicalVolume(
+        betwixtSolid, tef, REFL_BETW_SIPM_BOX_PFX + LOG);
+
+    G4ThreeVector placeTranslate(
+        0, 0,
+        siTranslations[0].z() + TEFLON_THICKNESS/2 + teflonAirGap);
+    (void) new G4PVPlacement(
+        nullptr, placeTranslate, betwixtLv, REFL_BETW_SIPM_BOX_PFX + PHY,
+        GetLogicalVolume(), false, 0);
+    attachTeflonOpticalSurface(betwixtLv);
 }
 
 void ImpHafxChannel::buildLightGuide()
@@ -526,6 +556,8 @@ void ImpHafxChannel::buildSi()
         (void) new G4PVPlacement(
             nullptr, siTranslate, siLogVol, SI_PHY_PFX + channelId + idxStr,
             GetLogicalVolume(), false, 0);
+
+        siTranslations.push_back(siTranslate);
         siBoxes.push_back(siBox);
         siLogVols.push_back(siLogVol);
     }

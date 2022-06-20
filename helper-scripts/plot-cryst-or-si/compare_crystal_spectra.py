@@ -33,7 +33,7 @@ ax.set_yscale('log')
 ax.set_ylabel('Crystal energy hits')
 ax.set_xlabel('Incident photon energy (keV)')
 
-delta_e = 10
+delta_e = 1
 bins = np.arange(low - delta_e, up + delta_e, delta_e)
 for i, e_indiv in enumerate(energies):
     lab = f'{os.path.basename(files[i]).split(".")[0]} | total counts = {e_indiv.size}'

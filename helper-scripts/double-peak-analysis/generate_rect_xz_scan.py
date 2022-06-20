@@ -1,15 +1,14 @@
 import numpy as np
 
-Z_START = 1.25
-Z_END = 6.25
-DZ = 0.5 # mm
-DX = 2 # mm
-NUM_PHOTS = 100000
+LENGTH = 5
+Z_START = 3.75 - LENGTH/2
+Z_END = 3.75  + LENGTH/2
+NUM_Z = 10
+NUM_X = 10
+NUM_PHOTS = 10000
 
 script_begin =\
-f'''/impe/distributionType gps
-
-/gps/particle opticalphoton
+f'''/gps/particle opticalphoton
 
 /gps/pos/type Point
 
@@ -19,13 +18,13 @@ f'''/impe/distributionType gps
 /gps/ene/type Mono
 /gps/ene/mono 3 eV
 
-/run/printProgress {NUM_PHOTS/5}
+/run/printProgress {NUM_PHOTS//5}
 
 '''
 
 def pozition():
-    for x in np.arange(0, 37/2, DX):
-        for z in np.arange(Z_START + 0.1, Z_END, DZ):
+    for x in np.linspace(0, 37/2, num=NUM_X):
+        for z in np.linspace(Z_START + 0.1, Z_END, num=NUM_Z):
             yield (x, z)
 
 if __name__ == '__main__':

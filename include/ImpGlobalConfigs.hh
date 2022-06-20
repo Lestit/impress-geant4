@@ -56,7 +56,8 @@ class ImpGlobalConfigs
             kMAKE_ONLY_CRYSTAL,
             kNUM_SIPMS,
             kSAVE_EACH_CRYST_HIT_ENERGY,
-            kREFLECTOR_SHIM_SIDE_LENGTH;
+            kREFLECTOR_SHIM_SIDE_LENGTH,
+            kBUILD_TEFLON_BETWEEN_SIPMS;
 
         enum class ParseType { vBOOL, vDOUBLE, vINT, vSTRING };
         static const std::unordered_map<std::string, ParseType> KEY_TYPE_PARSE;

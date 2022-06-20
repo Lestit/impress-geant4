@@ -10,12 +10,7 @@
 #include "ImpVDetectorConstruction.hh"
 
 ImpActionInitialization::ImpActionInitialization()
-        : G4VUserActionInitialization(),
-    dc(nullptr)
-{ }
-
-ImpActionInitialization::ImpActionInitialization(const ImpVDetectorConstruction* dc) : G4VUserActionInitialization(),
-    dc(dc)
+        : G4VUserActionInitialization()
 { }
 
 ImpActionInitialization::~ImpActionInitialization()

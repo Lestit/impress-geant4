@@ -33,6 +33,7 @@ const std::string ImpGlobalConfigs::kMAKE_ONLY_CRYSTAL            = "make-only-c
 const std::string ImpGlobalConfigs::kNUM_SIPMS                    = "num-sipms";
 const std::string ImpGlobalConfigs::kSAVE_EACH_CRYST_HIT_ENERGY   = "save-each-crystal-hit-energy";
 const std::string ImpGlobalConfigs::kREFLECTOR_SHIM_SIDE_LENGTH   = "reflector-shim-side-length";
+const std::string ImpGlobalConfigs::kBUILD_TEFLON_BETWEEN_SIPMS   = "build-teflon-between-sipms";
 
 namespace { using pt = ImpGlobalConfigs::ParseType; }
 const std::unordered_map<std::string, pt> ImpGlobalConfigs::KEY_TYPE_PARSE = {
@@ -52,7 +53,8 @@ const std::unordered_map<std::string, pt> ImpGlobalConfigs::KEY_TYPE_PARSE = {
     {kMAKE_ONLY_CRYSTAL,            pt::vBOOL},
     {kNUM_SIPMS,                    pt::vINT},
     {kSAVE_EACH_CRYST_HIT_ENERGY,   pt::vBOOL},
-    {kREFLECTOR_SHIM_SIDE_LENGTH,   pt::vDOUBLE}
+    {kREFLECTOR_SHIM_SIDE_LENGTH,   pt::vDOUBLE},
+    {kBUILD_TEFLON_BETWEEN_SIPMS,   pt::vBOOL}
 };
 
 const ImpGlobalConfigs& ImpGlobalConfigs::instance()

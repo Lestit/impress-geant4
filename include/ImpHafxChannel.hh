@@ -80,6 +80,7 @@ class ImpHafxChannel : public G4PVPlacement
         void buildLightGuide();
         void buildLightGuideWrap(const G4ThreeVector& translate);
         void buildCentralSipmShim();
+        void buildReflectorBetweenSipms();
 
         void buildSi();
         void attachSiOpticalSurface();
@@ -144,6 +145,7 @@ class ImpHafxChannel : public G4PVPlacement
         std::size_t sipmsOnSide;
         std::vector<G4Box*> siBoxes;
         std::vector<G4LogicalVolume*> siLogVols;
+        std::vector<G4ThreeVector> siTranslations;
 
         G4String channelId;
         std::string sensDetName;
@@ -155,4 +157,5 @@ class ImpHafxChannel : public G4PVPlacement
         G4double siSpacing;
         G4double siSideLength;
         bool doBuildLightGuideReflector;
+        bool doBuildReflectorBetweenSipms;
 };

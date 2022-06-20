@@ -18,7 +18,6 @@ class ImpVDetectorConstruction;
 class ImpActionInitialization : public G4VUserActionInitialization
 {
     public:
-        ImpActionInitialization(const ImpVDetectorConstruction* dc);
         ImpActionInitialization();
         ~ImpActionInitialization();
 
@@ -26,6 +25,5 @@ class ImpActionInitialization : public G4VUserActionInitialization
         void Build() const override;
 
     private:
-        const ImpVDetectorConstruction* dc;
         void setupPrimaryGenerator() const;
 };

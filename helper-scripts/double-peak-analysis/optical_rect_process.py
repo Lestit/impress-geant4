@@ -1,35 +1,18 @@
 import generate_rect_xz_scan as grs
-import matplotlib.pyplot as plt
-from mpl_toolkits import mplot3d
 import numpy as np
 import re
 import os
 import scipy.ndimage as ndimage
 import scipy.interpolate as interp
-import sys
 
-smooth = True
-smooth_sig = 2
+def resample_optical_data(dat):
+    x, z, ctz = dat
+    xx, zz = np.mgrid[np.min(x):np.max(x):1000j, np.min(z):np.max(z):1000j]
 
-def main():
-    fold = sys.argv[1]
-    x, z, num_counts = extract_optical_data(fold)
-    plot_2d_surf(x, z, num_counts)
-    plt.gcf().tight_layout()
-    plt.show()
-
-def plot_2d_surf(x, z, num_counts):
-    fig = plt.figure()
-    ax = fig.add_subplot(projection='3d')
-    if not smooth:
-        ax.plot_trisurf(x, z, num_counts)
-    else:
-        smoothed = ndimage.gaussian_filter(num_counts, sigma=smooth_sig, order=0)
-        ax.plot_trisurf(x, z, smoothed)
-    ax.set_xlabel('Position along $x$ (mm)')
-    ax.set_ylabel('Position along $z$ (mm)')
-    ax.set_zlabel('Number of SiPM hits')
-    fig.suptitle(f'{grs.NUM_PHOTS} launched')
+    smooth_sig = 2
+    smooth = ndimage.gaussian_filter(ctz, sigma=smooth_sig, order=0)
+    interpolated_grid = interp.griddata((x, z), smooth, (xx, zz), method='cubic')
+    return {'x_mesh': xx, 'z_mesh': zz, 'counts': interpolated_grid}
 
 def extract_optical_data(containing_folder, data_fn='c1-si-out.tab'):
     run_folders = os.listdir(containing_folder)
@@ -46,5 +29,34 @@ def extract_optical_data(containing_folder, data_fn='c1-si-out.tab'):
 
     return np.array(ret).T
 
-if __name__ == '__main__':
-    main()
+def plot_marginal_xz(dat, fig, axs, label=None):
+    axs = axs.flatten()
+    assert axs.size == 2
+
+    new = {'z': dat['z_mesh'][0], 'x': dat['x_mesh'][:,0]}
+    marg = {
+        k: dat['counts'].sum(axis=ax)
+        for k, ax in zip('xz', (1, 0))
+    }
+
+    for i, (k, marg) in enumerate(marg.items()):
+        d = (marg.max() - marg.min()) / marg.min()
+        axs[i].plot(new[k], marg, label=f'{label} ($\Delta = {d * 100:.2f}$%)')
+        # axs[i].set_title(f'(max - min) / min = {100 * d:.2f}%')
+        axs[i].set_xlabel(f'Launch along ${k}$ (mm)')
+        axs[i].set_ylabel('number of hits on SiPMs')
+        axs[i].set_title(f'${k}$ hit intensity (integrate out ${"z" if k == "x" else "x"}$)')
+
+    fig.suptitle('x and z marginal distributions')
+    fig.tight_layout()
+
+def plot_2d_distr(dat, fig, ax, label=None):
+    surf = ax.plot_surface(dat['x_mesh'], dat['z_mesh'], dat['counts'], label=label)
+    # https://stackoverflow.com/questions/54994600/pyplot-legend-poly3dcollection-object-has-no-attribute-edgecolors2d
+    surf._facecolors2d=surf._facecolor3d
+    surf._edgecolors2d=surf._edgecolor3d
+
+    ax.set_xlabel('Launch x (mm)')
+    ax.set_ylabel('Launch z (mm)')
+    ax.set_zlabel('Counts')
+    ax.set_title('Counts vs position')

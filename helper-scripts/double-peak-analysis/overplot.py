@@ -9,11 +9,12 @@ import scipy.stats as st
 kwds = dict(
     do_histogram=True,
     do_density=True,
-    do_kde=False,
+    do_kde=True,
 )
 
-
+NUM_BINS = 2000
 COLORS = itertools.cycle(list('krgbcmy') + ['orange'])
+
 def plot_geant_counts(
         ax, data, label=None, bins=None, do_histogram=True,
         do_density=False, do_kde=False
@@ -24,7 +25,7 @@ def plot_geant_counts(
             histtype='step', color=next(COLORS), density=do_density)
     if do_kde and do_density:
         centers = bins[:-1] + np.diff(bins)
-        kde = st.gaussian_kde(data, bw_method=0.01)
+        kde = st.gaussian_kde(data, bw_method=0.009)
         ax.plot(
             centers, kde(centers), label=f'KDE {label}',
             color=next(COLORS)
@@ -44,12 +45,12 @@ def main():
     dat = {}
     for fn in sys.argv[1:]:
         print('load', fn)
-        dat[fn] = load_si_cts(fn) #np.loadtxt(fn)
+        dat[fn] = load_si_cts(fn)
         max_cts = max(max_cts, np.max(dat[fn]))
         print('done', fn)
 
     fig, ax = plt.subplots()
-    bins = np.linspace(0, max_cts, num=2000)
+    bins = np.arange(0, max_cts, 5, dtype=int)
     for k, v in dat.items():
         plot_geant_counts(
             ax, v, label=f'{k} ({v.size} cts)',
