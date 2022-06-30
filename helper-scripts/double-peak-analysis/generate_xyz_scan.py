@@ -1,6 +1,9 @@
 import numpy as np
+from datetime import datetime
 
-OUT_FN = 'optical_xyz_scan.mac'
+pfx = datetime.now().strftime('%c').replace(' ', '-').replace(':', '.') + '_'
+MACRO_OUT_FN = pfx + 'optical-xyz-scan.mac'
+POSITIONS_OUT_FN = pfx + 'positions-xyz-scan.txt'
 
 LENGTH = 5
 Z_START = 3.75 - LENGTH/2
@@ -23,7 +26,6 @@ f'''/gps/particle opticalphoton
 /gps/ene/mono 3 eV
 
 /run/printProgress {NUM_PHOTS//5}
-
 '''
 
 def pozition():
@@ -34,8 +36,9 @@ def pozition():
                 yield (x, y, z)
 
 if __name__ == '__main__':
-    with open(OUT_FN, 'w') as f:
-        print(script_begin, file=f)
+    with open(MACRO_OUT_FN, 'w') as macro_file, open(POSITIONS_OUT_FN, 'w') as pos_file:
+        print(script_begin, file=macro_file)
         for (x, y, z) in pozition():
-            print(f'/gps/pos/centre {x:.2f} {y:.2f} {z:.2f} mm', file=f)
-            print(f'/run/beamOn {NUM_PHOTS}\n', file=f)
+            print(f'/gps/pos/centre {x:.2f} {y:.2f} {z:.2f} mm', file=macro_file)
+            print(f'/run/beamOn {NUM_PHOTS}\n', file=macro_file)
+            print(f"{x:.2f} {y:.2f} {z:.2f}", file=pos_file)
