@@ -676,7 +676,7 @@ void ImpHafxChannel::buildCrystalOpticalBorders(
     const std::string& edgeFinish, const std::string& backFinish,
     bool edgeLut, bool backLut)
 {
-    auto pvs = fillerCrystalBorderPhysicalVols();
+    const auto pvs = fillerCrystalBorderPhysicalVols();
     auto* edgeSurf = new G4OpticalSurface(BETWEEN_TEFLON_CRYSTAL + SUR + EDGE);
     auto* backSurf = new G4OpticalSurface(BETWEEN_TEFLON_CRYSTAL + SUR + BACK);
 
@@ -685,14 +685,14 @@ void ImpHafxChannel::buildCrystalOpticalBorders(
     edgeSurf->SetFinish(CONVERT_FINISH.at(edgeFinish));
     (void) new G4LogicalBorderSurface(
         BETWEEN_TEFLON_CRYSTAL + SUR + EDGE + channelId,
-        crystalPlacement, pvs[EDGE], edgeSurf);
+        crystalPlacement, pvs.at(EDGE), edgeSurf);
 
     backSurf->SetType(backLut? dielectric_LUTDAVIS : dielectric_dielectric);
     backSurf->SetModel(backLut? DAVIS : unified);
     backSurf->SetFinish(CONVERT_FINISH.at(backFinish));
     (void) new G4LogicalBorderSurface(
         BETWEEN_TEFLON_CRYSTAL + SUR + BACK + channelId,
-        crystalPlacement, pvs[BACK], backSurf);
+        crystalPlacement, pvs.at(BACK), backSurf);
 }
 
 static G4OpticalSurface* siOpticalSurface()

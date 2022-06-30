@@ -27,9 +27,10 @@ f'''/gps/particle opticalphoton
 '''
 
 def pozition():
-    for x in np.linspace(0, RADIUS - 0.1, num=NUM_X):
-        for y in np.linspace(0, RADIUS - 0.1, num=NUM_Y):
-            for z in np.linspace(Z_START + 0.1, Z_END - 0.1, num=NUM_Z):
+    max_xy = RADIUS / np.sqrt(2)
+    for x in np.linspace(0, max_xy - 0.5, num=NUM_X):
+        for y in np.linspace(0, max_xy - 0.5, num=NUM_Y):
+            for z in np.linspace(Z_START + 0.5, Z_END - 0.5, num=NUM_Z):
                 yield (x, y, z)
 
 if __name__ == '__main__':

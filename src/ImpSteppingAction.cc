@@ -122,6 +122,7 @@ void ImpSteppingAction::trackScintillation(const G4Step* step)
 void ImpSteppingAction::processOptical(const G4Step* step)
 {
     static const G4ThreadLocal G4OpBoundaryProcess* boundary = findOpticalboundary(step);
+    if (boundary == nullptr) return;
 
     const auto* prePt = step->GetPreStepPoint();
     const auto* postPt = step->GetPostStepPoint();
@@ -172,10 +173,6 @@ void ImpSteppingAction::processOptical(const G4Step* step)
 void ImpSteppingAction::processDetected(
     const G4VPhysicalVolume* preVol, const G4VPhysicalVolume* postVol, const G4Step* step)
 {
-    // allow for ad-hoc efficiency
-    // removed 3 March 2022 (just detect all photons)
-    /* if (G4UniformRand() > ImpGlobalConf::HACKY_DETECTOR_EFF) return; */
-
     std::array<const G4VPhysicalVolume*, 2> volz = {preVol, postVol};
     for (const auto* v : volz) {
         const auto* sdLogVol = v->GetLogicalVolume();

@@ -7,8 +7,7 @@
 
 ImpRunAction::ImpRunAction() :
     G4UserRunAction()
-{
-}
+{ }
 
 ImpRunAction::~ImpRunAction()
 { }

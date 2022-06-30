@@ -19,9 +19,9 @@ int main(int argc, char* argv[])
     ImpAnalysis::instance()->updateFlareIdentifier(flareSize);
 
     auto* runMan = new G4MTRunManager;
-    std::string envNumCores = std::getenv("SLURM_NUM_CORES");
+    const char* envNumCores = std::getenv("SLURM_NUM_CORES");
     size_t numCores;
-    if (not envNumCores.empty()) {
+    if (envNumCores != nullptr) {
         std::stringstream ss(envNumCores);
         ss >> numCores;
     }
