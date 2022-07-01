@@ -35,9 +35,9 @@ f'''/gps/particle opticalphoton
 
 def pozition():
     ''' cylindrical position iterator over a quarter of the cylinder '''
-    for r in np.linspace(0, RADIUS - 0.5, num=NUM_R):
+    for r in np.linspace(0, RADIUS - 0.25, num=NUM_R):
         for theta in np.linspace(0, np.pi / 2, num=NUM_THETA):
-            for z in np.linspace(Z_START + 0.5, Z_END - 0.5, num=NUM_Z):
+            for z in np.linspace(Z_START + 0.25, Z_END - 0.25, num=NUM_Z):
                 yield (r * np.cos(theta), r * np.sin(theta), z)
 
 if __name__ == '__main__':
