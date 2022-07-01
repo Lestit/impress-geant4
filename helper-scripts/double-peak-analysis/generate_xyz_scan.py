@@ -5,9 +5,14 @@ pfx = datetime.now().strftime('%c').replace(' ', '-').replace(':', '.') + '_'
 MACRO_OUT_FN = pfx + 'optical-xyz-scan.mac'
 POSITIONS_OUT_FN = pfx + 'positions-xyz-scan.txt'
 
+ATTENUATOR_THICK = 0
 LENGTH = 5
-Z_START = 3.75 - LENGTH/2
-Z_END = 3.75  + LENGTH/2
+LG_THICK = 8
+# computed after playing around with detector spacing etc
+Z_ANCHOR = LG_THICK/2 - 1/4 - ATTENUATOR_THICK/2
+Z_START = Z_ANCHOR - LENGTH/2
+Z_END = Z_START + LENGTH
+
 NUM_R = 10
 NUM_THETA = 10
 NUM_Z = 10
