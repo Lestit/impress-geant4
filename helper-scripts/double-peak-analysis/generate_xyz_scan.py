@@ -35,10 +35,15 @@ f'''/gps/particle opticalphoton
 
 def pozition():
     ''' cylindrical position iterator over a quarter of the cylinder '''
+    # account for degeneracy (specifically at r = 0)
+    cache = []
     for r in np.linspace(0, RADIUS - 0.25, num=NUM_R):
         for theta in np.linspace(0, np.pi / 2, num=NUM_THETA):
             for z in np.linspace(Z_START + 0.25, Z_END - 0.25, num=NUM_Z):
-                yield (r * np.cos(theta), r * np.sin(theta), z)
+                p = (r * np.cos(theta), r * np.sin(theta), z)
+                if p in cache: continue
+                cache.append(p)
+                yield p
 
 if __name__ == '__main__':
     with open(MACRO_OUT_FN, 'w') as macro_file, open(POSITIONS_OUT_FN, 'w') as pos_file:
