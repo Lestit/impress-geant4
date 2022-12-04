@@ -1,6 +1,3 @@
-# switch to allow gps . . .
-/impe/distributionType gps
-
 # cesium 137
 /gps/particle ion
 /gps/ion 55 137

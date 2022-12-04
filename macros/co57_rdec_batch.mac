@@ -1,7 +1,8 @@
-# cesium 137
+# cobalt 57
 /gps/particle ion
-/gps/ion 55 137
+/gps/ion 27 57
 /gps/pos/centre 0 0 2 cm
 /gps/ang/type iso
 
 /run/printProgress 10000
+/run/beamOn 1000000

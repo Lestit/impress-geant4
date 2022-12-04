@@ -1,4 +1,3 @@
-/impe/distributionType gps
 /control/execute macros/optical_diagnose.mac
 
 /gps/pos/centre 0.000 0 3 mm
