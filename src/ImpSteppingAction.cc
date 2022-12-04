@@ -121,6 +121,14 @@ void ImpSteppingAction::trackScintillation(const G4Step* step)
 
 void ImpSteppingAction::processOptical(const G4Step* step)
 {
+    auto* track = step->GetTrack();
+    const double KILL_LENGTH = 10 * m;
+    if (track->GetTrackLength() > KILL_LENGTH) {
+        track->SetTrackStatus(fStopAndKill);
+        G4cout << "killed track\n";
+        return;
+    }
+
     static const G4ThreadLocal G4OpBoundaryProcess* boundary = findOpticalboundary(step);
     if (boundary == nullptr) return;
 
@@ -153,8 +161,11 @@ void ImpSteppingAction::processOptical(const G4Step* step)
             // silence for now
             case NoRINDEX:
                 G4cout << "NoRINDEX: " << G4endl
-                       << "pre vol" << preName << G4endl
-                       << "post vol" << postName << G4endl;
+                       << "pre vol " << preName << G4endl
+                       << "post vol " << postName << G4endl;
+                step->GetTrack()->SetTrackStatus(fStopAndKill);
+                G4cout << "killed track\n";
+                break;
             default:
                 if (yesSilicon) {
                     /* const auto n = std::string( */

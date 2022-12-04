@@ -1,0 +1,14 @@
+/gps/direction 0 0 -1
+
+/gps/particle gamma
+
+/gps/pos/centre 0 0 3 cm
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/radius 18.5 mm
+
+/gps/ene/type Mono
+/gps/ene/mono {energy} keV
+
+/run/printProgress 5000
+/run/beamOn 100000

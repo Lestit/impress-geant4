@@ -1,0 +1,2742 @@
+/gps/particle opticalphoton
+
+/gps/pos/type Point
+
+/gps/ang/type iso
+/gps/polarization 1 0 0
+
+/gps/ene/type Mono
+/gps/ene/mono 3 eV
+
+/run/printProgress 2000
+
+/gps/pos/centre 0.00 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.00 0.35 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.91 0.69 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 1.01 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.55 1.30 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.30 1.55 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.01 1.76 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.69 1.91 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.35 2.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 2.03 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.99 0.70 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.81 1.39 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.51 2.03 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.11 2.61 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.61 3.11 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.03 3.51 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.39 3.81 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.70 3.99 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 4.06 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.99 1.06 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.72 2.08 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.27 3.04 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.66 3.91 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.91 4.66 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.04 5.27 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.08 5.72 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.06 5.99 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 6.08 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.99 1.41 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.62 2.77 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.02 4.06 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.21 5.21 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.21 6.21 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.06 7.02 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.77 7.62 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.41 7.99 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 8.11 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.14 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.98 1.76 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.53 3.47 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.78 5.07 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.77 6.52 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.52 7.77 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.07 8.78 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.47 9.53 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 1.76 9.98 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 10.14 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.17 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.98 2.11 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.43 4.16 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.54 6.08 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.32 7.82 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.82 9.32 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.08 10.54 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.16 11.43 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.11 11.98 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 12.17 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.19 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 2.46 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.34 4.85 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.29 7.10 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.87 9.12 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.12 10.87 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 7.10 12.29 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 4.85 13.34 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.46 13.98 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 14.19 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 16.22 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.98 2.82 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.24 5.55 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 14.05 8.11 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 12.43 10.43 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 10.43 12.43 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 8.11 14.05 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 5.55 15.24 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 2.82 15.98 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 16.22 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 18.25 0.00 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.97 3.17 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 17.15 6.24 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 15.80 9.12 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 13.98 11.73 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 11.73 13.98 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 9.13 15.80 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 6.24 17.15 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 3.17 17.97 6.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 1.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 2.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 2.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 3.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 3.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 4.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 4.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 5.00 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 5.50 mm
+/run/beamOn 10000
+
+/gps/pos/centre 0.00 18.25 6.00 mm
+/run/beamOn 10000
+

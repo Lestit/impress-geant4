@@ -1,8 +1,11 @@
-/gps/pos/centre 0 0 1 cm
-/gps/direction 0 0 -1
+# 662 keV point source isotropically emitting <1cm from detector face
 
 /gps/particle gamma
+
+/gps/pos/centre 0 0 1 cm
 /gps/pos/type Point
+/gps/ang/type iso
+
 /gps/ene/type Mono
 /gps/ene/mono 662 keV
 

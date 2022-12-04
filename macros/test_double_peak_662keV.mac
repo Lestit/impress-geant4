@@ -1,10 +1,12 @@
-/gps/pos/centre 0 0 1 cm
-/gps/direction 0 0 -1
-
 /gps/particle gamma
+
+/gps/pos/centre 0 0 3 cm
 /gps/pos/type Point
+/gps/ang/type iso
+
 /gps/ene/type Mono
 /gps/ene/mono 662 keV
 
 /run/printProgress 10000
+
 /run/beamOn 500000
